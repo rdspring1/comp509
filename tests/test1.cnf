@@ -1,0 +1,3 @@
+c print sat_solver([["0"]], [-1 for i in range(1)]) # p
+p cnf 1 1
+1
