@@ -1,0 +1,157 @@
+// characteristic representation
+const int red = 0;
+const int green = 1;
+const int white = 2;
+const int blue = 3;
+const int yellow = 4;
+
+const int british = 5;
+const int swedish = 6;
+const int danish = 7;
+const int norwegian = 8;
+const int german = 9;
+
+const int tea = 10;
+const int coffee = 11;
+const int water = 12;
+const int beer = 13;
+const int milk = 14;
+
+const int prince = 15;
+const int blends = 16;
+const int pallmall = 17;
+const int bluemasters = 18;
+const int dunhill = 19;
+
+const int dog = 20;
+const int cat = 21;
+const int bird = 22;
+const int horse = 23;
+const int fish = 24;
+
+// property(house id, characteristic) = propositional variable
+color(1,red): 1
+color(2,red): 2
+color(3,red): 3
+color(4,red): 4
+color(5,red): 5
+color(1,green): 6
+color(2,green): 7
+color(3,green): 8
+color(4,green): 9
+color(5,green): 10
+color(1,white): 11
+color(2,white): 12
+color(3,white): 13
+color(4,white): 14
+color(5,white): 15
+color(1,blue): 16
+color(2,blue): 17
+color(3,blue): 18
+color(4,blue): 19
+color(5,blue): 20
+color(1,yellow): 21
+color(2,yellow): 22
+color(3,yellow): 23
+color(4,yellow): 24
+color(5,yellow): 25
+lives(1,british): 26
+lives(2,british): 27
+lives(3,british): 28
+lives(4,british): 29
+lives(5,british): 30
+lives(1,swedish): 31
+lives(2,swedish): 32
+lives(3,swedish): 33
+lives(4,swedish): 34
+lives(5,swedish): 35
+lives(1,danish): 36
+lives(2,danish): 37
+lives(3,danish): 38
+lives(4,danish): 39
+lives(5,danish): 40
+lives(1,norwegian): 41
+lives(2,norwegian): 42
+lives(3,norwegian): 43
+lives(4,norwegian): 44
+lives(5,norwegian): 45
+lives(1,german): 46
+lives(2,german): 47
+lives(3,german): 48
+lives(4,german): 49
+lives(5,german): 50
+drinks(1,tea): 51
+drinks(2,tea): 52
+drinks(3,tea): 53
+drinks(4,tea): 54
+drinks(5,tea): 55
+drinks(1,coffee): 56
+drinks(2,coffee): 57
+drinks(3,coffee): 58
+drinks(4,coffee): 59
+drinks(5,coffee): 60
+drinks(1,water): 61
+drinks(2,water): 62
+drinks(3,water): 63
+drinks(4,water): 64
+drinks(5,water): 65
+drinks(1,beer): 66
+drinks(2,beer): 67
+drinks(3,beer): 68
+drinks(4,beer): 69
+drinks(5,beer): 70
+drinks(1,milk): 71
+drinks(2,milk): 72
+drinks(3,milk): 73
+drinks(4,milk): 74
+drinks(5,milk): 75
+cigars(1,prince): 76
+cigars(2,prince): 77
+cigars(3,prince): 78
+cigars(4,prince): 79
+cigars(5,prince): 80
+cigars(1,blends): 81
+cigars(2,blends): 82
+cigars(3,blends): 83
+cigars(4,blends): 84
+cigars(5,blends): 85
+cigars(1,pallmall): 86
+cigars(2,pallmall): 87
+cigars(3,pallmall): 88
+cigars(4,pallmall): 89
+cigars(5,pallmall): 90
+cigars(1,bluemasters): 91
+cigars(2,bluemasters): 92
+cigars(3,bluemasters): 93
+cigars(4,bluemasters): 94
+cigars(5,bluemasters): 95
+cigars(1,dunhill): 96
+cigars(2,dunhill): 97
+cigars(3,dunhill): 98
+cigars(4,dunhill): 99
+cigars(5,dunhill): 100
+pets(1,dog): 101
+pets(2,dog): 102
+pets(3,dog): 103
+pets(4,dog): 104
+pets(5,dog): 105
+pets(1,cat): 106
+pets(2,cat): 107
+pets(3,cat): 108
+pets(4,cat): 109
+pets(5,cat): 110
+pets(1,bird): 111
+pets(2,bird): 112
+pets(3,bird): 113
+pets(4,bird): 114
+pets(5,bird): 115
+pets(1,horse): 116
+pets(2,horse): 117
+pets(3,horse): 118
+pets(4,horse): 119
+pets(5,horse): 120
+pets(1,fish): 121
+pets(2,fish): 122
+pets(3,fish): 123
+pets(4,fish): 124
+pets(5,fish): 125
