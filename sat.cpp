@@ -38,7 +38,7 @@ void print(vector<int> t)
 
 vector<vector<string>> sub(vector<vector<string>> cnf, const string& ap, int value)
 {
-	/*
+    /*
 	cout << "sub start" << endl;
 	for(auto& clause : cnf)
 	{
@@ -50,7 +50,7 @@ vector<vector<string>> sub(vector<vector<string>> cnf, const string& ap, int val
 	}
 	cout << "ap: " << ap << endl;
 	cout << "value: " << value << endl;
-	*/
+    */
 
 	for(auto& clause : cnf)
 	{
@@ -100,7 +100,7 @@ vector<vector<string>> sub(vector<vector<string>> cnf, const string& ap, int val
 		}
 	}
 
-	/*
+    /*
 	cout << "sub end" << endl;
 	for(auto& clause : cnf)
 	{
@@ -110,7 +110,7 @@ vector<vector<string>> sub(vector<vector<string>> cnf, const string& ap, int val
 		}
 		cout << "end clause" << endl;
 	}
-	*/
+    */
 	return cnf;
 }
 
@@ -218,7 +218,8 @@ vector<vector<string>> parseCNF(const string& filename)
 			}
 		}
 	}
-	cnf.push_back(clause);
+    if(clause.size() > 0)
+	    cnf.push_back(clause);
 	return cnf;
 }
 
