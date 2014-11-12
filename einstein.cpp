@@ -208,6 +208,7 @@ int main()
         cout << "-" << cigars(k, dunhill) << " " << color(k, yellow) << " 0" << endl;
         cout << cigars(k, dunhill) << " -" << color(k, yellow) << " 0" << endl;
     }
+
     // swedish and dog
     for(int k = 1; k <= 5; ++k)
     {
@@ -259,6 +260,18 @@ int main()
     {
         cout << "-" << cigars(k, blends) << " " << drinks(k-1, water) << " " << drinks(k+1, water) << " 0" << endl;
     }
+
+	// green to the left of white
+	for(int w = 1; w <= 5; ++w)
+	{
+		for(int g = 5; g > 0; --g)
+		{
+			if(g < (w-1) || g > w)
+			{
+				cout << "-" << color(w, white) << " -" << color(g, green) << " 0" << endl;
+			}
+		}
+	}
 
     return 0;
 }
