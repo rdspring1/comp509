@@ -17,6 +17,7 @@ const string PROBLEM = "p";
 const string END = "0";
 const string cnf_format = "cnf";
 const string sat_format = "sat";
+const char NEGATION = '-';
 int vars = 0;
 int ignore = -1;
 
@@ -38,22 +39,25 @@ void print(vector<int> t)
 
 vector<vector<string>> sub(vector<vector<string>> cnf, const string& ap, int value)
 {
-    /*
-	cout << "sub start" << endl;
+	/*
+	cout << "sub start: " << cnf.size() << endl;
+	int c = 0;
 	for(auto& clause : cnf)
 	{
+		cout << "start clause: " << ++c << endl;
 		for(auto& literal : clause)
 		{
 			cout << "literal: " <<  literal << endl;
 		}
-		cout << "end clause" << endl;
 	}
 	cout << "ap: " << ap << endl;
 	cout << "value: " << value << endl;
-    */
+	*/
 
+	//int k = 0;
 	for(auto& clause : cnf)
 	{
+		//++k;
 		// empty_clause checks if the clause is empty
 		bool empty_clause = true;
 		for(auto& literal : clause)
@@ -62,21 +66,28 @@ vector<vector<string>> sub(vector<vector<string>> cnf, const string& ap, int val
 			{
 				empty_clause = false;
 			}
-			else if(literal == FALSE)
+			else if(literal != FALSE)
 			{
-				empty_clause = true;
-			}
-			else
-			{
-				if(literal[literal.size()-1] ==  ap[0])
+				bool match = false;
+				// evaluate truth value for literal
+				bool truth_value = bool(value);
+				
+				if(literal == ap)
 				{
-					// evaluate truth value for literal
-					bool truth_value = bool(value);
-					if(literal.size() > 1)
-					{
-						truth_value = !truth_value;
-					}
+					match = true;
+				}
+				else if(literal[0] == NEGATION && literal.substr(1) == ap)
+				{
+					truth_value = !truth_value;
+					match = true;
+				}
+				else
+				{
+					empty_clause = false;
+				}
 
+				if(match)
+				{
 					if(truth_value)
 					{
 						clause = vector<string>(1, TRUE);
@@ -88,29 +99,31 @@ vector<vector<string>> sub(vector<vector<string>> cnf, const string& ap, int val
 						literal = FALSE;
 					}
 				}
-				else
-				{
-					empty_clause = false;
-				}
 			}
 		}
+		
+		// replace unsatisfiable disjuncitve clauses with empty vector
 		if(empty_clause)
 		{
+			//cout << "eclause: " << k << endl;
+			//for(auto& literal : clause)
+			//	cout << literal << endl;
 			clause.clear();
 		}
 	}
 
-    /*
+	/*
 	cout << "sub end" << endl;
+	int e = 0;
 	for(auto& clause : cnf)
 	{
+		cout << "start clause: " << ++e << endl;
 		for(auto& literal : clause)
 		{
 			cout << "literal: " <<  literal << endl;
 		}
-		cout << "end clause" << endl;
 	}
-    */
+	*/
 	return cnf;
 }
 
@@ -118,13 +131,16 @@ vector<vector<string>> sub(vector<vector<string>> cnf, const string& ap, int val
 // prop - A set of truth assignments for AP
 vector<int> solve(vector<vector<string>> cnf, vector<int> t)
 {
+	//int c = 0;
 	bool clause_sat = true;
 	// check if any clauses are empty: Not Satisfiable under current truth assignment
 	// check if all clauses are True: Satisfiable
 	for(const auto& clause : cnf)
 	{
+		//++c;
 		if(clause.size() == 0)
 		{
+			//cout << c << endl;
 			return vector<int>();
 		}
 		else if(clause.size() > 1 || clause[0] != TRUE)
@@ -148,15 +164,23 @@ vector<int> solve(vector<vector<string>> cnf, vector<int> t)
 	}
 	assert(ap != ignore);
 
+	//cout << "true AP: " << to_string(ap+1) << endl;
 	// check if satisfiable if AP = True
 	t[ap] = 1;
 	vector<int> trueResult = solve(sub(cnf, to_string(ap+1), 1), t);
-	//cout << "tR: " << trueResult << endl;
+	//cout << "tR:"; 
+	//for(const int& i : trueResult)
+	//	cout << " " << i;
+	//cout << endl;
 
 	// check if satisfiable if AP = False
+	//cout << "false AP: " << to_string(ap+1) << endl;
 	t[ap] = 0;
 	vector<int> falseResult = solve(sub(cnf, to_string(ap+1), 0), t);
-	//cout << "fR: " << falseResult << endl;
+	//cout << "fR:";
+	//for(const int& i : falseResult)
+	//	cout << " " << i;
+	//cout << endl;
 
 	// return truth assignment if formula is satisfiable; otherwise return empty list
 	if(trueResult.size() < 1)
@@ -229,5 +253,6 @@ int main(int argc, char* argv[])
 	vector<vector<string>> cnf = parseCNF(file);
 	vector<int> t(vars, ignore);
 	vector<int> result = solve(cnf, t);
+	cout << "RESULT" << endl;
 	print(result); 
 }

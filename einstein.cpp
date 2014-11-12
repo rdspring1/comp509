@@ -44,27 +44,33 @@ int main()
     // House and Color
     for(int k = 0; k < 5; ++k)
     {
+		// every house has a color
         for(int house = 1; house <= 5; ++house)
         {
-             cout << color(house, k) << " "; // every house has a color
+             cout << color(house, k) << " ";
         }
         cout << "0" << endl;
 
+		// use color only once
         for(int house = 1; house <= 5; ++house)
         {
             for(int house1 = 1; house1 < house; ++house1)
             {
-                cout << "-" << color(house,k) << " -" << color(house1, k) << " 0" << endl; // use color only once
+                cout << "-" << color(house1,k) << " -" << color(house, k) << " 0" << endl;
             }
-    
+        }
+
+	    // only one color per house
+        for(int house = 1; house <= 5; ++house)
+        {
             for(int k1 = 0; k1 < 5; ++k1)
             {
                 if(k1 != k)
                 {
-                    cout << "-" << color(house,k) << " -" << color(house, k1) << " 0" << endl; // only one color per house
+                    cout << "-" << color(house,k) << " -" << color(house, k1) << " 0" << endl; 
                 }
             }
-        }
+		}
     } 
 
     // House and Drink
