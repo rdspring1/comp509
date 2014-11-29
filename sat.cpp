@@ -2,11 +2,18 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <stdlib.h>
 #include <vector>
 #include <fstream>
+#include <random>
+#include <algorithm>
+#include <boost/timer/timer.hpp>
+#include <memory>
 
 using namespace std;
 
+const int K = 3;
+const int ITER = 100;
 const string TRUE = "True";
 const string FALSE = "False";
 const string UNSAT = "UNSAT";
@@ -18,8 +25,9 @@ const string END = "0";
 const string cnf_format = "cnf";
 const string sat_format = "sat";
 const char NEGATION = '-';
+int split_count = 0;
 int vars = 0;
-int ignore = -1;
+int IGNORE = -1;
 
 void print(vector<int> t)
 {
@@ -30,7 +38,7 @@ void print(vector<int> t)
 
 	for(int i = 0; i < t.size(); ++i)
 	{
-		if(t[i] != ignore)
+		if(t[i] != IGNORE)
 			cout << VAR << " " << (i+1) << " " << TRUTH << " " <<  bool(t[i]) << endl;
 		else
 			cout << VAR << " " << (i+1) << " " << TRUTH << " " <<  t[i] << endl;
@@ -153,7 +161,7 @@ vector<int> solve(vector<vector<string>> cnf, vector<int> t)
 		return t;
 
 	// select AP without truth assignment
-	int ap = ignore;
+	int ap = IGNORE;
 	for(int i = 0; i < t.size(); ++i)
 	{
 		if(t[i] < 0)
@@ -162,7 +170,7 @@ vector<int> solve(vector<vector<string>> cnf, vector<int> t)
 			break;
 		}
 	}
-	assert(ap != ignore);
+	assert(ap != IGNORE);
 
 	//cout << "true AP: " << to_string(ap+1) << endl;
 	// check if satisfiable if AP = True
@@ -247,12 +255,88 @@ vector<vector<string>> parseCNF(const string& filename)
 	return cnf;
 }
 
+vector<vector<string>> randomCNF(const int& N, const double& LProb, const double& LN_Ratio)
+{
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> p(1,N);
+    std::uniform_real_distribution<double> l(0.0,1.0);
+
+    int size = int(LN_Ratio * N);
+	vector<vector<string>> cnf(size);
+
+    for(int n = 0; n < size; ++n)
+    {
+        for(int m = 0; m < K; ++m)
+        {
+            string literal;
+            if(l(generator) > LProb)
+            {
+                literal.append(1, NEGATION);
+            }
+            literal.append(to_string(p(generator)));
+            cnf[n].push_back(literal);
+        }
+    }
+    return cnf;
+}
+
 int main(int argc, char* argv[])
 {
-	const string file(argv[1]);
-	vector<vector<string>> cnf = parseCNF(file);
-	vector<int> t(vars, ignore);
-	vector<int> result = solve(cnf, t);
-	cout << "RESULT" << endl;
-	print(result); 
+    // Experiments - N, L-Probability, L/N Ratio
+    if(argc == 4)
+    {
+        int N = atoi(argv[1]);
+        double LProb = atof(argv[2]);
+        double LN_Ratio = atof(argv[3]);
+        cout << "N: " << N << " L-Probability: " << LProb << " LN_Ratio: " << LN_Ratio << std::endl;         
+
+        int success = 0;
+        vector<int> split(ITER, 0);
+        vector<double> time(ITER, 0);
+        boost::timer::cpu_timer timer;
+
+        // Run benchmark for ITER iterations
+        for(int n = 0; n < ITER; ++n)
+        {
+	        vector<vector<string>> cnf = randomCNF(N, LProb, LN_Ratio);
+	        vector<int> t(N, IGNORE);
+
+            timer.start();
+	        vector<int> result = solve(cnf, t);
+            timer.stop();
+
+            if(result.size() > 0)
+            {
+                ++success;
+            }
+
+            split[n] = split_count;
+            split_count = 0;
+            
+            time[n] = atof(timer.format(boost::timer::default_places, "%w").c_str());
+        }
+
+        // Sort data and print median value
+        cout << "Success Rate: " << success << endl;
+        std::sort(split.begin(), split.end());
+        std::sort(time.begin(), time.end());
+        cout << "Total Number of Splitting-Rule Applications: " << split[ITER/2] << endl;
+        cout << "Total Computation Time: " << time[ITER/2] << endl;
+    }
+    
+    // CNF Format File
+    if(argc == 2)
+    {
+	    const string file(argv[1]);
+	    vector<vector<string>> cnf = parseCNF(file);
+	    vector<int> t(vars, IGNORE);
+
+        // Timer
+        std::unique_ptr<boost::timer::auto_cpu_timer> timer(new boost::timer::auto_cpu_timer());
+	    vector<int> result = solve(cnf, t);
+        timer.reset(nullptr);
+
+	    cout << "RESULT" << endl;
+	    print(result); 
+    }
 }

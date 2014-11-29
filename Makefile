@@ -1,10 +1,11 @@
 CXXFLAGS = -g -std=c++11
 CXX=g++
+LD_FLAGS = -lboost_program_options -lboost_system -lboost_timer
 
-all: sat einstein key
+all: sat
 
 sat: sat.cpp
-	$(CXX) $(CXXFLAGS) -o $@ $<
+	$(CXX) $(CXXFLAGS) -o $@ $< $(LD_FLAGS)
 
 einstein: einstein.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $<
