@@ -52,7 +52,7 @@ void print(vector<int> t)
     }
 }
 
-vector<vector<string>> sub(const vector<vector<string>>& cnf, const string& ap, const int& value)
+void sub(vector<vector<string>>& cnf, const string& ap, const int& value)
 {
     /*
     cout << "sub start: " << cnf.size() << endl;
@@ -69,18 +69,14 @@ vector<vector<string>> sub(const vector<vector<string>>& cnf, const string& ap, 
     cout << "value: " << value << endl;
     */
 
-    vector<vector<string>> new_cnf;
-    vector<string> new_clause;
-
-    for(const auto& clause : cnf)
+    for(auto& clause : cnf)
     {
         // empty_clause checks if the clause is empty
         bool empty_clause = true;
-        for(const auto& literal : clause)
+        for(auto& literal : clause)
         {
             if(literal == TRUE)
             {
-                new_clause.push_back(literal);
                 empty_clause = false;
             }
             else if(literal != FALSE)
@@ -100,7 +96,6 @@ vector<vector<string>> sub(const vector<vector<string>>& cnf, const string& ap, 
                 }
                 else
                 {
-                    new_clause.push_back(literal);
                     empty_clause = false;
                 }
 
@@ -108,13 +103,13 @@ vector<vector<string>> sub(const vector<vector<string>>& cnf, const string& ap, 
                 {
                     if(truth_value)
                     {
-                        new_clause = vector<string>(1, TRUE);
+                        clause = vector<string>(1, TRUE);
                         empty_clause = false;
                         break;
                     }
                     else
                     {
-                        new_clause.push_back(FALSE);
+                        literal = FALSE;
                     }
                 }
             }
@@ -123,19 +118,14 @@ vector<vector<string>> sub(const vector<vector<string>>& cnf, const string& ap, 
         // replace unsatisfiable disjunctive clauses with empty vector
         if(empty_clause)
         {
-            new_cnf.push_back(vector<string>());
+            clause.clear();
         }
-        else
-        {
-            new_cnf.push_back(new_clause);
-        }
-        new_clause.clear();
     }
 
     /*
-    cout << "sub end: " << new_cnf.size() << endl;
+    cout << "sub end: " << cnf.size() << endl;
     int e = 0;
-    for(auto& clause : new_cnf)
+    for(auto& clause : cnf)
     {
         cout << "start clause: " << ++e << endl;
         for(auto& literal : clause)
@@ -144,8 +134,6 @@ vector<vector<string>> sub(const vector<vector<string>>& cnf, const string& ap, 
         }
     }
     */
-    assert(cnf.size() == new_cnf.size());
-    return new_cnf;
 }
 
 int valid(const vector<vector<string>>& cnf)
@@ -172,6 +160,7 @@ int valid(const vector<vector<string>>& cnf)
 // return - a truth assignment if formula is satisfiable; otherwise return empty list
 vector<int> solve(vector<vector<string>>& initial_cnf, vector<int>& initial_t)
 {
+    stack<update> truth_updates;
     stack<vector<vector<string>>> cnf_set;
     stack<vector<int>> truth_set;
     cnf_set.push(move(initial_cnf));
@@ -185,9 +174,16 @@ vector<int> solve(vector<vector<string>>& initial_cnf, vector<int>& initial_t)
         cnf_set.pop();
         truth_set.pop();
 
-        for(const int& i : t)
-        	cout << " " << i;
-        cout << endl;
+        //for(const int& i : t)
+        //	cout << " " << i;
+        //cout << endl;
+
+        if(!truth_updates.empty())
+        {
+            update& u = truth_updates.top();
+            sub(cnf, to_string(u.first+1), u.second);
+            truth_updates.pop();
+        }
 
         // Check Formula
         switch(valid(cnf))
@@ -218,17 +214,16 @@ vector<int> solve(vector<vector<string>>& initial_cnf, vector<int>& initial_t)
         assert(ap != IGNORE);
         //cout << "AP: " << to_string(ap+1) << endl;
 
-        vector<int> true_assignment(t);
-        true_assignment[ap] = 1;
-        vector<vector<string>> true_cnf = sub(cnf, to_string(ap+1), 1);        
-        truth_set.push(move(true_assignment));
-        cnf_set.push(move(true_cnf));
-
         vector<int> false_assignment(t);
         false_assignment[ap] = 0;
-        vector<vector<string>> false_cnf = sub(cnf, to_string(ap+1), 0);        
         truth_set.push(move(false_assignment));
-        cnf_set.push(move(false_cnf));
+        truth_updates.push(make_pair(ap, 0));
+        cnf_set.push(cnf);
+
+        t[ap] = 1;
+        truth_set.push(move(t));
+        truth_updates.push(make_pair(ap, 1));
+        cnf_set.push(move(cnf));
     }
 
     return vector<int>();
