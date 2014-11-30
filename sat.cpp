@@ -152,6 +152,7 @@ int valid(const vector<vector<string>>& cnf)
 {
     // check if any clauses are empty: Not Satisfiable under current truth assignment
     // check if all clauses are True: Satisfiable
+    int clause_sat = SAT;
     for(const auto& clause : cnf)
     {
         // Clause is False, Clause contains multiple propositions, singleton clause
@@ -161,10 +162,10 @@ int valid(const vector<vector<string>>& cnf)
         }
         else if(clause.size() > 1 || clause[0] != TRUE)
         {
-            return CONTINUE;
+            clause_sat = CONTINUE;
         }
     }
-    return SAT;
+    return clause_sat;
 }
 
 // cnf - A formula represented in Conjunctive Normal Form
@@ -185,9 +186,9 @@ vector<int> solve(vector<vector<string>>& initial_cnf, vector<int>& initial_t)
         cnf_set.pop();
         truth_set.pop();
 
-        for(const int& i : t)
-        	cout << " " << i;
-        cout << endl;
+        //for(const int& i : t)
+        //	cout << " " << i;
+        //cout << endl;
 
         // Check Formula
         switch(valid(cnf))
