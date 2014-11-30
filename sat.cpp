@@ -24,12 +24,14 @@ const string END = "0";
 const string cnf_format = "cnf";
 const string sat_format = "sat";
 const char NEGATION = '-';
+
 const int UNSAT = -1;
 const int CONTINUE = 0;
 const int SAT = 1;
 const int IGNORE = -1;
 const int K = 3;
 const int ITER = 100;
+const boost::timer::nanosecond_type timeout(10 * 1000000000LL);
 
 int split_count = 0;
 int vars = 0;
@@ -159,7 +161,7 @@ int valid(const vector<vector<string>>& cnf)
 // cnf - A formula represented in Conjunctive Normal Form
 // prop - A set of truth assignments for AP
 // return - a truth assignment if formula is satisfiable; otherwise return empty list
-vector<int> solve(vector<vector<string>>& initial_cnf, vector<int>& initial_t)
+vector<int> solve(vector<vector<string>>& initial_cnf, vector<int>& initial_t, const boost::timer::cpu_timer& timer)
 {
     stack<update> truth_updates;
     stack<vector<vector<string>>> cnf_set;
@@ -167,7 +169,7 @@ vector<int> solve(vector<vector<string>>& initial_cnf, vector<int>& initial_t)
     cnf_set.push(move(initial_cnf));
     truth_set.push(move(initial_t));
 
-    while(!cnf_set.empty())
+    while(!cnf_set.empty() && (timer.elapsed().wall < timeout))
     {
         vector<vector<string>> cnf = move(cnf_set.top());
         vector<int> t = move(truth_set.top());
@@ -332,7 +334,7 @@ int main(int argc, char* argv[])
             vector<int> t(N, IGNORE);
 
             timer.start();
-            vector<int> result = solve(cnf, t);
+            vector<int> result = solve(cnf, t, timer);
             timer.stop();
 
             if(result.size() > 0)
@@ -364,7 +366,7 @@ int main(int argc, char* argv[])
 
         // Timer
         std::unique_ptr<boost::timer::auto_cpu_timer> timer(new boost::timer::auto_cpu_timer());
-        vector<int> result = solve(cnf, t);
+        vector<int> result = solve(cnf, t, *timer);
         timer.reset(nullptr);
 
         cout << "RESULT" << endl;

@@ -13,6 +13,9 @@ einstein: einstein.cpp
 key: key.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
+benchmark: sat 
+	./sat 100 0.5 3 
+
 test: sat tests/test.cnf tests/test1.cnf tests/test2.cnf tests/test3.cnf tests/test4.cnf tests/test5.cnf 
 	./sat tests/test.cnf
 	./sat tests/test1.cnf
