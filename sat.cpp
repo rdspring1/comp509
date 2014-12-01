@@ -182,9 +182,19 @@ int valid(const vector<list<string>>& cnf)
 
 update two_clause_heuristic()
 {
-    auto max_it = max_element(two_clauses.begin(), two_clauses.end());
-    *max_it = 0;
-    return make_pair(*max_it, 0);
+    auto it = max_element(two_clauses.begin(), two_clauses.end());
+    vector<int> ties;
+    for(int i = 0; i < two_clauses.size(); ++i)
+    {
+        if(two_clauses[i] == *it)
+        {
+            ties.push_back(i);
+        }
+    }
+    std::uniform_int_distribution<int> p(0,ties.size());
+    int max_index = p(generator);
+    two_clauses[max_index] = 0;
+    return make_pair(max_index, 0);
 }
 
 update random_heuristic(const vector<int>& t)
@@ -269,7 +279,8 @@ vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, con
                 break;
             case TwoClause:
                 {
-                    // TODO 2-Clause Heuristic
+                    // 2-Clause Heuristic
+                    u = two_clause_heuristic();
                 }
                 break;
             case MyHeuristic:
