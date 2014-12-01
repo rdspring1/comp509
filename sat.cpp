@@ -4,7 +4,9 @@
 #include <sstream>
 #include <stdlib.h>
 #include <vector>
+#include <list>
 #include <stack>
+#include <queue>
 #include <fstream>
 #include <random>
 #include <algorithm>
@@ -12,6 +14,9 @@
 #include <boost/timer/timer.hpp>
 
 using namespace std;
+
+typedef std::pair<int, int> update;
+typedef std::pair<int, int> tc;
 
 const string TRUE = "True";
 const string FALSE = "False";
@@ -32,11 +37,39 @@ const int IGNORE = -1;
 const int K = 3;
 const int ITER = 100;
 const boost::timer::nanosecond_type timeout(10 * 1000000000LL);
+std::default_random_engine generator;
+
+// Heuristic
+enum heuristic
+{
+    Random,
+    TwoClause,
+    MyHeuristic,
+    Basic 
+};
+
+// Two Clause Heuristic
+class tc_comp
+{
+    bool reverse;
+
+    public:
+    tc_comp(const bool& revparam=false)
+    {
+        reverse=revparam;
+    }
+    bool operator() (const tc& lhs, const tc& rhs) const
+    {
+        if (reverse) 
+            return (lhs.second > rhs.second);
+        else 
+            return (lhs.second < rhs.second);
+    }
+};
+priority_queue<tc, std::vector<tc>, tc_comp> two_clauses;
 
 int split_count = 0;
 int vars = 0;
-
-typedef std::pair<int, int> update;
 
 void print(vector<int> t)
 {
@@ -54,91 +87,77 @@ void print(vector<int> t)
     }
 }
 
-void sub(vector<vector<string>>& cnf, const string& ap, const int& value)
+void sub(vector<list<string>>& cnf, const string& ap, const int& value)
 {
     /*
-    cout << "sub start: " << cnf.size() << endl;
-    int c = 0;
-    for(const auto& clause : cnf)
-    {
-        cout << "start clause: " << ++c << endl;
-        for(const auto& literal : clause)
-        {
-            cout << "literal: " <<  literal << endl;
-        }
-    }
-    cout << "ap: " << ap << endl;
-    cout << "value: " << value << endl;
-    */
+       cout << "sub start: " << cnf.size() << endl;
+       int c = 0;
+       for(const auto& clause : cnf)
+       {
+       cout << "start clause: " << ++c << endl;
+       for(const auto& literal : clause)
+       {
+       cout << "literal: " <<  literal << endl;
+       }
+       }
+       cout << "ap: " << ap << endl;
+       cout << "value: " << value << endl;
+     */
 
     for(auto& clause : cnf)
     {
-        // empty_clause checks if the clause is empty
-        bool empty_clause = true;
-        for(auto& literal : clause)
+        for(auto it = clause.begin(); it != clause.end();)
         {
-            if(literal == TRUE)
-            {
-                empty_clause = false;
-            }
-            else if(literal != FALSE)
-            {
-                bool match = false;
-                // evaluate truth value for literal
-                bool truth_value = bool(value);
+            auto& literal = *it;
+            bool match = false;
+            // evaluate truth value for literal
+            bool truth_value = bool(value);
 
-                if(literal == ap)
+            if(literal == ap)
+            {
+                match = true;
+            }
+            else if(literal[0] == NEGATION && literal.substr(1) == ap)
+            {
+                truth_value = !truth_value;
+                match = true;
+            }
+
+            if(match)
+            {
+                if(truth_value)
                 {
-                    match = true;
-                }
-                else if(literal[0] == NEGATION && literal.substr(1) == ap)
-                {
-                    truth_value = !truth_value;
-                    match = true;
+                    clause.clear();
+                    clause.push_back(TRUE);
+                    break;
                 }
                 else
                 {
-                    empty_clause = false;
-                }
-
-                if(match)
-                {
-                    if(truth_value)
-                    {
-                        clause = vector<string>(1, TRUE);
-                        empty_clause = false;
-                        break;
-                    }
-                    else
-                    {
-                        literal = FALSE;
-                    }
+                    clause.erase(it++);
                 }
             }
-        }
-
-        // replace unsatisfiable disjunctive clauses with empty vector
-        if(empty_clause)
-        {
-            clause.clear();
+            else
+            {
+                ++it;
+            }
         }
     }
 
     /*
-    cout << "sub end: " << cnf.size() << endl;
-    int e = 0;
-    for(auto& clause : cnf)
-    {
-        cout << "start clause: " << ++e << endl;
-        for(auto& literal : clause)
-        {
-            cout << "literal: " <<  literal << endl;
-        }
-    }
-    */
+       cout << "sub end: " << cnf.size() << endl;
+       int e = 0;
+       for(auto& clause : cnf)
+       {
+       cout << "start clause: " << ++e << endl;
+       for(auto& literal : clause)
+       {
+       cout << "literal: " <<  literal << endl;
+       }
+       }
+     */
 }
 
-int valid(const vector<vector<string>>& cnf)
+int valid(const vector<list<string>>& cnf)
 {
     // check if any clauses are empty: Not Satisfiable under current truth assignment
     // check if all clauses are True: Satisfiable
@@ -150,7 +169,7 @@ int valid(const vector<vector<string>>& cnf)
         {
             return UNSAT;
         }
-        else if(clause.size() > 1 || clause[0] != TRUE)
+        else if(clause.size() > 1 || clause.front() != TRUE)
         {
             clause_sat = CONTINUE;
         }
@@ -158,20 +177,46 @@ int valid(const vector<vector<string>>& cnf)
     return clause_sat;
 }
 
+update random_heuristic(const vector<int>& t)
+{
+    vector<int> available;
+    for(int i = 0; i < t.size(); ++i)
+    {
+        if(t[i] < 0)
+        {
+            available.push_back(i);
+        }
+    }
+    std::uniform_int_distribution<int> p(0,available.size());
+    return make_pair(p(generator), 0);
+}
+
+update basic_heuristic(const vector<int>& t)
+{
+    for(int i = 0; i < t.size(); ++i)
+    {
+        if(t[i] < 0)
+        {
+            return make_pair(i, 0);
+        }
+    }
+    assert(true);
+}
+
 // cnf - A formula represented in Conjunctive Normal Form
 // prop - A set of truth assignments for AP
 // return - a truth assignment if formula is satisfiable; otherwise return empty list
-vector<int> solve(vector<vector<string>>& initial_cnf, vector<int>& initial_t, const boost::timer::cpu_timer& timer)
+vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, const boost::timer::cpu_timer& timer, heuristic h = Random)
 {
     stack<update> truth_updates;
-    stack<vector<vector<string>>> cnf_set;
+    stack<vector<list<string>>> cnf_set;
     stack<vector<int>> truth_set;
     cnf_set.push(move(initial_cnf));
     truth_set.push(move(initial_t));
 
     while(!cnf_set.empty() && (timer.elapsed().wall < timeout))
     {
-        vector<vector<string>> cnf = move(cnf_set.top());
+        vector<list<string>> cnf = move(cnf_set.top());
         vector<int> t = move(truth_set.top());
         cnf_set.pop();
         truth_set.pop();
@@ -203,40 +248,51 @@ vector<int> solve(vector<vector<string>>& initial_cnf, vector<int>& initial_t, c
         }
 
         // Select AP without truth assignment
-        // TODO Random Heuristic
-        // TODO 2-Clause Heuristic
-        // TODO My Heuristic
-        int ap = IGNORE;
-        for(int i = 0; i < t.size(); ++i)
+        update u;
+        switch(h)
         {
-            if(t[i] < 0)
-            {
-                ap = i;
+            case Random:
+                {
+                    // Random Heuristic
+                    u = random_heuristic(t);
+                }
                 break;
-            }
+            case TwoClause:
+                {
+                    // TODO 2-Clause Heuristic
+                }
+                break;
+            case MyHeuristic:
+                {
+                    // TODO My Heuristic
+                }
+                break;
+            default:
+                {
+                    u = basic_heuristic(t);
+                }
         }
-        assert(ap != IGNORE);
-        //cout << "AP: " << to_string(ap+1) << endl;
+        //cout << "AP: " << to_string(u.first+1) << endl;
 
-        vector<int> false_assignment(t);
-        false_assignment[ap] = 0;
-        truth_set.push(move(false_assignment));
-        truth_updates.push(make_pair(ap, 0));
+        vector<int> a1(t);
+        a1[u.first] = u.second;
+        truth_set.push(move(a1));
+        truth_updates.push(move(u));
         cnf_set.push(cnf);
 
-        t[ap] = 1;
+        t[u.first] = (1 - u.second);
         truth_set.push(move(t));
-        truth_updates.push(make_pair(ap, 1));
+        truth_updates.push(make_pair(u.first, (1- u.second)));
         cnf_set.push(move(cnf));
     }
 
     return vector<int>();
 }
 
-vector<vector<string>> parseCNF(const string& filename)
+vector<list<string>> parseCNF(const string& filename)
 {
-    vector<vector<string>> cnf;
-    vector<string> clause;
+    vector<list<string>> cnf;
+    list<string> clause;
     bool p = false;
     string format;
     int clauses = -1;
@@ -287,14 +343,13 @@ vector<vector<string>> parseCNF(const string& filename)
     return cnf;
 }
 
-vector<vector<string>> randomCNF(const int& N, const double& LProb, const double& LN_Ratio)
+vector<list<string>> randomCNF(const int& N, const double& LProb, const double& LN_Ratio)
 {
-    std::default_random_engine generator;
     std::uniform_int_distribution<int> p(1,N);
     std::uniform_real_distribution<double> l(0.0,1.0);
 
     int size = int(LN_Ratio * N);
-    vector<vector<string>> cnf(size);
+    vector<list<string>> cnf(size);
 
     for(int n = 0; n < size; ++n)
     {
@@ -330,7 +385,7 @@ int main(int argc, char* argv[])
         // Run benchmark for ITER iterations
         for(int n = 0; n < ITER; ++n)
         {
-            vector<vector<string>> cnf = randomCNF(N, LProb, LN_Ratio);
+            vector<list<string>> cnf = randomCNF(N, LProb, LN_Ratio);
             vector<int> t(N, IGNORE);
 
             timer.start();
@@ -361,7 +416,7 @@ int main(int argc, char* argv[])
     if(argc == 2)
     {
         const string file(argv[1]);
-        vector<vector<string>> cnf = parseCNF(file);
+        vector<list<string>> cnf = parseCNF(file);
         vector<int> t(vars, IGNORE);
 
         // Timer
