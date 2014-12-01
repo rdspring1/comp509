@@ -16,7 +16,6 @@
 using namespace std;
 
 typedef std::pair<int, int> update;
-typedef std::pair<int, int> tc;
 
 const string TRUE = "True";
 const string FALSE = "False";
@@ -49,24 +48,7 @@ enum heuristic
 };
 
 // Two Clause Heuristic
-class tc_comp
-{
-    bool reverse;
-
-    public:
-    tc_comp(const bool& revparam=false)
-    {
-        reverse=revparam;
-    }
-    bool operator() (const tc& lhs, const tc& rhs) const
-    {
-        if (reverse) 
-            return (lhs.second > rhs.second);
-        else 
-            return (lhs.second < rhs.second);
-    }
-};
-priority_queue<tc, std::vector<tc>, tc_comp> two_clauses;
+vector<int> two_clauses;
 
 int split_count = 0;
 int vars = 0;
@@ -141,6 +123,27 @@ void sub(vector<list<string>>& cnf, const string& ap, const int& value)
                 ++it;
             }
         }
+
+        if(clause.size() == 2)
+        {
+            for(auto& literal : clause)
+            {
+                if(literal[0] == NEGATION)
+                {
+                    int value = atoi(literal.substr(1).c_str())-1;
+                    ++two_clauses[value];
+                    assert(value < two_clauses.size());
+                    assert(value >= 0);
+                }
+                else
+                {
+                    int value = atoi(literal.c_str())-1;
+                    ++two_clauses[value];
+                    assert(value < two_clauses.size());
+                    assert(value >= 0);
+                }
+            }
+        }
     }
 
     /*
@@ -177,6 +180,13 @@ int valid(const vector<list<string>>& cnf)
     return clause_sat;
 }
 
+update two_clause_heuristic()
+{
+    auto max_it = max_element(two_clauses.begin(), two_clauses.end());
+    *max_it = 0;
+    return make_pair(*max_it, 0);
+}
+
 update random_heuristic(const vector<int>& t)
 {
     vector<int> available;
@@ -206,7 +216,7 @@ update basic_heuristic(const vector<int>& t)
 // cnf - A formula represented in Conjunctive Normal Form
 // prop - A set of truth assignments for AP
 // return - a truth assignment if formula is satisfiable; otherwise return empty list
-vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, const boost::timer::cpu_timer& timer, heuristic h = Random)
+vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, const boost::timer::cpu_timer& timer, heuristic h = TwoClause)
 {
     stack<update> truth_updates;
     stack<vector<list<string>>> cnf_set;
@@ -385,6 +395,10 @@ int main(int argc, char* argv[])
         // Run benchmark for ITER iterations
         for(int n = 0; n < ITER; ++n)
         {
+            // Reset Two Clause Tracking List
+            two_clauses.clear();
+            two_clauses.resize(N, 0);
+
             vector<list<string>> cnf = randomCNF(N, LProb, LN_Ratio);
             vector<int> t(N, IGNORE);
 
@@ -418,6 +432,8 @@ int main(int argc, char* argv[])
         const string file(argv[1]);
         vector<list<string>> cnf = parseCNF(file);
         vector<int> t(vars, IGNORE);
+        // Reset Two Clause Tracking List
+        two_clauses.resize(vars, 0);
 
         // Timer
         std::unique_ptr<boost::timer::auto_cpu_timer> timer(new boost::timer::auto_cpu_timer());
