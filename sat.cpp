@@ -36,7 +36,7 @@ const int IGNORE = -1;
 const int K = 3;
 const int ITER = 100;
 const boost::timer::nanosecond_type timeout(10 * 1000000000LL);
-std::default_random_engine generator;
+std::default_random_engine generator( (unsigned int)time(NULL) );
 
 // Heuristic
 enum heuristic
@@ -46,6 +46,8 @@ enum heuristic
     MyHeuristic,
     Basic 
 };
+
+vector<int> random_count;
 
 // Two Clause Heuristic
 vector<int> two_clauses;
@@ -191,8 +193,8 @@ update two_clause_heuristic()
             ties.push_back(i);
         }
     }
-    std::uniform_int_distribution<int> p(0,ties.size());
-    int max_index = p(generator);
+    std::uniform_int_distribution<int> p(0,ties.size()-1);
+    int max_index = ties[p(generator)];
     two_clauses[max_index] = 0;
     return make_pair(max_index, 0);
 }
@@ -202,13 +204,14 @@ update random_heuristic(const vector<int>& t)
     vector<int> available;
     for(int i = 0; i < t.size(); ++i)
     {
-        if(t[i] < 0)
+        if(t[i] == IGNORE)
         {
             available.push_back(i);
         }
     }
-    std::uniform_int_distribution<int> p(0,available.size());
-    return make_pair(p(generator), 0);
+    std::uniform_int_distribution<int> p(0,available.size()-1);
+    std::uniform_int_distribution<int> v(0,1);
+    return make_pair(available[p(generator)], v(generator));
 }
 
 update basic_heuristic(const vector<int>& t)
@@ -226,7 +229,7 @@ update basic_heuristic(const vector<int>& t)
 // cnf - A formula represented in Conjunctive Normal Form
 // prop - A set of truth assignments for AP
 // return - a truth assignment if formula is satisfiable; otherwise return empty list
-vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, const boost::timer::cpu_timer& timer, heuristic h = TwoClause)
+vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, const boost::timer::cpu_timer& timer, heuristic h = Random)
 {
     stack<update> truth_updates;
     stack<vector<list<string>>> cnf_set;
@@ -236,6 +239,7 @@ vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, con
 
     while(!cnf_set.empty() && (timer.elapsed().wall < timeout))
     {
+        cout << cnf_set.size() << endl;
         vector<list<string>> cnf = move(cnf_set.top());
         vector<int> t = move(truth_set.top());
         cnf_set.pop();
@@ -275,6 +279,7 @@ vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, con
                 {
                     // Random Heuristic
                     u = random_heuristic(t);
+                    ++random_count[u.first];
                 }
                 break;
             case TwoClause:
@@ -294,6 +299,7 @@ vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, con
                 }
         }
         //cout << "AP: " << to_string(u.first+1) << endl;
+        assert(t[u.first] == IGNORE);
 
         vector<int> a1(t);
         a1[u.first] = u.second;
@@ -306,7 +312,6 @@ vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, con
         truth_updates.push(make_pair(u.first, (1- u.second)));
         cnf_set.push(move(cnf));
     }
-
     return vector<int>();
 }
 
@@ -390,6 +395,8 @@ vector<list<string>> randomCNF(const int& N, const double& LProb, const double& 
 
 int main(int argc, char* argv[])
 {
+    srand (time(NULL));
+
     // Experiments - N, L-Probability, L/N Ratio
     if(argc == 4)
     {
@@ -443,7 +450,11 @@ int main(int argc, char* argv[])
         const string file(argv[1]);
         vector<list<string>> cnf = parseCNF(file);
         vector<int> t(vars, IGNORE);
-        // Reset Two Clause Tracking List
+
+        // Setup Random Tracking List
+        random_count.resize(vars, 0);
+
+        // Setup Two Clause Tracking List
         two_clauses.resize(vars, 0);
 
         // Timer
