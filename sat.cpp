@@ -47,7 +47,7 @@ enum heuristic
     Basic 
 };
 
-vector<int> random_count;
+vector<int> random_order;
 
 // Two Clause Heuristic
 vector<int> two_clauses;
@@ -201,24 +201,40 @@ update two_clause_heuristic()
 
 update random_heuristic(const vector<int>& t)
 {
-    vector<int> available;
-    for(int i = 0; i < t.size(); ++i)
-    {
-        if(t[i] == IGNORE)
-        {
-            available.push_back(i);
+	if(random_order.size() == 0)
+	{
+		for(int i = 0; i < t.size(); ++i)
+		{
+            random_order.push_back(i);
         }
-    }
-    std::uniform_int_distribution<int> p(0,available.size()-1);
-    std::uniform_int_distribution<int> v(0,1);
-    return make_pair(available[p(generator)], v(generator));
+
+		//for(int i = 0; i < random_order.size(); ++i)	
+		//{
+		//	std::uniform_int_distribution<int> p(i, random_order.size()-1);
+		//	swap(random_order[i], random_order[p(generator)]);
+		//}
+
+		//for(int index : random_order)
+		//	cout << index << endl;
+	}
+
+
+	for(int index : random_order)
+	{
+		if(t[index] == IGNORE)
+		{
+			std::uniform_int_distribution<int> v(0,1);
+			return make_pair(index, v(generator));
+		}
+	}
+	assert(true);
 }
 
 update basic_heuristic(const vector<int>& t)
 {
     for(int i = 0; i < t.size(); ++i)
     {
-        if(t[i] < 0)
+        if(t[i] == IGNORE)
         {
             return make_pair(i, 0);
         }
@@ -239,7 +255,6 @@ vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, con
 
     while(!cnf_set.empty() && (timer.elapsed().wall < timeout))
     {
-        cout << cnf_set.size() << endl;
         vector<list<string>> cnf = move(cnf_set.top());
         vector<int> t = move(truth_set.top());
         cnf_set.pop();
@@ -279,7 +294,6 @@ vector<int> solve(vector<list<string>>& initial_cnf, vector<int>& initial_t, con
                 {
                     // Random Heuristic
                     u = random_heuristic(t);
-                    ++random_count[u.first];
                 }
                 break;
             case TwoClause:
@@ -413,6 +427,9 @@ int main(int argc, char* argv[])
         // Run benchmark for ITER iterations
         for(int n = 0; n < ITER; ++n)
         {
+			// Reset Random Order
+			random_order.clear();
+
             // Reset Two Clause Tracking List
             two_clauses.clear();
             two_clauses.resize(N, 0);
@@ -451,8 +468,8 @@ int main(int argc, char* argv[])
         vector<list<string>> cnf = parseCNF(file);
         vector<int> t(vars, IGNORE);
 
-        // Setup Random Tracking List
-        random_count.resize(vars, 0);
+		// Reset Random Order
+		random_order.clear();
 
         // Setup Two Clause Tracking List
         two_clauses.resize(vars, 0);
