@@ -189,7 +189,6 @@ state valid(const vector<list<string>>& cnf)
 update two_clause_heuristic(const vector<int>& t)
 {
 	vector<int> tc;
-	tc.reserve(t.size());
 	for(int i = 0; i < t.size(); ++i)
 	{
 		if(t[i] == IGNORE)
@@ -217,7 +216,6 @@ update two_clause_heuristic(const vector<int>& t)
 update random_heuristic(const vector<int>& t)
 {
 	vector<int> available;
-	available.reserve(t.size());
 	for(int i = 0; i < t.size(); ++i)
 	{
 		if(t[i] == IGNORE)
@@ -349,7 +347,7 @@ vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_time
 
 		t[u.first] = (1 - u.second);
 		truth_set.push(move(t));
-		truth_updates.push(make_pair(u.first, (1- u.second)));
+		truth_updates.push(make_pair(u.first, (1-u.second)));
 		cnf_set.push(move(cnf));
 	}
 	return vector<int>();
@@ -449,8 +447,6 @@ void setup(int N, heuristic h)
 
 int main(int argc, char* argv[])
 {
-	srand (time(NULL));
-
 	// Experiments - N, L-Probability, L/N Ratio
 	if(argc == 4)
 	{
