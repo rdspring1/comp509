@@ -44,7 +44,7 @@ enum heuristic
 	Basic 
 };
 string hstr[] = {"Random", "TwoClause", "MyHeuristic", "Basic"};
-const int HEURISTICS = (int) Random;
+const int HEURISTICS = (int) MyHeuristic;
 
 enum state
 {
@@ -132,7 +132,7 @@ void sub(vector<list<string>>& cnf, const string& ap, const int& value, heuristi
 
 		if(h == TwoClause && clause.size() == 2)
 		{
-			for(auto& literal : clause)
+			for(const auto& literal : clause)
 			{
 				if(literal[0] == NEGATION)
 				{
@@ -244,9 +244,34 @@ update basic_heuristic(const vector<int>& t)
 	assert(true);
 }
 
+void unit_propagation(vector<list<string>>& cnf, vector<int>& t, heuristic h)
+{
+	for(auto& clause : cnf)
+	{
+		if(clause.size() == 1 && clause.front() != TRUE)
+		{
+			string literal = clause.front();
+			if(literal[0] == NEGATION)
+			{
+				int ap = atoi(literal.substr(1).c_str())-1;
+				assert(t[ap] == IGNORE);
+				sub(cnf, to_string(ap+1), 0, h);
+				t[ap] = 0;
+			}
+			else
+			{
+				int ap = atoi(literal.c_str())-1;
+				assert(t[ap] == IGNORE);
+				sub(cnf, to_string(ap+1), 1, h);
+				t[ap] = 1;
+			}
+		}
+	}
+}
+
 // cnf - A formula represented in Conjunctive Normal Form
 // return - a truth assignment if formula is satisfiable; otherwise return empty list
-vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_timer& timer, heuristic h = TwoClause)
+vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_timer& timer, heuristic h)
 {
 	stack<update> truth_updates;
 	stack<vector<list<string>>> cnf_set;
@@ -270,6 +295,9 @@ vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_time
 			//cout << split_count << " " << u.first << " " << u.second << endl;
 		}
 
+		// Unit Clause Propagation
+		unit_propagation(cnf, t, h);
+
 		// Check Formula
 		switch(valid(cnf))
 		{
@@ -281,7 +309,7 @@ vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_time
 				{
 					return t;
 				}
-		}
+		}	
 
 		// Select AP without truth assignment
 		update u;
@@ -405,7 +433,7 @@ vector<list<string>> randomCNF(const int& N, const double& LProb, const double& 
 	return cnf;
 }
 
-void setup(int N, heuristic h = TwoClause)
+void setup(int N, heuristic h)
 {
 	switch(h)
 	{
@@ -485,18 +513,26 @@ int main(int argc, char* argv[])
 	}
 
 	// CNF Format File
-	if(argc == 2)
+	if(argc > 1)
 	{
+		heuristic h = Basic;
+		if(argc == 3)
+		{
+			int value = atoi(argv[2]);
+			if(value >= 0 && value < Basic)
+				h = (heuristic) value;
+		}
+
 		const string file(argv[1]);
 		const vector<list<string>> cnf = parseCNF(file);
-		setup(vars);
+		setup(vars, h);
 
 		// Timer
 		std::unique_ptr<boost::timer::auto_cpu_timer> timer(new boost::timer::auto_cpu_timer());
-		vector<int> result = solve(cnf, *timer);
+		vector<int> result = solve(cnf, *timer, h);
 		timer.reset(nullptr);
 
-		cout << "RESULT" << endl;
 		print(result); 
+		cout << hstr[h] << endl;
 	}
 }
