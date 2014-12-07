@@ -44,7 +44,7 @@ enum heuristic
 	Basic 
 };
 string hstr[] = {"Random", "TwoClause", "MyHeuristic", "Basic"};
-const int HEURISTICS = (int) MyHeuristic;
+const int HEURISTICS = (int) Basic;
 
 enum state
 {
@@ -53,6 +53,9 @@ enum state
 	SAT
 };
 	
+// MyHeuristic - DLIS
+vector<int> dlis;
+
 // Two Clause Heuristic
 vector<int> two_clauses;
 
@@ -150,6 +153,19 @@ void sub(vector<list<string>>& cnf, const string& ap, const int& value, heuristi
 				}
 			}
 		}
+        else if(h == MyHeuristic)
+        {
+			for(const auto& literal : clause)
+			{
+				if(literal[0] != NEGATION && literal != TRUE)
+				{
+					int value = atoi(literal.c_str())-1;
+					++dlis[value];
+					assert(value < dlis.size());
+					assert(value >= 0);
+				}
+			}
+        }
 	}
 
 	/*
@@ -186,31 +202,55 @@ state valid(const vector<list<string>>& cnf)
 	return clause_sat;
 }
 
-update two_clause_heuristic(const vector<int>& t)
+update dlis_heuristic(const vector<int>& t)
 {
-	vector<int> tc;
+	vector<int> ties;
+    int maxValue = 0;
 	for(int i = 0; i < t.size(); ++i)
 	{
 		if(t[i] == IGNORE)
 		{
-			tc.push_back(two_clauses[i]);
+            if(dlis[i] > maxValue)
+            {
+                maxValue = dlis[i];
+                ties.clear();
+            }
+            
+            if(dlis[i] == maxValue)
+            {
+			    ties.push_back(i);
+            }
 		}
-	}
-	assert(tc.size() > 0);
-
-	auto it = max_element(tc.begin(), tc.end());
-	vector<int> ties;
-	for(int i = 0; i < two_clauses.size(); ++i)
-	{
-		if(t[i] == IGNORE && two_clauses[i] == *it)
-		{
-			ties.push_back(i);
-		}
+        dlis[i] = 0;
 	}
 	std::uniform_int_distribution<int> p(0,ties.size()-1);
-	int max_index = ties[p(generator)];
-	two_clauses[max_index] = 0;
-	return make_pair(max_index, 0);
+	std::uniform_int_distribution<int> v(0,1);
+	return make_pair(ties[p(generator)], v(generator));
+}
+
+update two_clause_heuristic(const vector<int>& t)
+{
+	vector<int> ties;
+    int maxValue = 0;
+	for(int i = 0; i < t.size(); ++i)
+	{
+		if(t[i] == IGNORE)
+		{
+            if(two_clauses[i] > maxValue)
+            {
+                maxValue = two_clauses[i];
+                ties.clear();
+            }
+            
+            if(two_clauses[i] == maxValue)
+            {
+			    ties.push_back(i);
+            }
+		}
+        two_clauses[i] = 0;
+	}
+	std::uniform_int_distribution<int> p(0,ties.size()-1);
+	return make_pair(ties[p(generator)], 0);
 }
 
 update random_heuristic(const vector<int>& t)
@@ -327,8 +367,8 @@ vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_time
 				break;
 			case MyHeuristic:
 				{
-					// TODO My Heuristic
-					return vector<int>();
+					// My Heuristic - Dynamic Largest Individual Sum
+                    u = dlis_heuristic(t);
 				}
 				break;
 			default:
@@ -431,7 +471,7 @@ vector<list<string>> randomCNF(const int& N, const double& LProb, const double& 
 	return cnf;
 }
 
-void setup(int N, heuristic h)
+void setup(const vector<list<string>>& cnf, heuristic h)
 {
 	switch(h)
 	{
@@ -439,9 +479,25 @@ void setup(int N, heuristic h)
 			{
 				// Reset Two Clause Tracking List
 				two_clauses.clear();
-				two_clauses.resize(N, 0);
+				two_clauses.resize(vars, 0);
 			}
 			break;
+        case MyHeuristic:
+            {
+                dlis.clear();
+                dlis.resize(vars, 0);
+                for(const auto& clause : cnf)
+                {
+                    for(const auto& literal : clause)
+                    {
+			            if(literal[0] != NEGATION)
+			            {
+                            ++dlis[atoi(literal.c_str())-1];
+                        }
+                    }
+                }
+            }
+            break;
 	}
 }
 
@@ -472,7 +528,7 @@ int main(int argc, char* argv[])
 			const vector<list<string>> cnf = randomCNF(vars, LProb, LN_Ratio);
 			for(int h = 0; h < HEURISTICS; ++h)
 			{
-				setup(vars, (heuristic) h);
+				setup(cnf, (heuristic) h);
 
 				timer.start();
 				vector<int> result = solve(cnf, timer, (heuristic) h);
@@ -506,6 +562,7 @@ int main(int argc, char* argv[])
 			cout << "median computation time: " << time[h][ITER/2] << endl;
 			cout << "max computation time: " << time[h][ITER-1] << endl;
 		}
+        return 0;
 	}
 
 	// CNF Format File
@@ -521,7 +578,7 @@ int main(int argc, char* argv[])
 
 		const string file(argv[1]);
 		const vector<list<string>> cnf = parseCNF(file);
-		setup(vars, h);
+		setup(cnf, h);
 
 		// Timer
 		std::unique_ptr<boost::timer::auto_cpu_timer> timer(new boost::timer::auto_cpu_timer());
