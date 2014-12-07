@@ -1,0 +1,24 @@
+100 0.5 6
+MyHeuristic Success Rate: 0
+min number of splitting-rule applications: 214
+median number of splitting-rule applications: 632
+max number of splitting-rule applications: 1300
+min computation time: 0.717999
+median computation time: 2.02647
+max computation time: 4.18916
+
+TwoClause Success Rate: 0
+min number of splitting-rule applications: 326
+median number of splitting-rule applications: 672
+max number of splitting-rule applications: 1210
+min computation time: 0.77387
+median computation time: 1.55876
+max computation time: 2.74333
+
+Random Success Rate: 0
+min number of splitting-rule applications: 5842
+median number of splitting-rule applications: 12254
+max number of splitting-rule applications: 30252
+min computation time: 9.08147
+median computation time: 19.2039
+max computation time: 46.0525
