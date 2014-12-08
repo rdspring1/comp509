@@ -57,7 +57,7 @@ float psize[]
     0.25f,
     0.125,
 };
-const int HEURISTICS = (int) Basic;
+const int HEURISTICS = (int) Random;
 
 enum state
 {
@@ -68,6 +68,7 @@ enum state
 
 // MyHeuristic
 vector<float> myh;
+vector<float> nc;
 
 // Two Clause Heuristic
 vector<int> two_clauses;
@@ -127,6 +128,7 @@ void sub_heuristic(heuristic h, const list<string>& clause)
                         if(literal[0] == NEGATION)
                         {
                             value = atoi(literal.substr(1).c_str())-1;
+                            nc[value] += psize[clause.size()];
                         }
                         else
                         {
@@ -258,10 +260,16 @@ update myh_heuristic(const vector<int>& t)
             }
         }
         myh[i] = 0;
+        nc[i] = 0;
     }
     std::uniform_int_distribution<int> p(0,ties.size()-1);
-    std::uniform_int_distribution<int> v(0,1);
-    return make_pair(ties[p(generator)], v(generator));
+    int index = ties[p(generator)];
+    int pc = myh[index] - nc[index];
+    if(pc > nc[index])
+    {
+        return make_pair(index, 0);
+    }
+    return make_pair(index, 1);
 }
 
 update two_clause_heuristic(const vector<int>& t)
@@ -286,7 +294,8 @@ update two_clause_heuristic(const vector<int>& t)
         two_clauses[i] = 0;
     }
     std::uniform_int_distribution<int> p(0,ties.size()-1);
-    return make_pair(ties[p(generator)], 0);
+    std::uniform_int_distribution<int> v(0,1);
+    return make_pair(ties[p(generator)], v(generator));
 }
 
 update random_heuristic(const vector<int>& t)
@@ -320,8 +329,9 @@ update basic_heuristic(const vector<int>& t)
 
 void unit_propagation(vector<list<string>>& cnf, vector<int>& t, heuristic h)
 {
-    for(auto& clause : cnf)
+    for(int i = 0; i < cnf.size(); ++i)
     {
+        const list<string>& clause = cnf[i];
         if(clause.size() == 1 && clause.front() != TRUE)
         {
             string literal = clause.front();
@@ -339,6 +349,7 @@ void unit_propagation(vector<list<string>>& cnf, vector<int>& t, heuristic h)
                 sub(cnf, to_string(ap+1), 1, h);
                 t[ap] = 1;
             }
+            i = 0;
         }
     }
 }
@@ -521,7 +532,9 @@ void setup(const vector<list<string>>& cnf, heuristic h)
         case MyHeuristic:
             {
                 myh.clear();
+                nc.clear();
                 myh.resize(vars, 0);
+                nc.resize(vars, 0);
                 for(const auto& clause : cnf)
                 {
                     for(const auto& literal : clause)
@@ -530,6 +543,7 @@ void setup(const vector<list<string>>& cnf, heuristic h)
                         if(literal[0] == NEGATION)
                         {
                             value = atoi(literal.substr(1).c_str())-1;
+                            nc[value] += psize[clause.size()];
                         }
                         else
                         {
