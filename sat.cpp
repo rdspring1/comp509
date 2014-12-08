@@ -53,9 +53,9 @@ string hstr[] =
 float psize[]
 {
     0.0f,
-    0.5f,
-    0.25f,
-    0.125,
+        0.5f,
+        0.25f,
+        0.125,
 };
 const int HEURISTICS = (int) Random;
 
@@ -361,25 +361,12 @@ vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_time
     stack<update> truth_updates;
     stack<vector<list<string>>> cnf_set;
     stack<vector<int>> truth_set;
-    cnf_set.push(move(initial_cnf));
-    truth_set.push(vector<int>(vars, IGNORE));
 
-    while(!cnf_set.empty() && (timer.elapsed().wall < timeout))
+    vector<list<string>> cnf = move(initial_cnf);
+    vector<int> t(vars, IGNORE);
+
+    do
     {
-        vector<list<string>> cnf = move(cnf_set.top());
-        vector<int> t = move(truth_set.top());
-        cnf_set.pop();
-        truth_set.pop();
-
-        if(!truth_updates.empty())
-        {
-            ++split_count;
-            update& u = truth_updates.top();
-            sub(cnf, to_string(u.first+1), u.second, h);
-            truth_updates.pop();
-            //cout << split_count << " " << u.first << " " << u.second << endl;
-        }
-
         // Unit Clause Propagation
         unit_propagation(cnf, t, h);
 
@@ -388,15 +375,28 @@ vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_time
         {
             case UNSAT:
                 {
-                    continue;
+                    if(!truth_updates.empty())
+                    {
+                        cnf = move(cnf_set.top());
+                        t = move(truth_set.top());
+                        cnf_set.pop();
+                        truth_set.pop();
+
+                        ++split_count;
+                        update& u = truth_updates.top();
+                        sub(cnf, to_string(u.first+1), u.second, h);
+                        truth_updates.pop();
+                        //cout << split_count << " " << u.first << " " << u.second << endl;
+                    }
                 }
+                continue;
             case SAT:
                 {
                     return t;
                 }
         }	
 
-        // Select AP without truth assignment
+        // Branching Heuristic - Select AP without truth assignment
         update u;
         switch(h)
         {
@@ -426,17 +426,17 @@ vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_time
         //cout << "AP: " << to_string(u.first+1) << endl;
         assert(t[u.first] == IGNORE);
 
-        vector<int> a1(t);
-        a1[u.first] = u.second;
-        truth_set.push(move(a1));
-        truth_updates.push(move(u));
+        vector<int> branch_truth_set(t);
+        branch_truth_set[u.first] = (1 - u.second);
+        truth_set.push(move(branch_truth_set));
+        truth_updates.push(make_pair(u.first, (1-u.second)));
         cnf_set.push(cnf);
 
-        t[u.first] = (1 - u.second);
-        truth_set.push(move(t));
-        truth_updates.push(make_pair(u.first, (1-u.second)));
-        cnf_set.push(move(cnf));
-    }
+        ++split_count;
+        t[u.first] = u.second;
+        sub(cnf, to_string(u.first+1), u.second, h);
+    } while(!truth_updates.empty() && (timer.elapsed().wall < timeout));
+
     return vector<int>();
 }
 
