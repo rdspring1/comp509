@@ -43,16 +43,16 @@ enum heuristic
     Random,
     Basic 
 };
-string hstr[] = 
+const string hstr[] = 
 {
     "MyHeuristic", 
     "TwoClause", 
     "Random", 
     "Basic"
 };
-float psize[]
+const float psize[]
 {
-    0.0f,
+        0.0f,
         0.5f,
         0.25f,
         0.125,
@@ -92,6 +92,25 @@ void print(vector<int> t)
     }
 }
 
+void update_heuristic(heuristic h, const string& ap, int size, bool neg)
+{
+    switch(h)
+    {
+        case MyHeuristic:
+            {
+                int value = atoi(ap.c_str())-1;
+                if(neg)
+                {
+                    nc[value] += psize[size];
+                }
+                myh[value] += psize[size];
+                assert(value < myh.size());
+                assert(value >= 0);
+            }
+            break;
+    }
+}
+
 void sub_heuristic(heuristic h, const list<string>& clause)
 {
     switch(h)
@@ -118,6 +137,7 @@ void sub_heuristic(heuristic h, const list<string>& clause)
                 }
             }
             break;
+        /*
         case MyHeuristic:
             {
                 for(const auto& literal : clause)
@@ -142,6 +162,7 @@ void sub_heuristic(heuristic h, const list<string>& clause)
                 }
             }
             break;
+        */
     }
 }
 
@@ -177,11 +198,20 @@ void sub(vector<list<string>>& cnf, const string& ap, const int& value, heuristi
             }
             else if(literal[0] == NEGATION)
             {
-                if(literal.substr(1) == ap)
+                string prop = literal.substr(1);
+                if(prop == ap)
                 {
                     truth_value = !truth_value;
                     match = true;
                 }
+                else
+                {
+                    update_heuristic(h, prop, clause.size(), true);
+                }
+            }
+            else if(literal != TRUE)
+            {
+                update_heuristic(h, literal, clause.size(), false);
             }
 
             if(match)
@@ -539,18 +569,14 @@ void setup(const vector<list<string>>& cnf, heuristic h)
                 {
                     for(const auto& literal : clause)
                     {
-                        int value = -1;
                         if(literal[0] == NEGATION)
                         {
-                            value = atoi(literal.substr(1).c_str())-1;
-                            nc[value] += psize[clause.size()];
+                            update_heuristic(h, literal.substr(1), clause.size(), true);
                         }
                         else
                         {
-                            value = atoi(literal.c_str())-1;
+                            update_heuristic(h, literal, clause.size(), false);
                         }
-                        //myh[value] += std::pow(2, -1.0f * clause.size());
-                        myh[value] += psize[clause.size()];
                     }
                 }
             }
