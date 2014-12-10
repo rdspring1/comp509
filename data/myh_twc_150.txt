@@ -1,0 +1,125 @@
+./sat 150 0.5 3
+N: 150 L-Probability: 0.5 LN_Ratio: 3
+MyHeuristic Success Rate: 100
+min number of splitting-rule applications: 25
+median number of splitting-rule applications: 39
+max number of splitting-rule applications: 214
+min computation time: 0.014527
+median computation time: 0.023604
+max computation time: 0.490942
+
+TwoClause Success Rate: 100
+min number of splitting-rule applications: 26
+median number of splitting-rule applications: 43
+max number of splitting-rule applications: 1300
+min computation time: 0.016781
+median computation time: 0.030906
+max computation time: 0.889145
+
+./sat 150 0.5 3.5
+N: 150 L-Probability: 0.5 LN_Ratio: 3.5
+MyHeuristic Success Rate: 100
+min number of splitting-rule applications: 19
+median number of splitting-rule applications: 88
+max number of splitting-rule applications: 2464
+min computation time: 0.018075
+median computation time: 0.20352
+max computation time: 8.89673
+
+TwoClause Success Rate: 100
+min number of splitting-rule applications: 21
+median number of splitting-rule applications: 90
+max number of splitting-rule applications: 2704
+min computation time: 0.021253
+median computation time: 0.253046
+max computation time: 10.9164
+
+./sat 150 0.5 4
+N: 150 L-Probability: 0.5 LN_Ratio: 4
+MyHeuristic Success Rate: 77
+min number of splitting-rule applications: 31
+median number of splitting-rule applications: 5148
+max number of splitting-rule applications: 15219
+min computation time: 0.032796
+median computation time: 22.0391
+max computation time: 60.0156
+
+TwoClause Success Rate: 64
+min number of splitting-rule applications: 21
+median number of splitting-rule applications: 6504
+max number of splitting-rule applications: 15029
+min computation time: 0.026668
+median computation time: 25.4471
+max computation time: 60.0174
+
+./sat 150 0.5 4.5
+N: 150 L-Probability: 0.5 LN_Ratio: 4.5
+MyHeuristic Success Rate: 5
+min number of splitting-rule applications: 2212
+median number of splitting-rule applications: 7964
+max number of splitting-rule applications: 12017
+min computation time: 11.3722
+median computation time: 45.1407
+max computation time: 60.0114
+
+TwoClause Success Rate: 6
+min number of splitting-rule applications: 186
+median number of splitting-rule applications: 10377
+max number of splitting-rule applications: 11795
+min computation time: 0.984741
+median computation time: 60.0026
+max computation time: 60.0149
+
+./sat 150 0.5 5
+N: 150 L-Probability: 0.5 LN_Ratio: 5
+MyHeuristic Success Rate: 0
+min number of splitting-rule applications: 650
+median number of splitting-rule applications: 3386
+max number of splitting-rule applications: 9296
+min computation time: 4.43719
+median computation time: 23.1947
+max computation time: 60.0124
+
+TwoClause Success Rate: 0
+min number of splitting-rule applications: 1348
+median number of splitting-rule applications: 4922
+max number of splitting-rule applications: 9343
+min computation time: 9.49458
+median computation time: 34.255
+max computation time: 60.0132
+
+./sat 150 0.5 5.5
+N: 150 L-Probability: 0.5 LN_Ratio: 5.5
+MyHeuristic Success Rate: 0
+min number of splitting-rule applications: 214
+median number of splitting-rule applications: 1674
+max number of splitting-rule applications: 4320
+min computation time: 1.70507
+median computation time: 12.8728
+max computation time: 32.2446
+
+TwoClause Success Rate: 0
+min number of splitting-rule applications: 822
+median number of splitting-rule applications: 2428
+max number of splitting-rule applications: 5852
+min computation time: 6.60905
+median computation time: 19.5955
+max computation time: 45.9045
+
+./sat 150 0.5 6
+N: 150 L-Probability: 0.5 LN_Ratio: 6
+MyHeuristic Success Rate: 0
+min number of splitting-rule applications: 268
+median number of splitting-rule applications: 898
+max number of splitting-rule applications: 2622
+min computation time: 2.34384
+median computation time: 7.63639
+max computation time: 21.5874
+
+TwoClause Success Rate: 0
+min number of splitting-rule applications: 490
+median number of splitting-rule applications: 1176
+max number of splitting-rule applications: 3442
+min computation time: 4.39002
+median computation time: 10.7166
+max computation time: 29.0294
