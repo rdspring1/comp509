@@ -28,7 +28,7 @@ const string cnf_format = "cnf";
 const string sat_format = "sat";
 const char NEGATION = '-';
 
-const int TRUE = -1;
+const int TRUE = 0;
 const int IGNORE = -1;
 const int K = 3;
 const int ITER = 100;
@@ -381,7 +381,7 @@ vector<int> solve(vector<list<int>> initial_cnf, const boost::timer::cpu_timer& 
     vector<list<int>> cnf = move(initial_cnf);
     vector<int> t(vars, IGNORE);
 
-    do
+    while(timer.elapsed().wall < timeout)
     {
         // Unit Clause Propagation
         unit_propagation(cnf, t, h);
@@ -455,7 +455,7 @@ vector<int> solve(vector<list<int>> initial_cnf, const boost::timer::cpu_timer& 
         ++split_count;
         t[u.first] = u.second;
         sub(cnf, u.first+1, u.second, h);
-    } while((timer.elapsed().wall < timeout));
+    }
 
     return vector<int>();
 }
@@ -615,7 +615,7 @@ int main(int argc, char* argv[])
                 split_count = 0;
 
                 time[h][n] = atof(timer.format(boost::timer::default_places, "%w").c_str());
-                cout << hstr[h] << " - iteration: " << n << " time: " << time[h][n] << std::endl;
+                //cout << hstr[h] << " - iteration: " << n << " time: " << time[h][n] << std::endl;
             }
         }
 
