@@ -41,6 +41,8 @@ test: sat tests/test.cnf tests/test1.cnf tests/test2.cnf tests/test3.cnf tests/t
 	./sat tests/test3.cnf
 	./sat tests/test4.cnf
 	./sat tests/test5.cnf
+
+othertest: cdcl tests/test.cnf tests/test1.cnf tests/test2.cnf tests/test3.cnf tests/test4.cnf tests/test5.cnf 
 	./cdcl tests/test.cnf
 	./cdcl tests/test1.cnf
 	./cdcl tests/test2.cnf

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <list>
+#include <set>
 #include <stack>
 #include <queue>
 #include <fstream>
@@ -128,20 +129,27 @@ int evaluate_literal(const int& literal, const int& ap, const int& value)
 
 int evaluate_literal(const int& literal)
 {
+    int ap = abs(literal)-1;
+    if(t[ap] == IGNORE)
+    {
+        return IGNORE;
+    }
+
     if(literal < 0)
     {
-        return (1 - t[abs(literal)]);
+        return (1 - t[ap]);
     }
-    return t[literal];
+    return t[ap];
 }
 
 void update_watched_literal(bool first, int clause)
 {
+    int other = (first) ? wl1[clause] : wl2[clause];
     int index = 0;
     for(const auto& literal : cnf[clause])
     {
         int truth_value = evaluate_literal(literal);
-        if(truth_value == IGNORE)
+        if(index != other && truth_value == IGNORE)
         {
             if(first)
             {
@@ -188,53 +196,6 @@ void evaluate_cnf(const int& ap, const int& value)
     }
 }
 
-void unit_propagation()
-{
-    for(int i = 0; i < cnf.size(); ++i)
-    {
-        if(wl1[i] == wl2[i] && wl1[i] == IGNORE)
-        {
-            int literal = cnf[i][wl1[i]];
-            if(literal < 0)
-            {
-                int ap = abs(literal);
-                assert(t[ap] == IGNORE);
-                t[ap] = 1;
-                evaluate_cnf(ap, 0);
-            }
-            else
-            {
-                assert(t[literal] == IGNORE);
-                t[literal] = 1;
-                evaluate_cnf(literal, 1);
-            }
-            i = 0;
-        }
-    }
-}
-
-state valid()
-{
-    // check if any clauses are empty: Not Satisfiable under current truth assignment
-    // check if all clauses are True: Satisfiable
-    state clause_sat = SAT;
-    for(int i = 0; i < cnf.size(); ++i)
-    {
-        int v1 = evaluate_literal(wl1[i]);
-        int v2 = evaluate_literal(wl2[i]);
-        // Clause is False, Clause contains multiple propositions, singleton clause
-        if(v1 == 0 && v2 == 0)
-        {
-            return UNSAT;
-        }
-        else if(v1 == IGNORE || v2 == IGNORE)
-        {
-            clause_sat = CONTINUE;
-        }
-    }
-    return clause_sat;
-}
-
 void update_implication_graph(const int& ap, const int& value, const int& dl, const int& pc)
 {
     assert(t[ap] == IGNORE);
@@ -243,31 +204,176 @@ void update_implication_graph(const int& ap, const int& value, const int& dl, co
     parent[ap] = pc;
 }
 
+state unit_propagation(int& clause_id, int dl)
+{
+    // check if any clauses are empty: Not Satisfiable under current truth assignment
+    // check if all clauses are True: Satisfiable
+    state clause_sat = SAT;
+    for(int i = 0; i < cnf.size(); ++i)
+    {
+        int literal1 = cnf[i][wl1[i]];
+        int literal2 = cnf[i][wl2[i]];
+        int v1 = evaluate_literal(literal1);
+        int v2 = evaluate_literal(literal2);
+
+        cout << "wl1: " << wl1[i] << " wl2: " << wl2[i] << endl;
+        cout << "v1: " << v1 << " v2: " << v2 << endl;
+        if(v1 == 1 || v2 == 1)
+        {
+            // Clause is SAT
+            continue;
+        }
+        else if(v1 == 0 && v2 == 0)
+        {
+            clause_id = i;
+            return UNSAT;
+        }
+        else if((wl1[i] != wl2[i]) && v1 == IGNORE && v2 == IGNORE) // Unassigned
+        {
+            clause_sat = CONTINUE;
+        }
+        else // Unit Clause
+        {
+            int literal = -1;
+            if(v1 == IGNORE)
+            {
+                literal = literal1;
+            }
+            else
+            {
+                literal = literal2;
+            }
+
+            if(literal < 0)
+            {
+                int ap = abs(literal)-1;
+                assert(t[ap] == IGNORE);
+                update_implication_graph(ap, 0, dl, i);
+                evaluate_cnf(ap, 0);
+            }
+            else
+            {
+                int ap = literal-1;
+                assert(t[ap] == IGNORE);
+                update_implication_graph(ap, 1, dl, i);
+                evaluate_cnf(ap, 1);
+            }
+            i = 0;
+        }
+    }
+    return clause_sat;
+}
+
+int decision_count(const int& clause_id, const int& dl)
+{
+    int count = 0;
+    const auto& clause = cnf[clause_id];
+    for(const auto& literal : clause)
+    {
+        int ap = abs(literal)-1;
+        if(decision_level[ap] == dl && parent[ap] == IGNORE)
+        {
+            ++count;
+        }
+    }
+    return count;
+}
+
+// Conflict Analysis / New Decision Level
+vector<int> analysis(const int& clause_id, int& dl)
+{
+    // Collect all literals from parent clauses - Ignore Duplicates and conflicting variables
+    list<int> conflict_set(cnf[clause_id].begin(), cnf[clause_id].end());    
+    int ap = abs(conflict_set.front())-1;
+
+    while(!conflict_set.empty() && decision_count(parent[ap], dl) != 1)
+    {
+        if(decision_level[ap] == dl && parent[ap] != IGNORE)
+        {
+            int neg_literal = -1*conflict_set.front();
+            conflict_set.pop_front();
+            const vector<int>& clause = cnf[parent[ap]];
+            for(const int& literal : clause)
+            {
+                int others = count(conflict_set.begin(), conflict_set.end(), literal);
+                if(others == 0 && literal != neg_literal)
+                {
+                    conflict_set.push_back(literal);
+                }
+            }
+        }
+    }
+
+    // Create Conflict Clause
+    dl = IGNORE;
+    vector<int> conflict_clause;
+    for(int literal : conflict_set)
+    {
+        int ap = abs(literal);
+        dl = min(dl, decision_level[ap]);
+        conflict_clause.push_back(literal);
+    }
+    cout << "new dl: " << dl << endl;
+
+    return conflict_clause;
+}
+
+// Update Truth Assignment
+void update_truth_assignment(const int& dl)
+{
+    for(int ap = 0; ap < t.size(); ++ap)
+    {
+        if(decision_level[ap] > dl)
+        {
+            t[ap] = IGNORE;
+            decision_level[ap] = IGNORE;
+            parent[ap] = IGNORE;
+        }
+    }
+}
+
 // cnf - A formula represented in Conjunctive Normal Form
 // return - a truth assignment if formula is satisfiable; otherwise return empty list
 vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
 {
     stack<update> truth_updates;
-    do
+    while(timer.elapsed().wall < timeout)
     {
-        // Unit Clause Propagation
-        unit_propagation();
-
-        // Check Formula
-        switch(valid())
+        int clause_id = 0;
+        // Unit Clause Propagation + Check Formula
+        switch(unit_propagation(clause_id, truth_updates.size()))
         {
             case UNSAT:
                 {
-                    if(!truth_updates.empty())
-                    {
-                        // TODO Conflict Analysis / Decision Level
-                        // TODO Update Truth Assignment, VSIDS, Decision Level / Add Conflict Clause
+                    //  Conflict Analysis / New Decision Level
+                    int new_dl = truth_updates.size();
+                    vector<int> conflict_clause = analysis(clause_id, new_dl);
 
-                        ++split_count;
-                        update& u = truth_updates.top();
-                        truth_updates.pop();
-                        //cout << split_count << " " << u.first << " " << u.second << endl;
+                    if(new_dl == IGNORE)
+                    {
+                        return vector<int>();
                     }
+
+                    // Add Conflict Clause
+                    cnf.push_back(move(conflict_clause));
+
+                    // Update Decision Level
+                    while(truth_updates.size() != new_dl)
+                    {
+                        truth_updates.pop();
+                    }
+
+                    // Update Truth Assignment
+                    update_truth_assignment(new_dl);
+
+                    // TODO Update VSIDS Heuristic
+
+                    ++split_count;
+                    update& u = truth_updates.top();
+                    truth_updates.pop();
+                    update_implication_graph(u.first, u.second, truth_updates.size(), IGNORE);
+                    evaluate_cnf(u.first, u.second);
+                    //cout << split_count << " " << u.first << " " << u.second << endl;
                 }
                 continue;
             case SAT:
@@ -298,9 +404,10 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
 
         ++split_count;
         truth_updates.push(make_pair(u.first, (1-u.second)));
+        cout << "Decision: " << u.first << " " << u.second << endl;
         update_implication_graph(u.first, u.second, truth_updates.size(), IGNORE);
         evaluate_cnf(u.first, u.second);
-    } while(!truth_updates.empty() && (timer.elapsed().wall < timeout));
+    }
 
     return vector<int>();
 }
@@ -394,7 +501,11 @@ void setup(heuristic h)
     parent.resize(vars, IGNORE);
     t.resize(vars, IGNORE);
     wl1.resize(cnf.size(), 0);
-    wl2.resize(cnf.size(), K-1);
+    wl2.resize(cnf.size(), 0);
+    for(int i = 0; i < cnf.size(); ++i)
+    {
+        wl2[i] = cnf[i].size()-1;
+    }
 
     switch(h)
     {
@@ -426,10 +537,10 @@ int main(int argc, char* argv[])
 
     for(double LN_Ratio = min_LN; LN_Ratio <= max_LN; LN_Ratio += inc_LN)
     {
+        cout << "N: " << vars << " L-Probability: " << LProb << " LN_Ratio: " << LN_Ratio << std::endl;         
         int success = 0;
         vector<int> split(ITER, 0);
         vector<double> time(ITER, 0);
-
         boost::timer::cpu_timer timer;
 
         // Run benchmark for ITER iterations
@@ -455,7 +566,6 @@ int main(int argc, char* argv[])
         }
 
         // Sort data and print median value
-        cout << "N: " << vars << " L-Probability: " << LProb << " LN_Ratio: " << LN_Ratio << std::endl;         
         cout << hstr[h] << " Success Rate: " << success << endl;
         std::sort(split.begin(), split.end());
         std::sort(time.begin(), time.end());
