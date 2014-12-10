@@ -17,7 +17,6 @@ using namespace std;
 
 typedef std::pair<int, int> update;
 
-const string TRUE = "True";
 const string FALSE = "False";
 const string UNSAT_STR = "UNSAT";
 const string VAR = "VARIABLE";
@@ -29,6 +28,7 @@ const string cnf_format = "cnf";
 const string sat_format = "sat";
 const char NEGATION = '-';
 
+const int TRUE = -1;
 const int IGNORE = -1;
 const int K = 3;
 const int ITER = 100;
@@ -92,13 +92,13 @@ void print(vector<int> t)
     }
 }
 
-void update_heuristic(heuristic h, const string& ap, int size, bool neg)
+void update_heuristic(heuristic h, const int& ap, int size, bool neg)
 {
     switch(h)
     {
         case MyHeuristic:
             {
-                int value = atoi(ap.c_str())-1;
+                int value = ap-1;
                 if(neg)
                 {
                     nc[value] += psize[size];
@@ -111,7 +111,7 @@ void update_heuristic(heuristic h, const string& ap, int size, bool neg)
     }
 }
 
-void sub_heuristic(heuristic h, const list<string>& clause)
+void sub_heuristic(heuristic h, const list<int>& clause)
 {
     switch(h)
     {
@@ -121,15 +121,7 @@ void sub_heuristic(heuristic h, const list<string>& clause)
                 {
                     for(const auto& literal : clause)
                     {
-                        int value = -1;
-                        if(literal[0] == NEGATION)
-                        {
-                            value = atoi(literal.substr(1).c_str())-1;
-                        }
-                        else
-                        {
-                            value = atoi(literal.c_str())-1;
-                        }
+                        int value = abs(literal)-1;
                         ++two_clauses[value];
                         assert(value < two_clauses.size());
                         assert(value >= 0);
@@ -144,15 +136,10 @@ void sub_heuristic(heuristic h, const list<string>& clause)
                 {
                     if(literal != TRUE)
                     {
-                        int value = -1;
-                        if(literal[0] == NEGATION)
+                        int value = abs(literal)-1;
+                        if(literal < 0)
                         {
-                            value = atoi(literal.substr(1).c_str())-1;
                             nc[value] += psize[clause.size()];
-                        }
-                        else
-                        {
-                            value = atoi(literal.c_str())-1;
                         }
                         //myh[value] += std::pow(2, -1.0f * clause.size());
                         myh[value] += psize[clause.size()];
@@ -166,7 +153,7 @@ void sub_heuristic(heuristic h, const list<string>& clause)
     }
 }
 
-void sub(vector<list<string>>& cnf, const string& ap, const int& value, heuristic h)
+void sub(vector<list<int>>& cnf, const int& ap, const int& value, heuristic h)
 {
     /*
        cout << "sub start: " << cnf.size() << endl;
@@ -196,9 +183,9 @@ void sub(vector<list<string>>& cnf, const string& ap, const int& value, heuristi
             {
                 match = true;
             }
-            else if(literal[0] == NEGATION)
+            else if(literal < 0)
             {
-                string prop = literal.substr(1);
+                int prop = abs(literal);
                 if(prop == ap)
                 {
                     truth_value = !truth_value;
@@ -250,7 +237,7 @@ void sub(vector<list<string>>& cnf, const string& ap, const int& value, heuristi
      */
 }
 
-state valid(const vector<list<string>>& cnf)
+state valid(const vector<list<int>>& cnf)
 {
     // check if any clauses are empty: Not Satisfiable under current truth assignment
     // check if all clauses are True: Satisfiable
@@ -357,27 +344,26 @@ update basic_heuristic(const vector<int>& t)
     assert(true);
 }
 
-void unit_propagation(vector<list<string>>& cnf, vector<int>& t, heuristic h)
+void unit_propagation(vector<list<int>>& cnf, vector<int>& t, heuristic h)
 {
     for(int i = 0; i < cnf.size(); ++i)
     {
-        const list<string>& clause = cnf[i];
+        const list<int>& clause = cnf[i];
         if(clause.size() == 1 && clause.front() != TRUE)
         {
-            string literal = clause.front();
-            if(literal[0] == NEGATION)
+            int literal = clause.front();
+            if(literal < 0)
             {
-                int ap = atoi(literal.substr(1).c_str())-1;
+                int ap = abs(literal)-1;
                 assert(t[ap] == IGNORE);
-                sub(cnf, to_string(ap+1), 0, h);
+                sub(cnf, ap+1, 0, h);
                 t[ap] = 0;
             }
             else
             {
-                int ap = atoi(literal.c_str())-1;
-                assert(t[ap] == IGNORE);
-                sub(cnf, to_string(ap+1), 1, h);
-                t[ap] = 1;
+                assert(t[literal-1] == IGNORE);
+                sub(cnf, literal, 1, h);
+                t[literal-1] = 1;
             }
             i = 0;
         }
@@ -386,13 +372,13 @@ void unit_propagation(vector<list<string>>& cnf, vector<int>& t, heuristic h)
 
 // cnf - A formula represented in Conjunctive Normal Form
 // return - a truth assignment if formula is satisfiable; otherwise return empty list
-vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_timer& timer, heuristic h)
+vector<int> solve(vector<list<int>> initial_cnf, const boost::timer::cpu_timer& timer, heuristic h)
 {
     stack<update> truth_updates;
-    stack<vector<list<string>>> cnf_set;
+    stack<vector<list<int>>> cnf_set;
     stack<vector<int>> truth_set;
 
-    vector<list<string>> cnf = move(initial_cnf);
+    vector<list<int>> cnf = move(initial_cnf);
     vector<int> t(vars, IGNORE);
 
     do
@@ -414,10 +400,14 @@ vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_time
 
                         ++split_count;
                         update& u = truth_updates.top();
-                        sub(cnf, to_string(u.first+1), u.second, h);
+                        sub(cnf, u.first+1, u.second, h);
                         truth_updates.pop();
-                        //cout << split_count << " " << u.first << " " << u.second << endl;
                     }
+                    else
+                    {
+                        return vector<int>();
+                    }
+                    //cout << truth_updates.size() << " " << split_count << " " << u.first << " " << u.second << endl;
                 }
                 continue;
             case SAT:
@@ -464,16 +454,16 @@ vector<int> solve(vector<list<string>> initial_cnf, const boost::timer::cpu_time
 
         ++split_count;
         t[u.first] = u.second;
-        sub(cnf, to_string(u.first+1), u.second, h);
-    } while(!truth_updates.empty() && (timer.elapsed().wall < timeout));
+        sub(cnf, u.first+1, u.second, h);
+    } while((timer.elapsed().wall < timeout));
 
     return vector<int>();
 }
 
-vector<list<string>> parseCNF(const string& filename)
+vector<list<int>> parseCNF(const string& filename)
 {
-    vector<list<string>> cnf;
-    list<string> clause;
+    vector<list<int>> cnf;
+    list<int> clause;
     bool p = false;
     string format;
     int clauses = -1;
@@ -513,7 +503,7 @@ vector<list<string>> parseCNF(const string& filename)
                 else
                 {
                     if(c.size() > 0)
-                        clause.push_back(c);
+                        clause.push_back(atoi(c.c_str()));
                 }
                 c.clear();
             }
@@ -524,31 +514,30 @@ vector<list<string>> parseCNF(const string& filename)
     return cnf;
 }
 
-vector<list<string>> randomCNF(const int& N, const double& LProb, const double& LN_Ratio)
+vector<list<int>> randomCNF(const int& N, const double& LProb, const double& LN_Ratio)
 {
     std::uniform_int_distribution<int> p(1,N);
     std::uniform_real_distribution<double> l(0.0,1.0);
 
     int size = int(LN_Ratio * N);
-    vector<list<string>> cnf(size);
+    vector<list<int>> cnf(size);
 
     for(int n = 0; n < size; ++n)
     {
         for(int m = 0; m < K; ++m)
         {
-            string literal;
+            int literal = p(generator);
             if(l(generator) > LProb)
             {
-                literal.append(1, NEGATION);
+                literal *= -1;;
             }
-            literal.append(to_string(p(generator)));
             cnf[n].push_back(literal);
         }
     }
     return cnf;
 }
 
-void setup(const vector<list<string>>& cnf, heuristic h)
+void setup(const vector<list<int>>& cnf, heuristic h)
 {
     switch(h)
     {
@@ -569,9 +558,9 @@ void setup(const vector<list<string>>& cnf, heuristic h)
                 {
                     for(const auto& literal : clause)
                     {
-                        if(literal[0] == NEGATION)
+                        if(literal < 0)
                         {
-                            update_heuristic(h, literal.substr(1), clause.size(), true);
+                            update_heuristic(h, abs(literal), clause.size(), true);
                         }
                         else
                         {
@@ -608,7 +597,7 @@ int main(int argc, char* argv[])
         // Run benchmark for ITER iterations
         for(int n = 0; n < ITER; ++n)
         {
-            const vector<list<string>> cnf = randomCNF(vars, LProb, LN_Ratio);
+            const vector<list<int>> cnf = randomCNF(vars, LProb, LN_Ratio);
             for(int h = 0; h < HEURISTICS; ++h)
             {
                 setup(cnf, (heuristic) h);
@@ -660,7 +649,7 @@ int main(int argc, char* argv[])
         }
 
         const string file(argv[1]);
-        const vector<list<string>> cnf = parseCNF(file);
+        const vector<list<int>> cnf = parseCNF(file);
         setup(cnf, h);
 
         // Timer
