@@ -38,7 +38,7 @@ const double min_LN = 3.0f;
 const double max_LN = 6.0f;
 const double inc_LN = 0.5f;
 int vars = 100;
-int split_count = 0;
+int backtrack_count = 0;
 
 const string TRUE = "True";
 const string FALSE = "False";
@@ -58,9 +58,8 @@ std::default_random_engine generator( (unsigned int)time(NULL) );
 
 enum state
 {
-    CONTINUE,
-    UNSAT,
-    SAT
+    NONE,
+    CONFLICT
 };
 
 // Implication Graph
@@ -176,18 +175,10 @@ void evaluate_cnf(const int& ap, const int& value)
             // evaluate truth value for literal
             int truth_value = evaluate_literal(literal, ap, value);
 
-            if(truth_value != IGNORE)
+            if(!truth_value)
             {
                 //cout << "eval_cnf: " << i << " literal: " << literal << endl;
-                if(truth_value)
-                {
-                    // Do not move watch literal over the same literal
-                    if(wl2[i] != j)
-                    {
-                        wl1[i] = j; 
-                    }
-                }
-                else if(wl1[i] == j)
+                if(wl1[i] == j)
                 {   
                     update_watched_literal(true, i);
                 }
@@ -214,7 +205,6 @@ state unit_propagation(int& clause_id, int dl)
 {
     // check if any clauses are empty: Not Satisfiable under current truth assignment
     // check if all clauses are True: Satisfiable
-    state clause_sat = SAT;
     for(int i = 0; i < cnf.size(); ++i)
     {
         int literal1 = cnf[i][wl1[i]];
@@ -234,12 +224,8 @@ state unit_propagation(int& clause_id, int dl)
         else if(v1 == 0 && v2 == 0)
         {
             clause_id = i;
-            //cout << "UNSAT" << endl;
-            return UNSAT;
-        }
-        else if((wl1[i] != wl2[i]) && v1 == IGNORE && v2 == IGNORE) // Unassigned
-        {
-            clause_sat = CONTINUE;
+            //cout << "CONFLICT" << endl;
+            return CONFLICT;
         }
         else // Unit Clause
         {
@@ -272,7 +258,7 @@ state unit_propagation(int& clause_id, int dl)
             i = -1;
         }
     }
-    return clause_sat;
+    return NONE;
 }
 
 int decision_count(const list<int>& clause, const int& dl)
@@ -335,16 +321,20 @@ vector<int> analysis(const int& clause_id, int& dl)
             new_dl = decision_level[ap];
         }
     }
+
     if(new_dl == 0)
     {
+        // no decision variables / UNSAT
         dl = IGNORE;
     }
     else if(new_dl < dl)
     {
+        // Normal Backtrack
         dl = new_dl;
     }
     else if(new_dl == dl)
     {
+        // No Backtrack - Restart
         dl = 0;
     }
     //cout << "new dl: " << dl << endl;
@@ -366,23 +356,34 @@ void update_truth_assignment(const int& dl)
     }
 }
 
+bool complete_assignment(const vector<int>& t)
+{
+    for(int v : t)
+    {
+        if(v == IGNORE)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 // cnf - A formula represented in Conjunctive Normal Form
 // return - a truth assignment if formula is satisfiable; otherwise return empty list
 vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
 {
-    stack<update> truth_updates;
+    int dl = 0;
     while(timer.elapsed().wall < timeout)
     {
         int clause_id = 0;
         // Unit Clause Propagation + Check Formula
-        switch(unit_propagation(clause_id, truth_updates.size()))
+        switch(unit_propagation(clause_id, dl))
         {
-            case UNSAT:
+            case CONFLICT:
                 {
                     //  Conflict Analysis / New Decision Level
-                    int new_dl = truth_updates.size();
-                    vector<int> conflict_clause = analysis(clause_id, new_dl);
-                    if(new_dl < 0)
+                    vector<int> conflict_clause = analysis(clause_id, dl);
+                    if(dl < 0)
                     {
                         return vector<int>();
                     }
@@ -398,28 +399,21 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                     wl2.push_back(conflict_clause.size()-1);
                     cnf.push_back(move(conflict_clause));
 
-                    // Update Decision Level
-                    while(truth_updates.size() != new_dl)
-                    {
-                        truth_updates.pop();
-                    }
-
                     // Update Truth Assignment
-                    update_truth_assignment(new_dl);
+                    update_truth_assignment(dl);
 
                     // TODO Update VSIDS Heuristic
 
-                    ++split_count;
-                    //update& u = truth_updates.top();
-                    //truth_updates.pop();
-                    //cout << split_count << " " << u.first << " " << u.second << endl;
-                    //update_implication_graph(u.first, u.second, truth_updates.size(), IGNORE);
-                    //evaluate_cnf(u.first, u.second);
+                    ++backtrack_count;
+                    //cout << backtrack_count << endl;
                 }
                 continue;
-            case SAT:
+            case NONE:
                 {
-                    return t;
+                    if(complete_assignment(t))
+                    {
+                        return t;
+                    }
                 }
         }	
 
@@ -443,10 +437,9 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
         //cout << "AP: " << to_string(u.first+1) << endl;
         assert(t[u.first] == IGNORE);
 
-        ++split_count;
-        truth_updates.push(make_pair(u.first, (1-u.second)));
+        ++backtrack_count;
         //cout << "Decision: " << (u.first+1) << " " << u.second << endl;
-        update_implication_graph(u.first, u.second, truth_updates.size(), IGNORE);
+        update_implication_graph(u.first, u.second, ++dl, IGNORE);
         evaluate_cnf(u.first, u.second);
     }
 
@@ -599,8 +592,8 @@ int main(int argc, char* argv[])
                 ++success;
             }
 
-            split[n] = split_count;
-            split_count = 0;
+            split[n] = backtrack_count;
+            backtrack_count = 0;
 
             time[n] = atof(timer.format(boost::timer::default_places, "%w").c_str());
             cout << hstr[h] << " - iteration: " << n << " time: " << time[n] << std::endl;
@@ -611,9 +604,9 @@ int main(int argc, char* argv[])
         std::sort(split.begin(), split.end());
         std::sort(time.begin(), time.end());
 
-        cout << "min number of splitting-rule applications: " << split[0] << endl;
-        cout << "median number of splitting-rule applications: " << split[ITER/2] << endl;
-        cout << "max number of splitting-rule applications: " << split[ITER-1] << endl;
+        cout << "min number of backtracks: " << split[0] << endl;
+        cout << "median number of backtracks: " << split[ITER/2] << endl;
+        cout << "max number of backtracks: " << split[ITER-1] << endl;
 
         cout << "min computation time: " << time[0] << endl;
         cout << "median computation time: " << time[ITER/2] << endl;
