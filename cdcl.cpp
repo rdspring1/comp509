@@ -300,9 +300,9 @@ vector<int> analysis(const int& clause_id, int& dl)
 
     while(!conflict_set.empty() && decision_count(conflict_set, dl) != 1)
     {
-        cout << "a(l): " << parent[ap] << endl;
         if(decision_level[ap] == dl && parent[ap] != IGNORE)
         {
+            cout << "a(l): " << parent[ap] << endl;
             int neg_literal = -1*conflict_set.front();
             conflict_set.pop_front();
             const vector<int>& clause = cnf[parent[ap]];
@@ -315,16 +315,38 @@ vector<int> analysis(const int& clause_id, int& dl)
                 }
             }
         }
+        else
+        {
+            conflict_set.push_back(conflict_set.front());
+            conflict_set.pop_front();
+        }
         ap = abs(conflict_set.front())-1;
     }
 
     // Create Conflict Clause
+    int new_dl = 0;
     vector<int> conflict_clause;
     for(int literal : conflict_set)
     {
         int ap = abs(literal)-1;
-        dl = min(dl, decision_level[ap]);
         conflict_clause.push_back(literal);
+        new_dl = max(new_dl, decision_level[ap]);
+        if(decision_level[ap] < dl && decision_level[ap] > new_dl)
+        {
+            new_dl = decision_level[ap];
+        }
+    }
+    if(new_dl == 0)
+    {
+        dl = IGNORE;
+    }
+    else if(new_dl < dl)
+    {
+        dl = new_dl;
+    }
+    else if(new_dl == dl)
+    {
+        dl = 0;
     }
     cout << "new dl: " << dl << endl;
 
@@ -336,7 +358,7 @@ void update_truth_assignment(const int& dl)
 {
     for(int ap = 0; ap < t.size(); ++ap)
     {
-        if(decision_level[ap] >= dl)
+        if(decision_level[ap] > dl)
         {
             t[ap] = IGNORE;
             decision_level[ap] = IGNORE;
@@ -361,7 +383,7 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                     //  Conflict Analysis / New Decision Level
                     int new_dl = truth_updates.size();
                     vector<int> conflict_clause = analysis(clause_id, new_dl);
-                    if(new_dl == 0)
+                    if(new_dl < 0)
                     {
                         return vector<int>();
                     }
@@ -389,11 +411,11 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                     // TODO Update VSIDS Heuristic
 
                     ++split_count;
-                    update& u = truth_updates.top();
-                    truth_updates.pop();
+                    //update& u = truth_updates.top();
+                    //truth_updates.pop();
                     //cout << split_count << " " << u.first << " " << u.second << endl;
-                    update_implication_graph(u.first, u.second, truth_updates.size(), IGNORE);
-                    evaluate_cnf(u.first, u.second);
+                    //update_implication_graph(u.first, u.second, truth_updates.size(), IGNORE);
+                    //evaluate_cnf(u.first, u.second);
                 }
                 continue;
             case SAT:
