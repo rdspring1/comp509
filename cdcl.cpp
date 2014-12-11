@@ -334,6 +334,7 @@ vector<int> analysis(const int& clause_id, int& dl)
             conflict_set.pop_front();
         }
         ap = abs(conflict_set.front())-1;
+        conflict_set.unique();
     }
 
     // Create Conflict Clause
