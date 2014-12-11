@@ -142,7 +142,7 @@ int evaluate_literal(const int& literal)
 
 void update_watched_literal(bool first, int clause)
 {
-    cout << "uwl: " << ((first) ? wl1[clause] : wl2[clause])  << endl;
+    //cout << "uwl: " << ((first) ? wl1[clause] : wl2[clause])  << endl;
     int other = (first) ? wl2[clause] : wl1[clause];
     int index = 0;
     for(const auto& literal : cnf[clause])
@@ -150,7 +150,7 @@ void update_watched_literal(bool first, int clause)
         int truth_value = evaluate_literal(literal);
         if(index != other && truth_value == IGNORE)
         {
-            cout << first << " other: " << other << " clause: " << clause << " index: " << index << endl;
+            //cout << first << " other: " << other << " clause: " << clause << " index: " << index << endl;
             if(first)
             {
                 wl1[clause] = index;
@@ -178,7 +178,7 @@ void evaluate_cnf(const int& ap, const int& value)
 
             if(truth_value != IGNORE)
             {
-                cout << "eval_cnf: " << i << " literal: " << literal << endl;
+                //cout << "eval_cnf: " << i << " literal: " << literal << endl;
                 if(truth_value)
                 {
                     // Do not move watch literal over the same literal
@@ -222,10 +222,10 @@ state unit_propagation(int& clause_id, int dl)
         int v1 = evaluate_literal(literal1);
         int v2 = evaluate_literal(literal2);
 
-        cout << "clause: " << i << endl;
-        cout << "wl1: " << wl1[i] << " wl2: " << wl2[i] << endl;
-        cout << "l1: " << literal1 << " l2: " << literal2 << endl;
-        cout << "v1: " << v1 << " v2: " << v2 << endl;
+        //cout << "clause: " << i << endl;
+        //cout << "wl1: " << wl1[i] << " wl2: " << wl2[i] << endl;
+        //cout << "l1: " << literal1 << " l2: " << literal2 << endl;
+        //cout << "v1: " << v1 << " v2: " << v2 << endl;
         if(v1 == 1 || v2 == 1)
         {
             // Clause is SAT
@@ -234,7 +234,7 @@ state unit_propagation(int& clause_id, int dl)
         else if(v1 == 0 && v2 == 0)
         {
             clause_id = i;
-            cout << "UNSAT" << endl;
+            //cout << "UNSAT" << endl;
             return UNSAT;
         }
         else if((wl1[i] != wl2[i]) && v1 == IGNORE && v2 == IGNORE) // Unassigned
@@ -246,12 +246,12 @@ state unit_propagation(int& clause_id, int dl)
             int literal = -1;
             if(v1 == IGNORE)
             {
-                cout << "unit wl1" << endl;
+                //cout << "unit wl1" << endl;
                 literal = literal1;
             }
             else
             {
-                cout << "unit wl2" << endl;
+                //cout << "unit wl2" << endl;
                 literal = literal2;
             }
 
@@ -280,14 +280,13 @@ int decision_count(const list<int>& clause, const int& dl)
     int count = 0;
     for(const auto& literal : clause)
     {
-        cout << literal << endl;
         int ap = abs(literal)-1;
         if(decision_level[ap] == dl)
         {
             ++count;
         }
     }
-    cout << "decision count: " << count << endl;
+    //cout << "decision count: " << count << endl;
     return count;
 }
 
@@ -302,7 +301,7 @@ vector<int> analysis(const int& clause_id, int& dl)
     {
         if(decision_level[ap] == dl && parent[ap] != IGNORE)
         {
-            cout << "a(l): " << parent[ap] << endl;
+            //cout << "a(l): " << parent[ap] << endl;
             int neg_literal = -1*conflict_set.front();
             conflict_set.pop_front();
             const vector<int>& clause = cnf[parent[ap]];
@@ -348,7 +347,7 @@ vector<int> analysis(const int& clause_id, int& dl)
     {
         dl = 0;
     }
-    cout << "new dl: " << dl << endl;
+    //cout << "new dl: " << dl << endl;
 
     return conflict_clause;
 }
@@ -387,12 +386,12 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                     {
                         return vector<int>();
                     }
-                    cout << "clause id: " << clause_id << endl;
-                    for(int& l : conflict_clause)
-                    {
-                        cout << l << " ";
-                    }
-                    cout << endl;
+                    //cout << "clause id: " << clause_id << endl;
+                    //for(int& l : conflict_clause)
+                    //{
+                    //   cout << l << " ";
+                    //}
+                    //cout << endl;
 
                     // Add Conflict Clause
                     wl1.push_back(0);
@@ -446,7 +445,7 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
 
         ++split_count;
         truth_updates.push(make_pair(u.first, (1-u.second)));
-        cout << "Decision: " << (u.first+1) << " " << u.second << endl;
+        //cout << "Decision: " << (u.first+1) << " " << u.second << endl;
         update_implication_graph(u.first, u.second, truth_updates.size(), IGNORE);
         evaluate_cnf(u.first, u.second);
     }

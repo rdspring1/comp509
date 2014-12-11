@@ -365,7 +365,7 @@ void unit_propagation(vector<list<int>>& cnf, vector<int>& t, heuristic h)
                 sub(cnf, literal, 1, h);
                 t[literal-1] = 1;
             }
-            i = 0;
+            i = -1;
         }
     }
 }
