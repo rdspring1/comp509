@@ -12,6 +12,7 @@
 #include <random>
 #include <algorithm>
 #include <memory>
+#include <math.h>
 #include <boost/timer/timer.hpp>
 
 using namespace std;
@@ -31,13 +32,18 @@ const string hstr[] =
 };
 
 // Settings
-const heuristic h = Random;
+const heuristic h = MyHeuristic;
 const int K = 3;
 const double LProb = 0.5f;
 const double min_LN = 3.0f;
 const double max_LN = 6.0f;
 const double inc_LN = 0.5f;
-int vars = 100;
+const float DECAY = 2.0f;
+const float RESTART_INIT = 20;
+const float RESTART_CONST = 1.5;
+float restart_threshold = 0;
+float conflict_count = 0;
+int vars = 150;
 int backtrack_count = 0;
 int added_clauses = 0;
 
@@ -54,7 +60,7 @@ const string sat_format = "sat";
 const char NEGATION = '-';
 const int IGNORE = -1;
 const int ITER = 100;
-const boost::timer::nanosecond_type timeout(60 * 1000000000LL);
+const boost::timer::nanosecond_type timeout(100 * 1000000000LL);
 std::default_random_engine generator( (unsigned int)time(NULL) );
 
 enum state
@@ -74,6 +80,9 @@ vector<vector<int>> cnf;
 vector<int> wl1;
 vector<int> wl2;
 
+// MyHeuristic
+vector<float> myh;
+
 void print(vector<int> t)
 {
     if(t.size() == 0)
@@ -90,9 +99,80 @@ void print(vector<int> t)
     }
 }
 
+void update_heuristic(const vector<int>& clause)
+{
+    for(const auto& literal : clause)
+    {
+        ++myh[abs(literal)-1];
+    }
+}
+
+void setup(heuristic h, bool restart = false)
+{
+    decision_level.clear();
+    parent.clear();
+    t.clear();
+    decision_level.resize(vars, IGNORE);
+    parent.resize(vars, IGNORE);
+    t.resize(vars, IGNORE);
+    conflict_count = 0;
+
+    if(!restart)
+    {
+        wl1.clear();
+        wl2.clear();
+        wl1.resize(cnf.size(), 0);
+        wl2.resize(cnf.size(), 0);
+        for(int i = 0; i < cnf.size(); ++i)
+        {
+            wl2[i] = cnf[i].size()-1;
+        }
+        restart_threshold = RESTART_INIT;
+    }
+    else
+    {
+        //cout << "Restart" << endl;
+        restart_threshold = round(restart_threshold * RESTART_CONST);
+    }
+
+    switch(h)
+    {
+        case MyHeuristic:
+            {
+                myh.clear();
+                myh.resize(vars, 0);
+                for(const auto& clause : cnf)
+                {
+                    update_heuristic(clause);
+                }
+            }
+            break;
+    }
+}
+
 update myh_heuristic(const vector<int>& t)
 {
-    // TODO
+    vector<int> ties;
+    float maxValue = 0;
+    for(int i = 0; i < t.size(); ++i)
+    {
+        if(t[i] == IGNORE)
+        {
+            if(myh[i] > maxValue)
+            {
+                maxValue = myh[i];
+                ties.clear();
+            }
+
+            if(myh[i] == maxValue)
+            {
+                ties.push_back(i);
+            }
+        }
+    }
+    std::uniform_int_distribution<int> p(0,ties.size()-1);
+    std::uniform_int_distribution<int> v(0,1);
+    return make_pair(ties[p(generator)], v(generator));
 }
 
 update random_heuristic(const vector<int>& t)
@@ -215,6 +295,7 @@ state unit_propagation(int& clause_id, int dl)
 {
     // check if any clauses are empty: Not Satisfiable under current truth assignment
     // check if all clauses are True: Satisfiable
+    state cnf_status = SAT;
     for(int i = 0; i < cnf.size(); ++i)
     {
         int literal1 = cnf[i][wl1[i]];
@@ -239,6 +320,7 @@ state unit_propagation(int& clause_id, int dl)
         }
         else if(wl1[i] != wl2[i] && v1 == IGNORE && v2 == IGNORE)
         {
+            cnf_status = NONE;
             continue;
         }
         else // Unit Clause
@@ -269,10 +351,11 @@ state unit_propagation(int& clause_id, int dl)
                 update_implication_graph(ap, 1, dl, i);
                 evaluate_cnf(ap, 1);
             }
+            cnf_status = SAT;
             i = -1;
         }
     }
-    return NONE;
+    return cnf_status;
 }
 
 int decision_count(const list<int>& clause, const int& dl)
@@ -398,12 +481,22 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
         {
             case CONFLICT:
                 {
-                    //  Conflict Analysis / New Decision Level
+                    ++conflict_count;
+                    // Conflict Analysis / New Decision Level
                     //cout << "clause id: " << clause_id << endl;
                     vector<int> conflict_clause = analysis(clause_id, dl);
                     if(dl < 0)
                     {
                         return vector<int>();
+                    }
+                    ++backtrack_count;
+                    //cout << backtrack_count << endl;
+
+                    // Update VSIDS Heuristic
+                    update_heuristic(conflict_clause);
+                    for(int i = 0; i < myh.size(); ++i)
+                    {
+                        myh[i] = round(myh[i]/DECAY);
                     }
 
                     // Add Conflict Clause
@@ -413,20 +506,20 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                     ++added_clauses;
 
                     // Update Truth Assignment
-                    update_truth_assignment(dl);
+                    if(conflict_count > restart_threshold)
+                    {
+                        setup(h, true);
+                    }
+                    else
+                    {
+                        update_truth_assignment(dl);
+                    }
 
-                    // TODO Update VSIDS Heuristic
-
-                    ++backtrack_count;
-                    //cout << backtrack_count << endl;
                 }
                 continue;
-            case NONE:
+            case SAT:
                 {
-                    if(complete_assignment(t))
-                    {
-                        return t;
-                    }
+                    return t;
                 }
         }	
 
@@ -536,33 +629,6 @@ vector<vector<int>> randomCNF(const int& N, const double& LProb, const double& L
     return cnf;
 }
 
-void setup(heuristic h)
-{
-    decision_level.clear();
-    parent.clear();
-    t.clear();
-    wl1.clear();
-    wl2.clear();
-
-    decision_level.resize(vars, IGNORE);
-    parent.resize(vars, IGNORE);
-    t.resize(vars, IGNORE);
-    wl1.resize(cnf.size(), 0);
-    wl2.resize(cnf.size(), 0);
-    for(int i = 0; i < cnf.size(); ++i)
-    {
-        wl2[i] = cnf[i].size()-1;
-    }
-
-    switch(h)
-    {
-        case MyHeuristic:
-            {
-            }
-            break;
-    }
-}
-
 int main(int argc, char* argv[])
 {
     // CNF Format File
@@ -614,7 +680,7 @@ int main(int argc, char* argv[])
             added_clauses = 0;
 
             time[n] = atof(timer.format(boost::timer::default_places, "%w").c_str());
-            cout << hstr[h] << " - iteration: " << n << " time: " << time[n] << std::endl;
+            //cout << hstr[h] << " - iteration: " << n << " time: " << time[n] << std::endl;
         }
 
         // Sort data and print median value
