@@ -32,7 +32,7 @@ const int TRUE = 0;
 const int IGNORE = -1;
 const int K = 3;
 const int ITER = 100;
-const boost::timer::nanosecond_type timeout(60 * 1000000000LL);
+const boost::timer::nanosecond_type TIMEOUT(100 * 1000000000LL);
 std::default_random_engine generator( (unsigned int)time(NULL) );
 
 // Heuristic
@@ -52,7 +52,7 @@ const string hstr[] =
 };
 const float psize[]
 {
-        0.0f,
+    0.0f,
         0.5f,
         0.25f,
         0.125,
@@ -129,27 +129,27 @@ void sub_heuristic(heuristic h, const list<int>& clause)
                 }
             }
             break;
-        /*
-        case MyHeuristic:
-            {
-                for(const auto& literal : clause)
-                {
-                    if(literal != TRUE)
-                    {
-                        int value = abs(literal)-1;
-                        if(literal < 0)
-                        {
-                            nc[value] += psize[clause.size()];
-                        }
-                        //myh[value] += std::pow(2, -1.0f * clause.size());
-                        myh[value] += psize[clause.size()];
-                        assert(value < myh.size());
-                        assert(value >= 0);
-                    }
-                }
+            /*
+               case MyHeuristic:
+               {
+               for(const auto& literal : clause)
+               {
+               if(literal != TRUE)
+               {
+               int value = abs(literal)-1;
+               if(literal < 0)
+               {
+               nc[value] += psize[clause.size()];
+               }
+            //myh[value] += std::pow(2, -1.0f * clause.size());
+            myh[value] += psize[clause.size()];
+            assert(value < myh.size());
+            assert(value >= 0);
+            }
+            }
             }
             break;
-        */
+             */
     }
 }
 
@@ -380,8 +380,7 @@ vector<int> solve(vector<list<int>> initial_cnf, const boost::timer::cpu_timer& 
 
     vector<list<int>> cnf = move(initial_cnf);
     vector<int> t(vars, IGNORE);
-
-    while(timer.elapsed().wall < timeout)
+    while(timer.elapsed().wall < TIMEOUT)
     {
         // Unit Clause Propagation
         unit_propagation(cnf, t, h);
@@ -456,7 +455,6 @@ vector<int> solve(vector<list<int>> initial_cnf, const boost::timer::cpu_timer& 
         t[u.first] = u.second;
         sub(cnf, u.first+1, u.second, h);
     }
-
     return vector<int>();
 }
 
@@ -584,6 +582,7 @@ int main(int argc, char* argv[])
         cout << "N: " << vars << " L-Probability: " << LProb << " LN_Ratio: " << LN_Ratio << std::endl;         
 
         vector<int> success((int) Basic, 0);
+        vector<int> timeouts((int) Basic, 0);
         vector<vector<int>> split((int) Basic);
         vector<vector<double>> time((int) Basic);
         for(int h = 0; h < (int) Basic; ++h)
@@ -601,10 +600,16 @@ int main(int argc, char* argv[])
             for(int h = 0; h < HEURISTICS; ++h)
             {
                 setup(cnf, (heuristic) h);
-
+                bool timeout = false;
                 timer.start();
                 vector<int> result = solve(cnf, timer, (heuristic) h);
                 timer.stop();
+
+                if(timer.elapsed().wall >= TIMEOUT)
+                {
+                    timeout = true;
+                    ++timeouts[h];
+                }
 
                 if(result.size() > 0)
                 {
@@ -615,14 +620,14 @@ int main(int argc, char* argv[])
                 split_count = 0;
 
                 time[h][n] = atof(timer.format(boost::timer::default_places, "%w").c_str());
-                //cout << hstr[h] << " - iteration: " << n << " time: " << time[h][n] << std::endl;
+                cout << hstr[h] << " - iteration: " << n << " time: " << time[h][n] << " timeout: " << timeout << std::endl;
             }
         }
 
         for(int h = 0; h < HEURISTICS; ++h)
         {
             // Sort data and print median value
-            cout << hstr[h] << " Success Rate: " << success[h] << endl;
+            cout << hstr[h] << " Success Rate: " << success[h] << " Timeouts: " << timeouts[h] << endl;
             std::sort(split[h].begin(), split[h].end());
             std::sort(time[h].begin(), time[h].end());
 
@@ -652,12 +657,18 @@ int main(int argc, char* argv[])
         const vector<list<int>> cnf = parseCNF(file);
         setup(cnf, h);
 
+        bool timeout = false;
         // Timer
         std::unique_ptr<boost::timer::auto_cpu_timer> timer(new boost::timer::auto_cpu_timer());
         vector<int> result = solve(cnf, *timer, h);
+        if(timer->elapsed().wall >= TIMEOUT)
+        {
+            timeout = true;
+        }
         timer.reset(nullptr);
 
         print(result); 
+        cout << "Timeout: " << timeout << endl;
         cout << hstr[h] << endl;
     }
 }
