@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <list>
-#include <set>
+#include <unordered_set>
 #include <stack>
 #include <queue>
 #include <fstream>
@@ -60,7 +60,7 @@ const string sat_format = "sat";
 const char NEGATION = '-';
 const int IGNORE = -1;
 const int ITER = 100;
-const boost::timer::nanosecond_type timeout(60 * 1000000000LL);
+const boost::timer::nanosecond_type TIMEOUT(60 * 1000000000LL);
 std::default_random_engine generator( (unsigned int)time(NULL) );
 
 enum state
@@ -375,6 +375,7 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
     list<int> conflict_set(cnf[clause_id].begin(), cnf[clause_id].end()); 
     conflict_set.sort();
     conflict_set.unique();
+    unordered_set<int> duplicates(conflict_set.begin(), conflict_set.end());
     int ap = abs(conflict_set.front())-1;
 
     while(!conflict_set.empty() && !decision_count(conflict_set, dl))
@@ -386,15 +387,17 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
             // Resolution Implication Rule
             //cout << "a(l): " << parent[ap] << endl;
             int neg_literal = -1 * conflict_set.front();
+            duplicates.erase(conflict_set.front());
             conflict_set.pop_front();
 
             const vector<int>& clause = cnf[parent[ap]];
             for(const int& literal : clause)
             {
-                int others = count(conflict_set.begin(), conflict_set.end(), literal);
-                if(others == 0 && literal != neg_literal)
+                //int others = count(conflict_set.begin(), conflict_set.end(), literal);
+                if(literal != neg_literal && duplicates.find(literal) == duplicates.end())
                 {
                     conflict_set.push_back(literal);
+                    duplicates.insert(literal);
                 }
             }
         }
@@ -478,7 +481,7 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
         return vector<int>();
     }
 
-    while(timer.elapsed().wall < timeout)
+    while(timer.elapsed().wall < TIMEOUT)
     {
         // Unit Clause Propagation + Check Formula
         switch(unit_propagation(clause_id, dl))
@@ -646,14 +649,21 @@ int main(int argc, char* argv[])
         const string file(argv[1]);
         cnf = parseCNF(file);
         setup(h);
+        bool timeout = false;
 
         // Timer
         std::unique_ptr<boost::timer::auto_cpu_timer> timer(new boost::timer::auto_cpu_timer());
+
         vector<int> result = solve(*timer, h);
+
+            if(timer->elapsed().wall >= TIMEOUT)
+            {
+                timeout = true;
+            }
         timer.reset(nullptr);
 
         print(result); 
-        cout << hstr[h] << endl;
+        cout << hstr[h] << " Timeout: " << timeout << endl;
         cout << "Number of backtracks: " << backtrack_count << endl;
         cout << "Number of added_clauses: " << added_clauses << endl;
         return 0;
@@ -663,6 +673,7 @@ int main(int argc, char* argv[])
     {
         cout << "N: " << vars << " L-Probability: " << LProb << " LN_Ratio: " << LN_Ratio << std::endl;         
         int success = 0;
+        int timeouts = 0;
         vector<int> added(ITER, 0);
         vector<int> split(ITER, 0);
         vector<double> time(ITER, 0);
@@ -673,10 +684,17 @@ int main(int argc, char* argv[])
         {
             cnf = randomCNF(vars, LProb, LN_Ratio);
             setup((heuristic) h);
+            bool timeout = false;
 
             timer.start();
             vector<int> result = solve(timer, (heuristic) h);
             timer.stop();
+
+            if(timer.elapsed().wall >= TIMEOUT)
+            {
+                timeout = true;
+                ++timeouts;
+            }
 
             if(result.size() > 0)
             {
@@ -689,11 +707,11 @@ int main(int argc, char* argv[])
             added_clauses = 0;
 
             time[n] = atof(timer.format(boost::timer::default_places, "%w").c_str());
-            cout << hstr[h] << " - iteration: " << n << " time: " << time[n] << std::endl;
+            cout << hstr[h] << " - iteration: " << n << " time: " << time[n] << " timeout: " << timeout << std::endl;
         }
 
         // Sort data and print median value
-        cout << hstr[h] << " Success Rate: " << success << endl;
+        cout << hstr[h] << " Success Rate: " << success << " Timeout: " << timeouts << endl;
         std::sort(added.begin(), added.end());
         std::sort(split.begin(), split.end());
         std::sort(time.begin(), time.end());
