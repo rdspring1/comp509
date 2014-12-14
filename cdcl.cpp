@@ -382,6 +382,7 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
     {
         if(decision_level[ap] == dl && parent[ap] != IGNORE)
         {
+            assert(t[ap] != IGNORE);
             change = true;
 
             // Resolution Implication Rule
@@ -393,6 +394,7 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
             const vector<int>& clause = cnf[parent[ap]];
             for(const int& literal : clause)
             {
+                assert(t[abs(literal)-1] != IGNORE);
                 //int others = count(conflict_set.begin(), conflict_set.end(), literal);
                 if(literal != neg_literal && duplicates.find(literal) == duplicates.end())
                 {
@@ -412,32 +414,33 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
     }
 
     // Create Conflict Clause
+    int max_dl = -1;
     int new_dl = -1;
     vector<int> conflict_clause;
     for(int literal : conflict_set)
     {
         int ap = abs(literal)-1;
         conflict_clause.push_back(literal);
-        new_dl = max(new_dl, decision_level[ap]);
-        if(decision_level[ap] < dl && decision_level[ap] > new_dl)
+        max_dl = max(max_dl, decision_level[ap]);
+        if(decision_level[ap] != 0)
         {
-            new_dl = decision_level[ap];
+            new_dl = max(new_dl, decision_level[ap]);
         }
     }
 
-    if(new_dl <= 0)
+    if(max_dl <= 0)
     {
         dl = IGNORE;
+    }
+    else if(max_dl == dl)
+    {
+        // No Backtrack - Restart
+        dl = 0;
     }
     else if(new_dl < dl)
     {
         // Normal Backtrack
         dl = new_dl;
-    }
-    else if(new_dl == dl)
-    {
-        // No Backtrack - Restart
-        dl = 0;
     }
     //cout << "new dl: " << dl << endl;
 
