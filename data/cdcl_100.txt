@@ -1,0 +1,785 @@
+N: 100 L-Probability: 0.5 LN_Ratio: 3
+MyHeuristic - iteration: 0 time: 0.199649 timeout: 0
+MyHeuristic - iteration: 1 time: 0.088877 timeout: 0
+MyHeuristic - iteration: 2 time: 0.025828 timeout: 0
+MyHeuristic - iteration: 3 time: 0.012995 timeout: 0
+MyHeuristic - iteration: 4 time: 0.13766 timeout: 0
+MyHeuristic - iteration: 5 time: 0.091498 timeout: 0
+MyHeuristic - iteration: 6 time: 0.019895 timeout: 0
+MyHeuristic - iteration: 7 time: 0.022249 timeout: 0
+MyHeuristic - iteration: 8 time: 0.136253 timeout: 0
+MyHeuristic - iteration: 9 time: 0.014603 timeout: 0
+MyHeuristic - iteration: 10 time: 0.043222 timeout: 0
+MyHeuristic - iteration: 11 time: 0.159451 timeout: 0
+MyHeuristic - iteration: 12 time: 0.023838 timeout: 0
+MyHeuristic - iteration: 13 time: 0.054126 timeout: 0
+MyHeuristic - iteration: 14 time: 0.040751 timeout: 0
+MyHeuristic - iteration: 15 time: 0.135709 timeout: 0
+MyHeuristic - iteration: 16 time: 0.013795 timeout: 0
+MyHeuristic - iteration: 17 time: 0.011981 timeout: 0
+MyHeuristic - iteration: 18 time: 0.029505 timeout: 0
+MyHeuristic - iteration: 19 time: 0.131586 timeout: 0
+MyHeuristic - iteration: 20 time: 0.079166 timeout: 0
+MyHeuristic - iteration: 21 time: 0.033017 timeout: 0
+MyHeuristic - iteration: 22 time: 0.019648 timeout: 0
+MyHeuristic - iteration: 23 time: 0.055132 timeout: 0
+MyHeuristic - iteration: 24 time: 0.09831 timeout: 0
+MyHeuristic - iteration: 25 time: 0.012485 timeout: 0
+MyHeuristic - iteration: 26 time: 0.029471 timeout: 0
+MyHeuristic - iteration: 27 time: 0.256275 timeout: 0
+MyHeuristic - iteration: 28 time: 0.015219 timeout: 0
+MyHeuristic - iteration: 29 time: 0.069956 timeout: 0
+MyHeuristic - iteration: 30 time: 0.011861 timeout: 0
+MyHeuristic - iteration: 31 time: 0.046075 timeout: 0
+MyHeuristic - iteration: 32 time: 0.01413 timeout: 0
+MyHeuristic - iteration: 33 time: 0.096135 timeout: 0
+MyHeuristic - iteration: 34 time: 0.102686 timeout: 0
+MyHeuristic - iteration: 35 time: 0.024439 timeout: 0
+MyHeuristic - iteration: 36 time: 0.074183 timeout: 0
+MyHeuristic - iteration: 37 time: 0.047891 timeout: 0
+MyHeuristic - iteration: 38 time: 0.094062 timeout: 0
+MyHeuristic - iteration: 39 time: 0.050465 timeout: 0
+MyHeuristic - iteration: 40 time: 0.033778 timeout: 0
+MyHeuristic - iteration: 41 time: 0.024563 timeout: 0
+MyHeuristic - iteration: 42 time: 0.012654 timeout: 0
+MyHeuristic - iteration: 43 time: 0.043276 timeout: 0
+MyHeuristic - iteration: 44 time: 0.013002 timeout: 0
+MyHeuristic - iteration: 45 time: 0.050431 timeout: 0
+MyHeuristic - iteration: 46 time: 0.017395 timeout: 0
+MyHeuristic - iteration: 47 time: 0.085982 timeout: 0
+MyHeuristic - iteration: 48 time: 0.153027 timeout: 0
+MyHeuristic - iteration: 49 time: 0.138854 timeout: 0
+MyHeuristic - iteration: 50 time: 0.012364 timeout: 0
+MyHeuristic - iteration: 51 time: 0.169191 timeout: 0
+MyHeuristic - iteration: 52 time: 0.139265 timeout: 0
+MyHeuristic - iteration: 53 time: 0.013183 timeout: 0
+MyHeuristic - iteration: 54 time: 0.054814 timeout: 0
+MyHeuristic - iteration: 55 time: 0.018995 timeout: 0
+MyHeuristic - iteration: 56 time: 0.065941 timeout: 0
+MyHeuristic - iteration: 57 time: 0.136276 timeout: 0
+MyHeuristic - iteration: 58 time: 0.030805 timeout: 0
+MyHeuristic - iteration: 59 time: 0.029362 timeout: 0
+MyHeuristic - iteration: 60 time: 0.044202 timeout: 0
+MyHeuristic - iteration: 61 time: 0.035072 timeout: 0
+MyHeuristic - iteration: 62 time: 0.048664 timeout: 0
+MyHeuristic - iteration: 63 time: 0.225248 timeout: 0
+MyHeuristic - iteration: 64 time: 0.117152 timeout: 0
+MyHeuristic - iteration: 65 time: 0.02077 timeout: 0
+MyHeuristic - iteration: 66 time: 0.033255 timeout: 0
+MyHeuristic - iteration: 67 time: 0.057487 timeout: 0
+MyHeuristic - iteration: 68 time: 0.030327 timeout: 0
+MyHeuristic - iteration: 69 time: 0.012478 timeout: 0
+MyHeuristic - iteration: 70 time: 0.062949 timeout: 0
+MyHeuristic - iteration: 71 time: 0.085847 timeout: 0
+MyHeuristic - iteration: 72 time: 0.033473 timeout: 0
+MyHeuristic - iteration: 73 time: 0.045433 timeout: 0
+MyHeuristic - iteration: 74 time: 0.169253 timeout: 0
+MyHeuristic - iteration: 75 time: 0.027682 timeout: 0
+MyHeuristic - iteration: 76 time: 0.104104 timeout: 0
+MyHeuristic - iteration: 77 time: 0.099765 timeout: 0
+MyHeuristic - iteration: 78 time: 0.013486 timeout: 0
+MyHeuristic - iteration: 79 time: 0.04893 timeout: 0
+MyHeuristic - iteration: 80 time: 0.053132 timeout: 0
+MyHeuristic - iteration: 81 time: 0.056102 timeout: 0
+MyHeuristic - iteration: 82 time: 0.026059 timeout: 0
+MyHeuristic - iteration: 83 time: 0.127211 timeout: 0
+MyHeuristic - iteration: 84 time: 0.013566 timeout: 0
+MyHeuristic - iteration: 85 time: 0.01264 timeout: 0
+MyHeuristic - iteration: 86 time: 0.100342 timeout: 0
+MyHeuristic - iteration: 87 time: 0.048704 timeout: 0
+MyHeuristic - iteration: 88 time: 0.057518 timeout: 0
+MyHeuristic - iteration: 89 time: 0.03023 timeout: 0
+MyHeuristic - iteration: 90 time: 0.020102 timeout: 0
+MyHeuristic - iteration: 91 time: 0.018794 timeout: 0
+MyHeuristic - iteration: 92 time: 0.032037 timeout: 0
+MyHeuristic - iteration: 93 time: 0.068332 timeout: 0
+MyHeuristic - iteration: 94 time: 0.018551 timeout: 0
+MyHeuristic - iteration: 95 time: 0.103535 timeout: 0
+MyHeuristic - iteration: 96 time: 0.019609 timeout: 0
+MyHeuristic - iteration: 97 time: 0.052867 timeout: 0
+MyHeuristic - iteration: 98 time: 0.038354 timeout: 0
+MyHeuristic - iteration: 99 time: 0.05991 timeout: 0
+MyHeuristic Success Rate: 100 Timeout: 0
+Min number of added clauses: 0
+Median number of added clauses: 3
+Max number of added clauses: 27
+Min number of backtracks: 22
+Median number of backtracks: 93
+Max number of backtracks: 469
+Min computation time: 0.011861
+Median computation time: 0.046075
+Max computation time: 0.256275
+
+N: 100 L-Probability: 0.5 LN_Ratio: 3.5
+MyHeuristic - iteration: 0 time: 0.66975 timeout: 0
+MyHeuristic - iteration: 1 time: 0.137505 timeout: 0
+MyHeuristic - iteration: 2 time: 0.143626 timeout: 0
+MyHeuristic - iteration: 3 time: 0.415548 timeout: 0
+MyHeuristic - iteration: 4 time: 0.018779 timeout: 0
+MyHeuristic - iteration: 5 time: 0.113063 timeout: 0
+MyHeuristic - iteration: 6 time: 1.21247 timeout: 0
+MyHeuristic - iteration: 7 time: 0.16764 timeout: 0
+MyHeuristic - iteration: 8 time: 0.027091 timeout: 0
+MyHeuristic - iteration: 9 time: 0.976452 timeout: 0
+MyHeuristic - iteration: 10 time: 1.40576 timeout: 0
+MyHeuristic - iteration: 11 time: 0.175395 timeout: 0
+MyHeuristic - iteration: 12 time: 0.01215 timeout: 0
+MyHeuristic - iteration: 13 time: 0.555987 timeout: 0
+MyHeuristic - iteration: 14 time: 0.36575 timeout: 0
+MyHeuristic - iteration: 15 time: 0.394077 timeout: 0
+MyHeuristic - iteration: 16 time: 0.683907 timeout: 0
+MyHeuristic - iteration: 17 time: 1.79233 timeout: 0
+MyHeuristic - iteration: 18 time: 0.110036 timeout: 0
+MyHeuristic - iteration: 19 time: 0.220321 timeout: 0
+MyHeuristic - iteration: 20 time: 0.438452 timeout: 0
+MyHeuristic - iteration: 21 time: 0.149665 timeout: 0
+MyHeuristic - iteration: 22 time: 0.249617 timeout: 0
+MyHeuristic - iteration: 23 time: 0.204984 timeout: 0
+MyHeuristic - iteration: 24 time: 0.047223 timeout: 0
+MyHeuristic - iteration: 25 time: 1.72968 timeout: 0
+MyHeuristic - iteration: 26 time: 0.129633 timeout: 0
+MyHeuristic - iteration: 27 time: 0.012428 timeout: 0
+MyHeuristic - iteration: 28 time: 0.068547 timeout: 0
+MyHeuristic - iteration: 29 time: 0.874856 timeout: 0
+MyHeuristic - iteration: 30 time: 0.675905 timeout: 0
+MyHeuristic - iteration: 31 time: 1.16766 timeout: 0
+MyHeuristic - iteration: 32 time: 0.137495 timeout: 0
+MyHeuristic - iteration: 33 time: 0.05582 timeout: 0
+MyHeuristic - iteration: 34 time: 0.614888 timeout: 0
+MyHeuristic - iteration: 35 time: 0.054117 timeout: 0
+MyHeuristic - iteration: 36 time: 0.398568 timeout: 0
+MyHeuristic - iteration: 37 time: 0.046444 timeout: 0
+MyHeuristic - iteration: 38 time: 2.58372 timeout: 0
+MyHeuristic - iteration: 39 time: 0.184017 timeout: 0
+MyHeuristic - iteration: 40 time: 0.012957 timeout: 0
+MyHeuristic - iteration: 41 time: 0.03151 timeout: 0
+MyHeuristic - iteration: 42 time: 0.07251 timeout: 0
+MyHeuristic - iteration: 43 time: 1.65299 timeout: 0
+MyHeuristic - iteration: 44 time: 0.013992 timeout: 0
+MyHeuristic - iteration: 45 time: 0.089069 timeout: 0
+MyHeuristic - iteration: 46 time: 0.260097 timeout: 0
+MyHeuristic - iteration: 47 time: 0.095599 timeout: 0
+MyHeuristic - iteration: 48 time: 0.058165 timeout: 0
+MyHeuristic - iteration: 49 time: 0.196608 timeout: 0
+MyHeuristic - iteration: 50 time: 0.031841 timeout: 0
+MyHeuristic - iteration: 51 time: 0.093852 timeout: 0
+MyHeuristic - iteration: 52 time: 0.170685 timeout: 0
+MyHeuristic - iteration: 53 time: 0.15001 timeout: 0
+MyHeuristic - iteration: 54 time: 1.39119 timeout: 0
+MyHeuristic - iteration: 55 time: 0.265718 timeout: 0
+MyHeuristic - iteration: 56 time: 0.306979 timeout: 0
+MyHeuristic - iteration: 57 time: 0.73722 timeout: 0
+MyHeuristic - iteration: 58 time: 1.4895 timeout: 0
+MyHeuristic - iteration: 59 time: 0.364724 timeout: 0
+MyHeuristic - iteration: 60 time: 0.778904 timeout: 0
+MyHeuristic - iteration: 61 time: 1.07502 timeout: 0
+MyHeuristic - iteration: 62 time: 0.354604 timeout: 0
+MyHeuristic - iteration: 63 time: 0.098376 timeout: 0
+MyHeuristic - iteration: 64 time: 0.163672 timeout: 0
+MyHeuristic - iteration: 65 time: 0.450457 timeout: 0
+MyHeuristic - iteration: 66 time: 0.036277 timeout: 0
+MyHeuristic - iteration: 67 time: 2.27033 timeout: 0
+MyHeuristic - iteration: 68 time: 0.092212 timeout: 0
+MyHeuristic - iteration: 69 time: 0.028718 timeout: 0
+MyHeuristic - iteration: 70 time: 0.215639 timeout: 0
+MyHeuristic - iteration: 71 time: 2.89123 timeout: 0
+MyHeuristic - iteration: 72 time: 0.202567 timeout: 0
+MyHeuristic - iteration: 73 time: 0.012272 timeout: 0
+MyHeuristic - iteration: 74 time: 0.038635 timeout: 0
+MyHeuristic - iteration: 75 time: 0.012692 timeout: 0
+MyHeuristic - iteration: 76 time: 0.08025 timeout: 0
+MyHeuristic - iteration: 77 time: 0.24312 timeout: 0
+MyHeuristic - iteration: 78 time: 0.134704 timeout: 0
+MyHeuristic - iteration: 79 time: 0.031334 timeout: 0
+MyHeuristic - iteration: 80 time: 1.42915 timeout: 0
+MyHeuristic - iteration: 81 time: 0.620769 timeout: 0
+MyHeuristic - iteration: 82 time: 0.414017 timeout: 0
+MyHeuristic - iteration: 83 time: 0.080738 timeout: 0
+MyHeuristic - iteration: 84 time: 0.478983 timeout: 0
+MyHeuristic - iteration: 85 time: 0.128151 timeout: 0
+MyHeuristic - iteration: 86 time: 0.347427 timeout: 0
+MyHeuristic - iteration: 87 time: 0.23123 timeout: 0
+MyHeuristic - iteration: 88 time: 0.279729 timeout: 0
+MyHeuristic - iteration: 89 time: 0.023743 timeout: 0
+MyHeuristic - iteration: 90 time: 0.028612 timeout: 0
+MyHeuristic - iteration: 91 time: 0.01352 timeout: 0
+MyHeuristic - iteration: 92 time: 0.013817 timeout: 0
+MyHeuristic - iteration: 93 time: 0.487052 timeout: 0
+MyHeuristic - iteration: 94 time: 0.316739 timeout: 0
+MyHeuristic - iteration: 95 time: 0.544107 timeout: 0
+MyHeuristic - iteration: 96 time: 0.349294 timeout: 0
+MyHeuristic - iteration: 97 time: 0.170114 timeout: 0
+MyHeuristic - iteration: 98 time: 0.365986 timeout: 0
+MyHeuristic - iteration: 99 time: 0.02275 timeout: 0
+MyHeuristic Success Rate: 100 Timeout: 0
+Min number of added clauses: 0
+Median number of added clauses: 22
+Max number of added clauses: 214
+Min number of backtracks: 18
+Median number of backtracks: 314
+Max number of backtracks: 3789
+Min computation time: 0.01215
+Median computation time: 0.202567
+Max computation time: 2.89123
+
+N: 100 L-Probability: 0.5 LN_Ratio: 4
+MyHeuristic - iteration: 0 time: 2.52362 timeout: 0
+MyHeuristic - iteration: 1 time: 0.199483 timeout: 0
+MyHeuristic - iteration: 2 time: 0.492596 timeout: 0
+MyHeuristic - iteration: 3 time: 0.192394 timeout: 0
+MyHeuristic - iteration: 4 time: 0.27072 timeout: 0
+MyHeuristic - iteration: 5 time: 0.275446 timeout: 0
+MyHeuristic - iteration: 6 time: 4.19523 timeout: 0
+MyHeuristic - iteration: 7 time: 5.16305 timeout: 0
+MyHeuristic - iteration: 8 time: 0.195757 timeout: 0
+MyHeuristic - iteration: 9 time: 4.10105 timeout: 0
+MyHeuristic - iteration: 10 time: 2.48052 timeout: 0
+MyHeuristic - iteration: 11 time: 0.071273 timeout: 0
+MyHeuristic - iteration: 12 time: 0.655369 timeout: 0
+MyHeuristic - iteration: 13 time: 3.35234 timeout: 0
+MyHeuristic - iteration: 14 time: 4.65702 timeout: 0
+MyHeuristic - iteration: 15 time: 0.781413 timeout: 0
+MyHeuristic - iteration: 16 time: 1.209 timeout: 0
+MyHeuristic - iteration: 17 time: 4.18594 timeout: 0
+MyHeuristic - iteration: 18 time: 2.24632 timeout: 0
+MyHeuristic - iteration: 19 time: 10.0026 timeout: 1
+MyHeuristic - iteration: 20 time: 0.236843 timeout: 0
+MyHeuristic - iteration: 21 time: 8.66377 timeout: 0
+MyHeuristic - iteration: 22 time: 1.87134 timeout: 0
+MyHeuristic - iteration: 23 time: 1.39441 timeout: 0
+MyHeuristic - iteration: 24 time: 10.0015 timeout: 1
+MyHeuristic - iteration: 25 time: 2.80819 timeout: 0
+MyHeuristic - iteration: 26 time: 1.19472 timeout: 0
+MyHeuristic - iteration: 27 time: 0.246476 timeout: 0
+MyHeuristic - iteration: 28 time: 10.0019 timeout: 1
+MyHeuristic - iteration: 29 time: 10.0145 timeout: 1
+MyHeuristic - iteration: 30 time: 3.00872 timeout: 0
+MyHeuristic - iteration: 31 time: 6.03924 timeout: 0
+MyHeuristic - iteration: 32 time: 5.79691 timeout: 0
+MyHeuristic - iteration: 33 time: 10.0097 timeout: 1
+MyHeuristic - iteration: 34 time: 1.42347 timeout: 0
+MyHeuristic - iteration: 35 time: 10.0074 timeout: 1
+MyHeuristic - iteration: 36 time: 0.594208 timeout: 0
+MyHeuristic - iteration: 37 time: 6.33135 timeout: 0
+MyHeuristic - iteration: 38 time: 10.0121 timeout: 1
+MyHeuristic - iteration: 39 time: 10.0098 timeout: 1
+MyHeuristic - iteration: 40 time: 2.86295 timeout: 0
+MyHeuristic - iteration: 41 time: 2.16835 timeout: 0
+MyHeuristic - iteration: 42 time: 6.20453 timeout: 0
+MyHeuristic - iteration: 43 time: 0.992526 timeout: 0
+MyHeuristic - iteration: 44 time: 3.65071 timeout: 0
+MyHeuristic - iteration: 45 time: 3.38254 timeout: 0
+MyHeuristic - iteration: 46 time: 1.32108 timeout: 0
+MyHeuristic - iteration: 47 time: 10.0019 timeout: 1
+MyHeuristic - iteration: 48 time: 4.39514 timeout: 0
+MyHeuristic - iteration: 49 time: 0.17276 timeout: 0
+MyHeuristic - iteration: 50 time: 10 timeout: 1
+MyHeuristic - iteration: 51 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 52 time: 1.11162 timeout: 0
+MyHeuristic - iteration: 53 time: 0.924503 timeout: 0
+MyHeuristic - iteration: 54 time: 0.090479 timeout: 0
+MyHeuristic - iteration: 55 time: 1.89399 timeout: 0
+MyHeuristic - iteration: 56 time: 1.65135 timeout: 0
+MyHeuristic - iteration: 57 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 58 time: 10.0063 timeout: 1
+MyHeuristic - iteration: 59 time: 0.015233 timeout: 0
+MyHeuristic - iteration: 60 time: 2.00284 timeout: 0
+MyHeuristic - iteration: 61 time: 3.832 timeout: 0
+MyHeuristic - iteration: 62 time: 3.78114 timeout: 0
+MyHeuristic - iteration: 63 time: 2.09594 timeout: 0
+MyHeuristic - iteration: 64 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 65 time: 6.68778 timeout: 0
+MyHeuristic - iteration: 66 time: 1.20182 timeout: 0
+MyHeuristic - iteration: 67 time: 0.611789 timeout: 0
+MyHeuristic - iteration: 68 time: 5.31331 timeout: 0
+MyHeuristic - iteration: 69 time: 1.24663 timeout: 0
+MyHeuristic - iteration: 70 time: 0.615008 timeout: 0
+MyHeuristic - iteration: 71 time: 10.003 timeout: 1
+MyHeuristic - iteration: 72 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 73 time: 3.69745 timeout: 0
+MyHeuristic - iteration: 74 time: 7.54509 timeout: 0
+MyHeuristic - iteration: 75 time: 10.0028 timeout: 1
+MyHeuristic - iteration: 76 time: 0.779999 timeout: 0
+MyHeuristic - iteration: 77 time: 3.54447 timeout: 0
+MyHeuristic - iteration: 78 time: 7.50378 timeout: 0
+MyHeuristic - iteration: 79 time: 1.68362 timeout: 0
+MyHeuristic - iteration: 80 time: 0.133996 timeout: 0
+MyHeuristic - iteration: 81 time: 0.554095 timeout: 0
+MyHeuristic - iteration: 82 time: 0.585335 timeout: 0
+MyHeuristic - iteration: 83 time: 4.34257 timeout: 0
+MyHeuristic - iteration: 84 time: 0.412138 timeout: 0
+MyHeuristic - iteration: 85 time: 1.95276 timeout: 0
+MyHeuristic - iteration: 86 time: 7.75635 timeout: 0
+MyHeuristic - iteration: 87 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 88 time: 3.34019 timeout: 0
+MyHeuristic - iteration: 89 time: 10.0001 timeout: 1
+MyHeuristic - iteration: 90 time: 0.069624 timeout: 0
+MyHeuristic - iteration: 91 time: 1.96765 timeout: 0
+MyHeuristic - iteration: 92 time: 0.56776 timeout: 0
+MyHeuristic - iteration: 93 time: 10.0008 timeout: 1
+MyHeuristic - iteration: 94 time: 1.44443 timeout: 0
+MyHeuristic - iteration: 95 time: 2.36635 timeout: 0
+MyHeuristic - iteration: 96 time: 4.49998 timeout: 0
+MyHeuristic - iteration: 97 time: 0.364824 timeout: 0
+MyHeuristic - iteration: 98 time: 2.21201 timeout: 0
+MyHeuristic - iteration: 99 time: 10 timeout: 1
+MyHeuristic Success Rate: 79 Timeout: 21
+Min number of added clauses: 0
+Median number of added clauses: 217
+Max number of added clauses: 638
+Min number of backtracks: 20
+Median number of backtracks: 2455
+Max number of backtracks: 8722
+Min computation time: 0.015233
+Median computation time: 2.80819
+Max computation time: 10.0145
+
+N: 100 L-Probability: 0.5 LN_Ratio: 4.5
+MyHeuristic - iteration: 0 time: 10.0047 timeout: 1
+MyHeuristic - iteration: 1 time: 2.94227 timeout: 0
+MyHeuristic - iteration: 2 time: 10.001 timeout: 1
+MyHeuristic - iteration: 3 time: 10.0006 timeout: 1
+MyHeuristic - iteration: 4 time: 10.0028 timeout: 1
+MyHeuristic - iteration: 5 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 6 time: 10.0049 timeout: 1
+MyHeuristic - iteration: 7 time: 10.0008 timeout: 1
+MyHeuristic - iteration: 8 time: 10.0081 timeout: 1
+MyHeuristic - iteration: 9 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 10 time: 10.0015 timeout: 1
+MyHeuristic - iteration: 11 time: 10.0015 timeout: 1
+MyHeuristic - iteration: 12 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 13 time: 0.628098 timeout: 0
+MyHeuristic - iteration: 14 time: 10.0051 timeout: 1
+MyHeuristic - iteration: 15 time: 3.78769 timeout: 0
+MyHeuristic - iteration: 16 time: 10.0017 timeout: 1
+MyHeuristic - iteration: 17 time: 10.0068 timeout: 1
+MyHeuristic - iteration: 18 time: 10.0046 timeout: 1
+MyHeuristic - iteration: 19 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 20 time: 10.0015 timeout: 1
+MyHeuristic - iteration: 21 time: 10.0171 timeout: 1
+MyHeuristic - iteration: 22 time: 10.0013 timeout: 1
+MyHeuristic - iteration: 23 time: 10.0104 timeout: 1
+MyHeuristic - iteration: 24 time: 10.0009 timeout: 1
+MyHeuristic - iteration: 25 time: 5.02471 timeout: 0
+MyHeuristic - iteration: 26 time: 10.0029 timeout: 1
+MyHeuristic - iteration: 27 time: 10.0001 timeout: 1
+MyHeuristic - iteration: 28 time: 10.0009 timeout: 1
+MyHeuristic - iteration: 29 time: 10.0041 timeout: 1
+MyHeuristic - iteration: 30 time: 10.0019 timeout: 1
+MyHeuristic - iteration: 31 time: 4.25003 timeout: 0
+MyHeuristic - iteration: 32 time: 10.0012 timeout: 1
+MyHeuristic - iteration: 33 time: 10.0027 timeout: 1
+MyHeuristic - iteration: 34 time: 10.0051 timeout: 1
+MyHeuristic - iteration: 35 time: 10.0034 timeout: 1
+MyHeuristic - iteration: 36 time: 2.00726 timeout: 0
+MyHeuristic - iteration: 37 time: 10.0014 timeout: 1
+MyHeuristic - iteration: 38 time: 4.89203 timeout: 0
+MyHeuristic - iteration: 39 time: 10.0008 timeout: 1
+MyHeuristic - iteration: 40 time: 10.0063 timeout: 1
+MyHeuristic - iteration: 41 time: 10.0017 timeout: 1
+MyHeuristic - iteration: 42 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 43 time: 10.0066 timeout: 1
+MyHeuristic - iteration: 44 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 45 time: 7.25096 timeout: 0
+MyHeuristic - iteration: 46 time: 10.0039 timeout: 1
+MyHeuristic - iteration: 47 time: 10.0008 timeout: 1
+MyHeuristic - iteration: 48 time: 6.01973 timeout: 0
+MyHeuristic - iteration: 49 time: 10.0058 timeout: 1
+MyHeuristic - iteration: 50 time: 10 timeout: 1
+MyHeuristic - iteration: 51 time: 5.20793 timeout: 0
+MyHeuristic - iteration: 52 time: 10.0082 timeout: 1
+MyHeuristic - iteration: 53 time: 10.0067 timeout: 1
+MyHeuristic - iteration: 54 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 55 time: 1.71968 timeout: 0
+MyHeuristic - iteration: 56 time: 10.007 timeout: 1
+MyHeuristic - iteration: 57 time: 3.73578 timeout: 0
+MyHeuristic - iteration: 58 time: 10 timeout: 1
+MyHeuristic - iteration: 59 time: 10.0008 timeout: 1
+MyHeuristic - iteration: 60 time: 10.0016 timeout: 1
+MyHeuristic - iteration: 61 time: 3.44339 timeout: 0
+MyHeuristic - iteration: 62 time: 10.0151 timeout: 1
+MyHeuristic - iteration: 63 time: 10.0093 timeout: 1
+MyHeuristic - iteration: 64 time: 10.0012 timeout: 1
+MyHeuristic - iteration: 65 time: 10.0006 timeout: 1
+MyHeuristic - iteration: 66 time: 10.0055 timeout: 1
+MyHeuristic - iteration: 67 time: 3.42974 timeout: 0
+MyHeuristic - iteration: 68 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 69 time: 10.0037 timeout: 1
+MyHeuristic - iteration: 70 time: 3.32375 timeout: 0
+MyHeuristic - iteration: 71 time: 10.0015 timeout: 1
+MyHeuristic - iteration: 72 time: 10.0036 timeout: 1
+MyHeuristic - iteration: 73 time: 10.0014 timeout: 1
+MyHeuristic - iteration: 74 time: 2.77469 timeout: 0
+MyHeuristic - iteration: 75 time: 8.44779 timeout: 0
+MyHeuristic - iteration: 76 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 77 time: 3.1862 timeout: 0
+MyHeuristic - iteration: 78 time: 1.7833 timeout: 0
+MyHeuristic - iteration: 79 time: 1.71715 timeout: 0
+MyHeuristic - iteration: 80 time: 10.0042 timeout: 1
+MyHeuristic - iteration: 81 time: 10.0012 timeout: 1
+MyHeuristic - iteration: 82 time: 7.89924 timeout: 0
+MyHeuristic - iteration: 83 time: 10.0034 timeout: 1
+MyHeuristic - iteration: 84 time: 10.0007 timeout: 1
+MyHeuristic - iteration: 85 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 86 time: 10.0065 timeout: 1
+MyHeuristic - iteration: 87 time: 10.0084 timeout: 1
+MyHeuristic - iteration: 88 time: 5.08726 timeout: 0
+MyHeuristic - iteration: 89 time: 10.0067 timeout: 1
+MyHeuristic - iteration: 90 time: 7.75715 timeout: 0
+MyHeuristic - iteration: 91 time: 10.0043 timeout: 1
+MyHeuristic - iteration: 92 time: 7.09586 timeout: 0
+MyHeuristic - iteration: 93 time: 10.007 timeout: 1
+MyHeuristic - iteration: 94 time: 10.0045 timeout: 1
+MyHeuristic - iteration: 95 time: 10.0062 timeout: 1
+MyHeuristic - iteration: 96 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 97 time: 10.0204 timeout: 1
+MyHeuristic - iteration: 98 time: 10.0035 timeout: 1
+MyHeuristic - iteration: 99 time: 4.1113 timeout: 0
+MyHeuristic Success Rate: 19 Timeout: 75
+Min number of added clauses: 58
+Median number of added clauses: 343
+Max number of added clauses: 630
+Min number of backtracks: 550
+Median number of backtracks: 5273
+Max number of backtracks: 9059
+Min computation time: 0.628098
+Median computation time: 10.0012
+Max computation time: 10.0204
+
+N: 100 L-Probability: 0.5 LN_Ratio: 5
+MyHeuristic - iteration: 0 time: 4.78425 timeout: 0
+MyHeuristic - iteration: 1 time: 10.0107 timeout: 1
+MyHeuristic - iteration: 2 time: 10.0057 timeout: 1
+MyHeuristic - iteration: 3 time: 10.0034 timeout: 1
+MyHeuristic - iteration: 4 time: 2.6981 timeout: 0
+MyHeuristic - iteration: 5 time: 1.97476 timeout: 0
+MyHeuristic - iteration: 6 time: 10.0067 timeout: 1
+MyHeuristic - iteration: 7 time: 10.0004 timeout: 1
+MyHeuristic - iteration: 8 time: 1.41802 timeout: 0
+MyHeuristic - iteration: 9 time: 10.0004 timeout: 1
+MyHeuristic - iteration: 10 time: 1.92599 timeout: 0
+MyHeuristic - iteration: 11 time: 10.0014 timeout: 1
+MyHeuristic - iteration: 12 time: 10.0079 timeout: 1
+MyHeuristic - iteration: 13 time: 10.0047 timeout: 1
+MyHeuristic - iteration: 14 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 15 time: 10.0021 timeout: 1
+MyHeuristic - iteration: 16 time: 1.14265 timeout: 0
+MyHeuristic - iteration: 17 time: 2.57872 timeout: 0
+MyHeuristic - iteration: 18 time: 10.0004 timeout: 1
+MyHeuristic - iteration: 19 time: 10.0004 timeout: 1
+MyHeuristic - iteration: 20 time: 10.001 timeout: 1
+MyHeuristic - iteration: 21 time: 2.71388 timeout: 0
+MyHeuristic - iteration: 22 time: 10.0054 timeout: 1
+MyHeuristic - iteration: 23 time: 10.0008 timeout: 1
+MyHeuristic - iteration: 24 time: 2.56156 timeout: 0
+MyHeuristic - iteration: 25 time: 2.63566 timeout: 0
+MyHeuristic - iteration: 26 time: 10.0036 timeout: 1
+MyHeuristic - iteration: 27 time: 3.52288 timeout: 0
+MyHeuristic - iteration: 28 time: 10 timeout: 1
+MyHeuristic - iteration: 29 time: 10.0074 timeout: 1
+MyHeuristic - iteration: 30 time: 1.24503 timeout: 0
+MyHeuristic - iteration: 31 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 32 time: 1.311 timeout: 0
+MyHeuristic - iteration: 33 time: 2.13392 timeout: 0
+MyHeuristic - iteration: 34 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 35 time: 1.15053 timeout: 0
+MyHeuristic - iteration: 36 time: 10.0008 timeout: 1
+MyHeuristic - iteration: 37 time: 4.53928 timeout: 0
+MyHeuristic - iteration: 38 time: 10.0013 timeout: 1
+MyHeuristic - iteration: 39 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 40 time: 10.001 timeout: 1
+MyHeuristic - iteration: 41 time: 10.0045 timeout: 1
+MyHeuristic - iteration: 42 time: 2.03187 timeout: 0
+MyHeuristic - iteration: 43 time: 10.0117 timeout: 1
+MyHeuristic - iteration: 44 time: 10.0058 timeout: 1
+MyHeuristic - iteration: 45 time: 10.005 timeout: 1
+MyHeuristic - iteration: 46 time: 1.51916 timeout: 0
+MyHeuristic - iteration: 47 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 48 time: 1.19814 timeout: 0
+MyHeuristic - iteration: 49 time: 10.0023 timeout: 1
+MyHeuristic - iteration: 50 time: 10.0124 timeout: 1
+MyHeuristic - iteration: 51 time: 10.0013 timeout: 1
+MyHeuristic - iteration: 52 time: 10.0001 timeout: 1
+MyHeuristic - iteration: 53 time: 10.0037 timeout: 1
+MyHeuristic - iteration: 54 time: 10.004 timeout: 1
+MyHeuristic - iteration: 55 time: 10.0079 timeout: 1
+MyHeuristic - iteration: 56 time: 10.0035 timeout: 1
+MyHeuristic - iteration: 57 time: 1.53155 timeout: 0
+MyHeuristic - iteration: 58 time: 8.566 timeout: 0
+MyHeuristic - iteration: 59 time: 10.0023 timeout: 1
+MyHeuristic - iteration: 60 time: 10.001 timeout: 1
+MyHeuristic - iteration: 61 time: 10.0066 timeout: 1
+MyHeuristic - iteration: 62 time: 10.0015 timeout: 1
+MyHeuristic - iteration: 63 time: 10.0076 timeout: 1
+MyHeuristic - iteration: 64 time: 10.0037 timeout: 1
+MyHeuristic - iteration: 65 time: 1.41344 timeout: 0
+MyHeuristic - iteration: 66 time: 10.0013 timeout: 1
+MyHeuristic - iteration: 67 time: 2.23968 timeout: 0
+MyHeuristic - iteration: 68 time: 10.0019 timeout: 1
+MyHeuristic - iteration: 69 time: 10.0156 timeout: 1
+MyHeuristic - iteration: 70 time: 5.32318 timeout: 0
+MyHeuristic - iteration: 71 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 72 time: 10.0035 timeout: 1
+MyHeuristic - iteration: 73 time: 1.2269 timeout: 0
+MyHeuristic - iteration: 74 time: 4.46365 timeout: 0
+MyHeuristic - iteration: 75 time: 6.41807 timeout: 0
+MyHeuristic - iteration: 76 time: 10.0036 timeout: 1
+MyHeuristic - iteration: 77 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 78 time: 10.0011 timeout: 1
+MyHeuristic - iteration: 79 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 80 time: 1.2077 timeout: 0
+MyHeuristic - iteration: 81 time: 10.0051 timeout: 1
+MyHeuristic - iteration: 82 time: 10.0024 timeout: 1
+MyHeuristic - iteration: 83 time: 10.0009 timeout: 1
+MyHeuristic - iteration: 84 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 85 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 86 time: 10.0013 timeout: 1
+MyHeuristic - iteration: 87 time: 10.002 timeout: 1
+MyHeuristic - iteration: 88 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 89 time: 10.0078 timeout: 1
+MyHeuristic - iteration: 90 time: 10.0009 timeout: 1
+MyHeuristic - iteration: 91 time: 10.0024 timeout: 1
+MyHeuristic - iteration: 92 time: 10.0007 timeout: 1
+MyHeuristic - iteration: 93 time: 10.0082 timeout: 1
+MyHeuristic - iteration: 94 time: 10.0007 timeout: 1
+MyHeuristic - iteration: 95 time: 10.005 timeout: 1
+MyHeuristic - iteration: 96 time: 10.0015 timeout: 1
+MyHeuristic - iteration: 97 time: 10.0035 timeout: 1
+MyHeuristic - iteration: 98 time: 10.0096 timeout: 1
+MyHeuristic - iteration: 99 time: 10.0067 timeout: 1
+MyHeuristic Success Rate: 2 Timeout: 72
+Min number of added clauses: 77
+Median number of added clauses: 222
+Max number of added clauses: 573
+Min number of backtracks: 602
+Median number of backtracks: 4757
+Max number of backtracks: 13705
+Min computation time: 1.14265
+Median computation time: 10.0009
+Max computation time: 10.0156
+
+N: 100 L-Probability: 0.5 LN_Ratio: 5.5
+MyHeuristic - iteration: 0 time: 10.0037 timeout: 1
+MyHeuristic - iteration: 1 time: 10.0063 timeout: 1
+MyHeuristic - iteration: 2 time: 10.0046 timeout: 1
+MyHeuristic - iteration: 3 time: 10.0035 timeout: 1
+MyHeuristic - iteration: 4 time: 2.05475 timeout: 0
+MyHeuristic - iteration: 5 time: 0.949342 timeout: 0
+MyHeuristic - iteration: 6 time: 10.0007 timeout: 1
+MyHeuristic - iteration: 7 time: 1.67166 timeout: 0
+MyHeuristic - iteration: 8 time: 10.0021 timeout: 1
+MyHeuristic - iteration: 9 time: 1.78097 timeout: 0
+MyHeuristic - iteration: 10 time: 10.0014 timeout: 1
+MyHeuristic - iteration: 11 time: 10.0024 timeout: 1
+MyHeuristic - iteration: 12 time: 10.0006 timeout: 1
+MyHeuristic - iteration: 13 time: 10.0004 timeout: 1
+MyHeuristic - iteration: 14 time: 10.0014 timeout: 1
+MyHeuristic - iteration: 15 time: 0.922193 timeout: 0
+MyHeuristic - iteration: 16 time: 2.37278 timeout: 0
+MyHeuristic - iteration: 17 time: 1.75629 timeout: 0
+MyHeuristic - iteration: 18 time: 3.11313 timeout: 0
+MyHeuristic - iteration: 19 time: 2.22682 timeout: 0
+MyHeuristic - iteration: 20 time: 10.0026 timeout: 1
+MyHeuristic - iteration: 21 time: 10.0007 timeout: 1
+MyHeuristic - iteration: 22 time: 10.0063 timeout: 1
+MyHeuristic - iteration: 23 time: 1.37193 timeout: 0
+MyHeuristic - iteration: 24 time: 10.0037 timeout: 1
+MyHeuristic - iteration: 25 time: 10.0056 timeout: 1
+MyHeuristic - iteration: 26 time: 1.08031 timeout: 0
+MyHeuristic - iteration: 27 time: 10.0001 timeout: 1
+MyHeuristic - iteration: 28 time: 10.0037 timeout: 1
+MyHeuristic - iteration: 29 time: 1.42796 timeout: 0
+MyHeuristic - iteration: 30 time: 0.924273 timeout: 0
+MyHeuristic - iteration: 31 time: 10.0034 timeout: 1
+MyHeuristic - iteration: 32 time: 1.82433 timeout: 0
+MyHeuristic - iteration: 33 time: 10.003 timeout: 1
+MyHeuristic - iteration: 34 time: 10.0029 timeout: 1
+MyHeuristic - iteration: 35 time: 2.02108 timeout: 0
+MyHeuristic - iteration: 36 time: 10.002 timeout: 1
+MyHeuristic - iteration: 37 time: 10.0011 timeout: 1
+MyHeuristic - iteration: 38 time: 10.0026 timeout: 1
+MyHeuristic - iteration: 39 time: 10.002 timeout: 1
+MyHeuristic - iteration: 40 time: 2.20176 timeout: 0
+MyHeuristic - iteration: 41 time: 10.0038 timeout: 1
+MyHeuristic - iteration: 42 time: 0.882595 timeout: 0
+MyHeuristic - iteration: 43 time: 10.0076 timeout: 1
+MyHeuristic - iteration: 44 time: 1.60735 timeout: 0
+MyHeuristic - iteration: 45 time: 3.56662 timeout: 0
+MyHeuristic - iteration: 46 time: 10.0006 timeout: 1
+MyHeuristic - iteration: 47 time: 10.0023 timeout: 1
+MyHeuristic - iteration: 48 time: 10.0007 timeout: 1
+MyHeuristic - iteration: 49 time: 1.8499 timeout: 0
+MyHeuristic - iteration: 50 time: 10.002 timeout: 1
+MyHeuristic - iteration: 51 time: 10.0065 timeout: 1
+MyHeuristic - iteration: 52 time: 2.16789 timeout: 0
+MyHeuristic - iteration: 53 time: 1.22063 timeout: 0
+MyHeuristic - iteration: 54 time: 10.0027 timeout: 1
+MyHeuristic - iteration: 55 time: 1.31393 timeout: 0
+MyHeuristic - iteration: 56 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 57 time: 10.0013 timeout: 1
+MyHeuristic - iteration: 58 time: 10.0007 timeout: 1
+MyHeuristic - iteration: 59 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 60 time: 2.5086 timeout: 0
+MyHeuristic - iteration: 61 time: 10.0049 timeout: 1
+MyHeuristic - iteration: 62 time: 10.0013 timeout: 1
+MyHeuristic - iteration: 63 time: 10.002 timeout: 1
+MyHeuristic - iteration: 64 time: 10.0065 timeout: 1
+MyHeuristic - iteration: 65 time: 10.0012 timeout: 1
+MyHeuristic - iteration: 66 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 67 time: 2.44621 timeout: 0
+MyHeuristic - iteration: 68 time: 10.0091 timeout: 1
+MyHeuristic - iteration: 69 time: 10.0018 timeout: 1
+MyHeuristic - iteration: 70 time: 3.83061 timeout: 0
+MyHeuristic - iteration: 71 time: 2.35893 timeout: 0
+MyHeuristic - iteration: 72 time: 1.99678 timeout: 0
+MyHeuristic - iteration: 73 time: 10.003 timeout: 1
+MyHeuristic - iteration: 74 time: 1.73707 timeout: 0
+MyHeuristic - iteration: 75 time: 10.001 timeout: 1
+MyHeuristic - iteration: 76 time: 2.70199 timeout: 0
+MyHeuristic - iteration: 77 time: 1.16939 timeout: 0
+MyHeuristic - iteration: 78 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 79 time: 10.0044 timeout: 1
+MyHeuristic - iteration: 80 time: 10.002 timeout: 1
+MyHeuristic - iteration: 81 time: 10.001 timeout: 1
+MyHeuristic - iteration: 82 time: 10.0024 timeout: 1
+MyHeuristic - iteration: 83 time: 0.467574 timeout: 0
+MyHeuristic - iteration: 84 time: 2.33478 timeout: 0
+MyHeuristic - iteration: 85 time: 1.41504 timeout: 0
+MyHeuristic - iteration: 86 time: 5.96741 timeout: 0
+MyHeuristic - iteration: 87 time: 0.790008 timeout: 0
+MyHeuristic - iteration: 88 time: 10.0025 timeout: 1
+MyHeuristic - iteration: 89 time: 10.008 timeout: 1
+MyHeuristic - iteration: 90 time: 1.421 timeout: 0
+MyHeuristic - iteration: 91 time: 10.0014 timeout: 1
+MyHeuristic - iteration: 92 time: 0.516361 timeout: 0
+MyHeuristic - iteration: 93 time: 10.0032 timeout: 1
+MyHeuristic - iteration: 94 time: 10.0095 timeout: 1
+MyHeuristic - iteration: 95 time: 2.95234 timeout: 0
+MyHeuristic - iteration: 96 time: 2.50979 timeout: 0
+MyHeuristic - iteration: 97 time: 0.718168 timeout: 0
+MyHeuristic - iteration: 98 time: 10.0006 timeout: 1
+MyHeuristic - iteration: 99 time: 10.0079 timeout: 1
+MyHeuristic Success Rate: 0 Timeout: 59
+Min number of added clauses: 44
+Median number of added clauses: 165
+Max number of added clauses: 482
+Min number of backtracks: 213
+Median number of backtracks: 3472
+Max number of backtracks: 19258
+Min computation time: 0.467574
+Median computation time: 10.0007
+Max computation time: 10.0095
+
+N: 100 L-Probability: 0.5 LN_Ratio: 6
+MyHeuristic - iteration: 0 time: 10.0006 timeout: 1
+MyHeuristic - iteration: 1 time: 1.5749 timeout: 0
+MyHeuristic - iteration: 2 time: 10.0001 timeout: 1
+MyHeuristic - iteration: 3 time: 10.0038 timeout: 1
+MyHeuristic - iteration: 4 time: 0.602302 timeout: 0
+MyHeuristic - iteration: 5 time: 10 timeout: 1
+MyHeuristic - iteration: 6 time: 10.005 timeout: 1
+MyHeuristic - iteration: 7 time: 10.0009 timeout: 1
+MyHeuristic - iteration: 8 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 9 time: 10.0102 timeout: 1
+MyHeuristic - iteration: 10 time: 10.0044 timeout: 1
+MyHeuristic - iteration: 11 time: 1.39007 timeout: 0
+MyHeuristic - iteration: 12 time: 10.0013 timeout: 1
+MyHeuristic - iteration: 13 time: 2.76133 timeout: 0
+MyHeuristic - iteration: 14 time: 10.0012 timeout: 1
+MyHeuristic - iteration: 15 time: 10.0009 timeout: 1
+MyHeuristic - iteration: 16 time: 2.08083 timeout: 0
+MyHeuristic - iteration: 17 time: 2.36553 timeout: 0
+MyHeuristic - iteration: 18 time: 10.0055 timeout: 1
+MyHeuristic - iteration: 19 time: 1.45138 timeout: 0
+MyHeuristic - iteration: 20 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 21 time: 1.68482 timeout: 0
+MyHeuristic - iteration: 22 time: 10.0011 timeout: 1
+MyHeuristic - iteration: 23 time: 1.22973 timeout: 0
+MyHeuristic - iteration: 24 time: 1.77335 timeout: 0
+MyHeuristic - iteration: 25 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 26 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 27 time: 0.871204 timeout: 0
+MyHeuristic - iteration: 28 time: 10.0018 timeout: 1
+MyHeuristic - iteration: 29 time: 10.0008 timeout: 1
+MyHeuristic - iteration: 30 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 31 time: 10.0084 timeout: 1
+MyHeuristic - iteration: 32 time: 1.03622 timeout: 0
+MyHeuristic - iteration: 33 time: 4.6265 timeout: 0
+MyHeuristic - iteration: 34 time: 0.972914 timeout: 0
+MyHeuristic - iteration: 35 time: 2.27616 timeout: 0
+MyHeuristic - iteration: 36 time: 10.004 timeout: 1
+MyHeuristic - iteration: 37 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 38 time: 10.0014 timeout: 1
+MyHeuristic - iteration: 39 time: 10.002 timeout: 1
+MyHeuristic - iteration: 40 time: 10.0052 timeout: 1
+MyHeuristic - iteration: 41 time: 1.15099 timeout: 0
+MyHeuristic - iteration: 42 time: 0.511499 timeout: 0
+MyHeuristic - iteration: 43 time: 10.0007 timeout: 1
+MyHeuristic - iteration: 44 time: 10.0001 timeout: 1
+MyHeuristic - iteration: 45 time: 10.0016 timeout: 1
+MyHeuristic - iteration: 46 time: 1.79238 timeout: 0
+MyHeuristic - iteration: 47 time: 10.0063 timeout: 1
+MyHeuristic - iteration: 48 time: 2.37258 timeout: 0
+MyHeuristic - iteration: 49 time: 10.0082 timeout: 1
+MyHeuristic - iteration: 50 time: 0.509197 timeout: 0
+MyHeuristic - iteration: 51 time: 10.0105 timeout: 1
+MyHeuristic - iteration: 52 time: 0.963088 timeout: 0
+MyHeuristic - iteration: 53 time: 10.0015 timeout: 1
+MyHeuristic - iteration: 54 time: 4.04763 timeout: 0
+MyHeuristic - iteration: 55 time: 10.001 timeout: 1
+MyHeuristic - iteration: 56 time: 2.23913 timeout: 0
+MyHeuristic - iteration: 57 time: 0.592975 timeout: 0
+MyHeuristic - iteration: 58 time: 1.84331 timeout: 0
+MyHeuristic - iteration: 59 time: 1.46612 timeout: 0
+MyHeuristic - iteration: 60 time: 1.74519 timeout: 0
+MyHeuristic - iteration: 61 time: 1.5608 timeout: 0
+MyHeuristic - iteration: 62 time: 10.0001 timeout: 1
+MyHeuristic - iteration: 63 time: 10.0073 timeout: 1
+MyHeuristic - iteration: 64 time: 10.004 timeout: 1
+MyHeuristic - iteration: 65 time: 10.0008 timeout: 1
+MyHeuristic - iteration: 66 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 67 time: 10.0009 timeout: 1
+MyHeuristic - iteration: 68 time: 0.917476 timeout: 0
+MyHeuristic - iteration: 69 time: 10.0003 timeout: 1
+MyHeuristic - iteration: 70 time: 10.001 timeout: 1
+MyHeuristic - iteration: 71 time: 1.12701 timeout: 0
+MyHeuristic - iteration: 72 time: 10.0006 timeout: 1
+MyHeuristic - iteration: 73 time: 10.0004 timeout: 1
+MyHeuristic - iteration: 74 time: 10.0116 timeout: 1
+MyHeuristic - iteration: 75 time: 2.19129 timeout: 0
+MyHeuristic - iteration: 76 time: 10.0025 timeout: 1
+MyHeuristic - iteration: 77 time: 10.0048 timeout: 1
+MyHeuristic - iteration: 78 time: 1.28712 timeout: 0
+MyHeuristic - iteration: 79 time: 0.543722 timeout: 0
+MyHeuristic - iteration: 80 time: 10.0001 timeout: 1
+MyHeuristic - iteration: 81 time: 1.39465 timeout: 0
+MyHeuristic - iteration: 82 time: 1.63681 timeout: 0
+MyHeuristic - iteration: 83 time: 10.0005 timeout: 1
+MyHeuristic - iteration: 84 time: 2.09179 timeout: 0
+MyHeuristic - iteration: 85 time: 10.0057 timeout: 1
+MyHeuristic - iteration: 86 time: 10.0017 timeout: 1
+MyHeuristic - iteration: 87 time: 1.59545 timeout: 0
+MyHeuristic - iteration: 88 time: 1.52001 timeout: 0
+MyHeuristic - iteration: 89 time: 2.38559 timeout: 0
+MyHeuristic - iteration: 90 time: 10.0002 timeout: 1
+MyHeuristic - iteration: 91 time: 1.18533 timeout: 0
+MyHeuristic - iteration: 92 time: 10.0013 timeout: 1
+MyHeuristic - iteration: 93 time: 1.03357 timeout: 0
+MyHeuristic - iteration: 94 time: 10.0017 timeout: 1
+MyHeuristic - iteration: 95 time: 10.0011 timeout: 1
+MyHeuristic - iteration: 96 time: 10.0004 timeout: 1
+MyHeuristic - iteration: 97 time: 1.46054 timeout: 0
+MyHeuristic - iteration: 98 time: 1.15333 timeout: 0
+MyHeuristic - iteration: 99 time: 1.41578 timeout: 0
+MyHeuristic Success Rate: 0 Timeout: 56
+Min number of added clauses: 37
+Median number of added clauses: 127
+Max number of added clauses: 310
+Min number of backtracks: 205
+Median number of backtracks: 3222
+Max number of backtracks: 13392
+Min computation time: 0.509197
+Median computation time: 10.0002
+Max computation time: 10.0116
+
+
