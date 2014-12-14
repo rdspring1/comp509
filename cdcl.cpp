@@ -6,6 +6,7 @@
 #include <vector>
 #include <list>
 #include <unordered_set>
+#include <unordered_map>
 #include <fstream>
 #include <random>
 #include <algorithm>
@@ -16,6 +17,7 @@
 using namespace std;
 
 typedef std::pair<int, int> update;
+typedef std::unordered_map<int, int> wlist;
 
 // Heuristic
 enum heuristic
@@ -72,11 +74,12 @@ enum state
 vector<int> decision_level;
 vector<int> parent;
 vector<int> t;
-vector<vector<int>> cnf;
+unordered_map<int, vector<int>> cnf;
+int original_size = 0;
 
 // Two Watched Law - Lazy Data Structure
-vector<int> wl1;
-vector<int> wl2;
+wlist wl1;
+wlist wl2;
 
 // MyHeuristic
 vector<float> myh;
@@ -119,10 +122,11 @@ void setup(heuristic h, bool restart = false)
         conflict_count = 0;
         wl1.clear();
         wl2.clear();
-        wl1.resize(cnf.size(), 0);
-        wl2.resize(cnf.size(), 0);
+        wl1.reserve(cnf.size());
+        wl2.reserve(cnf.size());
         for(int i = 0; i < cnf.size(); ++i)
         {
+            wl1[i] = 0;
             wl2[i] = cnf[i].size()-1;
         }
         restart_threshold = RESTART_INIT;
@@ -141,7 +145,7 @@ void setup(heuristic h, bool restart = false)
                 myh.resize(vars, 0);
                 for(const auto& clause : cnf)
                 {
-                    update_heuristic(clause);
+                    update_heuristic(clause.second);
                 }
             }
             break;
@@ -246,24 +250,24 @@ void update_watched_literal(bool first, int clause)
 void evaluate_cnf(const int& ap, const int& value)
 {
     // Update Watchlist 1
-    for(int i = 0; i < wl1.size(); ++i)
+    for(const auto& index : wl1)
     {
-        int literal1 = cnf[i][wl1[i]];
-        int truth_value = evaluate_literal(literal1, ap, value);
+        int literal = cnf[index.first][index.second];
+        int truth_value = evaluate_literal(literal, ap, value);
         if(truth_value == 0)
         {
-            update_watched_literal(true, i);
+            update_watched_literal(true, index.first);
         }
     }
 
     // Update Watchlist 2
-    for(int i = 0; i < wl1.size(); ++i)
+    for(const auto& index : wl2)
     {
-        int literal1 = cnf[i][wl2[i]];
-        int truth_value = evaluate_literal(literal1, ap, value);
+        int literal = cnf[index.first][index.second];
+        int truth_value = evaluate_literal(literal, ap, value);
         if(truth_value == 0)
         {
-            update_watched_literal(false, i);
+            update_watched_literal(false, index.first);
         }
     }
 }
@@ -278,69 +282,83 @@ void update_implication_graph(const int& ap, const int& value, const int& dl, co
 
 state unit_propagation(int& clause_id, int dl)
 {
-    // check if any clauses are empty: Not Satisfiable under current truth assignment
-    // check if all clauses are True: Satisfiable
-    for(int i = 0; i < cnf.size(); ++i)
+    bool restart = false;
+
+    do
     {
-        int literal1 = cnf[i][wl1[i]];
-        int literal2 = cnf[i][wl2[i]];
-        int v1 = evaluate_literal(literal1);
-        int v2 = evaluate_literal(literal2);
+        restart = false;
+        // check if any clauses are empty: Not Satisfiable under current truth assignment
+        // check if all clauses are True: Satisfiable
+        for(auto iter = cnf.begin(); iter != cnf.end(); ++iter)
+        {
+            int literal1 = iter->second[wl1[iter->first]];
+            int literal2 = iter->second[wl2[iter->first]];
+            int v1 = evaluate_literal(literal1);
+            int v2 = evaluate_literal(literal2);
 
-        if(v1 == 1 || v2 == 1)
-        {
-            // Clause is SAT
-            continue;
-        }
-        else if(v1 == 0 && v2 == 0)
-        {
-            clause_id = i;
-            //cout << "CONFLICT: " << dl << endl;
-            //cout << "clause: " << i << endl;
-            //cout << "wl1: " << wl1[i] << " wl2: " << wl2[i] << endl;
-            //cout << "l1: " << literal1 << " l2: " << literal2 << endl;
-            //cout << "v1: " << v1 << " v2: " << v2 << endl;
-            return CONFLICT;
-        }
-        else if(wl1[i] != wl2[i] && v1 == IGNORE && v2 == IGNORE)
-        {
-            continue;
-        }
-        else // Unit Clause
-        {
-            //cout << "clause: " << i << endl;
-            //cout << "wl1: " << wl1[i] << " wl2: " << wl2[i] << endl;
-            //cout << "l1: " << literal1 << " l2: " << literal2 << endl;
-            //cout << "v1: " << v1 << " v2: " << v2 << endl;
-            int literal = -1;
-            if(v1 == IGNORE)
+            if(v1 == 1 || v2 == 1)
             {
-                literal = literal1;
+                // Clause is SAT
+                continue;
             }
-            else
+            else if(v1 == 0 && v2 == 0)
             {
-                literal = literal2;
+                //cout << "CONFLICT: " << dl << endl;
+                //cout << "clause: " << i << endl;
+                //cout << "wl1: " << wl1[i] << " wl2: " << wl2[i] << endl;
+                //cout << "l1: " << literal1 << " l2: " << literal2 << endl;
+                //cout << "v1: " << v1 << " v2: " << v2 << endl;
+                clause_id = iter->first;
+                return CONFLICT;
             }
+            else if(wl1[iter->first] != wl2[iter->first] && v1 == IGNORE && v2 == IGNORE)
+            {
+                if(iter->first >= original_size && iter->second.size() >= vars)
+                {
+                    cout << "ERASE" << endl;
+                    wl1.erase(iter->first);
+                    wl2.erase(iter->first);
+                    cnf.erase(iter); 
+                } 
+                continue;
+            }
+            else // Unit Clause
+            {
+                //cout << "clause: " << i << endl;
+                //cout << "wl1: " << wl1[i] << " wl2: " << wl2[i] << endl;
+                //cout << "l1: " << literal1 << " l2: " << literal2 << endl;
+                //cout << "v1: " << v1 << " v2: " << v2 << endl;
+                int literal = -1;
+                if(v1 == IGNORE)
+                {
+                    literal = literal1;
+                }
+                else
+                {
+                    literal = literal2;
+                }
 
-            if(literal < 0)
-            {
-                int ap = abs(literal)-1;
-                assert(t[ap] == IGNORE);
-                //cout << "update1-clause: " << i << " ap: " << (ap+1) << " value: " << 0 << endl;
-                update_implication_graph(ap, 0, dl, i);
-                evaluate_cnf(ap, 0);
+                if(literal < 0)
+                {
+                    int ap = abs(literal)-1;
+                    assert(t[ap] == IGNORE);
+                    //cout << "update1-clause: " << i << " ap: " << (ap+1) << " value: " << 0 << endl;
+                    update_implication_graph(ap, 0, dl, iter->first);
+                    evaluate_cnf(ap, 0);
+                }
+                else
+                {
+                    int ap = literal-1;
+                    assert(t[ap] == IGNORE);
+                    //cout << "update2-clause: " << i << " ap: " << (ap+1) << " value: " << 1 << endl;
+                    update_implication_graph(ap, 1, dl, iter->first);
+                    evaluate_cnf(ap, 1);
+                }
+                restart = true;
+                break;
             }
-            else
-            {
-                int ap = literal-1;
-                assert(t[ap] == IGNORE);
-                //cout << "update2-clause: " << i << " ap: " << (ap+1) << " value: " << 1 << endl;
-                update_implication_graph(ap, 1, dl, i);
-                evaluate_cnf(ap, 1);
-            }
-            i = -1;
         }
-    }
+    } while (restart);
     return NONE;
 }
 
@@ -517,9 +535,9 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                     // Add Conflict Clause
                     if(change && conflict_clause.size() <= vars)
                     {
-                        wl1.push_back(0);
-                        wl2.push_back(conflict_clause.size()-1);
-                        cnf.push_back(move(conflict_clause));
+                        wl1[wl1.size()] = 0;
+                        wl2[wl2.size()] = conflict_clause.size()-1;
+                        cnf[cnf.size()] = move(conflict_clause);
                         ++added_clauses;
                     }
 
@@ -575,9 +593,9 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
     return vector<int>();
 }
 
-vector<vector<int>> parseCNF(const string& filename)
+unordered_map<int, vector<int>> parseCNF(const string& filename)
 {
-    vector<vector<int>> cnf;
+    unordered_map<int, vector<int>> cnf;
     vector<int> clause;
     bool p = false;
     string format;
@@ -612,7 +630,7 @@ vector<vector<int>> parseCNF(const string& filename)
                 }
                 else if(c == END)
                 {
-                    cnf.push_back(clause);
+                    cnf[cnf.size()] = clause;
                     clause.clear();
                 }
                 else
@@ -625,20 +643,23 @@ vector<vector<int>> parseCNF(const string& filename)
         }
     }
     if(clause.size() > 0)
-        cnf.push_back(clause);
+        cnf[cnf.size()] = clause;
+
+    original_size = cnf.size();
     return cnf;
 }
 
-vector<vector<int>> randomCNF(const int& N, const double& LProb, const double& LN_Ratio)
+unordered_map<int, vector<int>> randomCNF(const int& N, const double& LProb, const double& LN_Ratio)
 {
     std::uniform_int_distribution<int> p(1,N);
     std::uniform_real_distribution<double> l(0.0,1.0);
 
     int size = int(LN_Ratio * N);
-    vector<vector<int>> cnf(size);
+    unordered_map<int, vector<int>> cnf(size);
 
     for(int n = 0; n < size; ++n)
     {
+        vector<int> clause;
         for(int m = 0; m < K; ++m)
         {
             int literal = p(generator);
@@ -646,9 +667,11 @@ vector<vector<int>> randomCNF(const int& N, const double& LProb, const double& L
             {
                 literal *= -1;
             }
-            cnf[n].push_back(literal);
+            clause.push_back(literal);
         }
+        cnf[n] = move(clause);
     }
+    original_size = cnf.size();
     return cnf;
 }
 
@@ -664,13 +687,11 @@ int main(int argc, char* argv[])
 
         // Timer
         std::unique_ptr<boost::timer::auto_cpu_timer> timer(new boost::timer::auto_cpu_timer());
-
         vector<int> result = solve(*timer, h);
-
-            if(timer->elapsed().wall >= TIMEOUT)
-            {
-                timeout = true;
-            }
+        if(timer->elapsed().wall >= TIMEOUT)
+        {
+            timeout = true;
+        }
         timer.reset(nullptr);
 
         print(result); 
