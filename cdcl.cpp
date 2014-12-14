@@ -6,8 +6,6 @@
 #include <vector>
 #include <list>
 #include <unordered_set>
-#include <stack>
-#include <queue>
 #include <fstream>
 #include <random>
 #include <algorithm>
@@ -60,7 +58,7 @@ const string sat_format = "sat";
 const char NEGATION = '-';
 const int IGNORE = -1;
 const int ITER = 100;
-const boost::timer::nanosecond_type TIMEOUT(60 * 1000000000LL);
+const boost::timer::nanosecond_type TIMEOUT(10 * 1000000000LL);
 std::default_random_engine generator( (unsigned int)time(NULL) );
 
 enum state
@@ -115,10 +113,10 @@ void setup(heuristic h, bool restart = false)
     decision_level.resize(vars, IGNORE);
     parent.resize(vars, IGNORE);
     t.resize(vars, IGNORE);
-    conflict_count = 0;
 
     if(!restart)
     {
+        conflict_count = 0;
         wl1.clear();
         wl2.clear();
         wl1.resize(cnf.size(), 0);
@@ -422,9 +420,9 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
         int ap = abs(literal)-1;
         conflict_clause.push_back(literal);
         max_dl = max(max_dl, decision_level[ap]);
-        if(decision_level[ap] != 0)
+        if(decision_level[ap] != dl && decision_level[ap] > new_dl)
         {
-            new_dl = max(new_dl, decision_level[ap]);
+            new_dl = decision_level[ap];
         }
     }
 
@@ -448,17 +446,24 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
 }
 
 // Update Truth Assignment
-void update_truth_assignment(const int& dl)
+int update_truth_assignment(const int& dl)
 {
+    int decision = IGNORE;
     for(int ap = 0; ap < t.size(); ++ap)
     {
-        if(dl == 0 || decision_level[ap] > dl)
+        if(decision_level[ap] >= dl)
         {
+            if(parent[ap] == IGNORE && decision_level[ap] == dl)
+            {
+                decision = ap;
+            }
+
             t[ap] = IGNORE;
             decision_level[ap] = IGNORE;
             parent[ap] = IGNORE;
         }
     }
+    return decision;
 }
 
 bool complete_assignment(const vector<int>& t)
@@ -493,15 +498,14 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                 {
                     ++conflict_count;
                     bool change = false;
+
                     // Conflict Analysis / New Decision Level
                     vector<int> conflict_clause = analysis(clause_id, dl, change);
                     if(dl < 0)
                     {
                         return vector<int>();
                     }
-                    ++backtrack_count;
                     //cout << "conflict size: " << conflict_clause.size() << " new decision level: " << dl << endl;
-                    //cout << backtrack_count << endl;
 
                     // Update VSIDS Heuristic
                     update_heuristic(conflict_clause);
@@ -511,7 +515,7 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                     }
 
                     // Add Conflict Clause
-                    if(change)
+                    if(change && conflict_clause.size() <= vars)
                     {
                         wl1.push_back(0);
                         wl2.push_back(conflict_clause.size()-1);
@@ -520,14 +524,18 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                     }
 
                     // Update Truth Assignment
-                    if(conflict_count > restart_threshold)
+                    if(conflict_count > restart_threshold || dl == 0)
                     {
                         setup(h, true);
                     }
                     else
                     {
-                        update_truth_assignment(dl);
+                        int ap = update_truth_assignment(dl);
+                        update_implication_graph(ap, (1-t[ap]), dl++, IGNORE);
+                        evaluate_cnf(ap, (1-t[ap]));
                     }
+                    ++backtrack_count;
+                    //cout << backtrack_count << endl;
                 }
                 continue;
             case NONE:
