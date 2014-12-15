@@ -75,6 +75,7 @@ enum state
 vector<int> decision_level;
 vector<int> parent;
 vector<int> t;
+list<int> updates;
 unordered_map<int, vector<int>> cnf;
 int original_size = 0;
 
@@ -117,6 +118,7 @@ void setup(heuristic h, bool restart = false)
     decision_level.resize(vars, IGNORE);
     parent.resize(vars, IGNORE);
     t.resize(vars, IGNORE);
+    updates.clear();
 
     if(!restart)
     {
@@ -153,7 +155,8 @@ void setup(heuristic h, bool restart = false)
     }
 }
 
-const int p[] = {41, 40, 39, 38, 37, 35, 34, 33, 32, 29, 28, 27, 23, 22, 17, 16};
+const int p[] = {41, 40, 39, 38, 37, 35, 34, 33, 32, 29, 28, 27, 23, 22, 17, 16, 5, 4, 10, 17, 10, 16, 21, 2, 17, 4, 22, 8, 17, 22, 15, 23, 20, 22, 10, 9, 15, 23, 15, 10, 2, 22, 8, 2, 21, 8, 17, 3, 3, 25, 2, 3, 27, 17, 9, 23, 22, 21, 17, 22, 8, 22, 21, 23, 17, 3, 16, 23, 3, 20, 23, 9, 22, 20, 20, 33, 20, 10, 32, 33, 1, 8, 3, 33, 23, 22, 21, 16, 16, 22, 32, 22, 21, 10, 14, 21, 10, 16, 9, 23, 33, 26, 33, 16, 9, 10, 32, 7, 27, 15, 9, 21, 19, 27, 9, 16, 9, 26, 13, 16, 9, 3, 19, 27, 3, 33, 9, 2, 7, 13, 27, 7, 20, 33, 3, 10, 28, 33, 3, 19, 33, 3, 8, 33, 3, 8, 30, 25, 2, 9, 28, 10, 16, 21, 28, 16, 28, 33, 10, 20, 9, 10, 16, 3, 10, 3, 8, 8, 21, 10, 22, 38, 39, 9, 1, 20, 9, 16, 16, 15, 10, 8, 39, 11, 16, 21, 10, 17, 22, 26, 38, 39, 27, 9, 26, 19, 7, 39, 3, 39, 27, 3, 19, 8, 39, 27, 3, 10, 28, 38, 2, 39, 3, 9, 37, 2, 7, 27, 38, 13, 39, 20, 21, 3, 39, 20, 24, 37, 38, 1, 7, 19, 13, 1, 8, 39, 21, 28, 16, 28, 22, 39, 22, 20, 16, 33, 15, 11, 15, 32, 10, 11, 10, 39, 13, 20, 32, 8, 19, 14, 32, 8, 2, 14, 13, 14, 20, 3, 33, 40, 2, 9, 11, 32, 3, 19, 32, 2, 33, 3, 3, 7, 32, 33, 20, 20, 7, 2, 38, 6, 1, 31, 33, 19, 3, 19, 13, 0, 31, 33, 19, 13, 19, 13, 18, 19, 13, 33, 3, 31, 7, 12, 18, 1, 19, 6, 32, 1, 19, 3, 13, 13, 39, 37, 20, 19, 31, 33, 1, 13, 1, 39, 28, 37, 39, 13, 3, 13, 1, 33, 39, 31, 26, 26, 13, 39, 19, 39, 19, 33, 2, 13, 39, 33, 19, 2, 39, 33, 39, 33, 2, 25, 12, 26, 31, 1, 39, 39, 37, 33, 1, 32, 20, 39, 33, 33, 37, 32, 39, 20, 31, 32, 25, 19, 39, 25, 20, 39, 20, 26, 0, 31, 19, 39, 39, 37, 25, 33, 31, 39, 7, 1, 37, 31, 0, 37, 32, 0, 32, 1, 7, 19, 25, 0, 7, 1, 19, 8, 25, 20, 2, 18, 39};
+const int v[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 int prop = -1;
 
 update myh_heuristic(const vector<int>& t)
@@ -181,7 +184,7 @@ update myh_heuristic(const vector<int>& t)
     std::uniform_int_distribution<int> v(0,1);
     return make_pair(ties[p(generator)], v(generator));
     */
-    return make_pair(p[++prop], 0);
+    return make_pair(p[++prop], v[prop]);
 }
 
 update random_heuristic(const vector<int>& t)
@@ -269,6 +272,7 @@ void update_implication_graph(const int& ap, const int& value, const int& dl, co
 {
     cout << dl << " " << (ap+1) << " " << value << endl;
     assert(t[ap] == IGNORE);
+    updates.push_front(ap+1);
     t[ap] = value;
     decision_level[ap] = dl;
     parent[ap] = pc;
@@ -330,10 +334,9 @@ state unit_propagation(int& clause_id, int dl)
                 int literal = (v1 == IGNORE) ? literal1 : literal2;
                 int value = (literal < 0) ? 0 : 1;
                 int ap = abs(literal)-1;
-                assert(t[ap] == IGNORE);
                 update_implication_graph(ap, value, dl, iter->first);
-                //cout << "update-clause: " << iter->first << " ap: " << (ap+1) << " value: " << value << endl;
                 evaluate_cnf();
+                //cout << "update-clause: " << iter->first << " ap: " << (ap+1) << " value: " << value << endl;
                 restart = true;
             }
         }
@@ -341,7 +344,7 @@ state unit_propagation(int& clause_id, int dl)
     return NONE;
 }
 
-bool decision_count(const list<int>& clause, const int& dl)
+bool decision_count(const unordered_set<int>& clause, const int& dl)
 {
     int sigma = 0;
     int xi = 0;
@@ -367,61 +370,45 @@ bool decision_count(const list<int>& clause, const int& dl)
 vector<int> analysis(const int& clause_id, int& dl, bool& change)
 {
     // Collect all literals from parent clauses - Ignore Duplicates and conflicting variables
-    list<int> conflict_set(cnf[clause_id].begin(), cnf[clause_id].end()); 
-
     // All literals in unsatisfied clause are false
-    //for(int l : conflict_set)
-    //{
-        //cout << "literal:: " << l << endl;
-        //assert(evaluate_literal(l) == 0);
-    //}
+    unordered_set<int> conflict_set(cnf[clause_id].begin(), cnf[clause_id].end());
+    int literal = updates.front();
 
-    conflict_set.sort();
-    conflict_set.unique();
-    unordered_set<int> duplicates(conflict_set.begin(), conflict_set.end());
-    int ap = abs(conflict_set.front())-1;
-
-    while(!conflict_set.empty() && !decision_count(conflict_set, dl))
+    while(!updates.empty() && !decision_count(conflict_set, dl))
     {
-        //cout << "a(l): " << parent[ap] << endl;
-        if(decision_level[ap] == dl && parent[ap] != IGNORE)
+        //implied literals
+        if(decision_level[literal-1] == dl && parent[literal-1] != IGNORE)
         {
-            cout << "parent: " << parent[ap] << endl;
-            //implied literal
+            //cout << literal << " parent: " << parent[literal-1] << endl;
             change = true;
 
             // Resolution Implication Rule
-            int neg_literal = -1 * conflict_set.front();
-            duplicates.erase(conflict_set.front());
-            conflict_set.pop_front();
+            conflict_set.erase(literal);
+            conflict_set.erase(-1 * literal);
 
-            const vector<int>& clause = cnf[parent[ap]];
-            for(const int& literal : clause)
+            const vector<int>& clause = cnf[parent[literal-1]];
+            for(const int& l : clause)
             {
-                cout << literal << " ";
-                if(literal != neg_literal && duplicates.find(literal) == duplicates.end())
+                //cout << l << " ";
+                if(abs(l) != literal && conflict_set.find(literal) == conflict_set.end())
                 {
-                    assert(evaluate_literal(literal) == 0);
-                    conflict_set.push_back(literal);
-                    duplicates.insert(literal);
+                    assert(evaluate_literal(l) == 0);
+                    conflict_set.insert(l);
                 }
             }
-            cout << endl;
-        }
-        else
-        {
-            // Skip literal
-            conflict_set.push_back(conflict_set.front());
-            conflict_set.pop_front();
+            //cout << endl;
         }
 
-    for(int l : conflict_set)
-    {
-        cout << l << " ";
-        assert(evaluate_literal(l) == 0);
-    }
-    cout << endl;
-        ap = abs(conflict_set.front())-1;
+        //cout << "new: ";
+        //for(int l : conflict_set)
+        //{
+        //    cout << l << " ";
+        //    assert(evaluate_literal(l) == 0);
+        //}
+        //cout << endl;
+
+        updates.pop_front();
+        literal = updates.front();
     }
 
     // Create Conflict Clause
@@ -432,7 +419,6 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
     {
         // All literals in conflict clause are false
         assert(evaluate_literal(literal) == 0);
-        cout << literal << " ";
         conflict_clause.push_back(literal);
 
         int ap = abs(literal)-1;
@@ -445,7 +431,14 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
             }
         }
     }
-    cout << endl;
+
+        for(int l : conflict_set)
+        {
+            cout << l << " ";
+            assert(evaluate_literal(l) == 0);
+        }
+        cout << endl;
+
     //cout << "dl: " << dl << " max_dl: " << max_dl << " new_dl: " << new_dl << " size: " << conflict_clause.size() << endl;
     if(max_dl <= 0)
     {
@@ -468,6 +461,11 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
 // Update Truth Assignment
 void update_truth_assignment(const int& dl)
 {
+    while(!updates.empty() && decision_level[updates.front()-1] > dl)
+    {
+        updates.pop_front();
+    }
+
     for(int ap = 0; ap < t.size(); ++ap)
     {
         if(decision_level[ap] > dl)
@@ -583,8 +581,6 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
         update_implication_graph(u.first, u.second, ++dl, IGNORE);
         evaluate_cnf();
     }
-
-    cout << "decision level: " << dl << endl;
     return vector<int>();
 }
 
