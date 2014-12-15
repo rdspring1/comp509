@@ -32,7 +32,7 @@ const int TRUE = 0;
 const int IGNORE = -1;
 const int K = 3;
 const int ITER = 100;
-const boost::timer::nanosecond_type TIMEOUT(100 * 1000000000LL);
+const boost::timer::nanosecond_type TIMEOUT(60 * 1000000000LL);
 std::default_random_engine generator( (unsigned int)time(NULL) );
 
 // Heuristic
@@ -53,9 +53,9 @@ const string hstr[] =
 const float psize[]
 {
     0.0f,
-        0.5f,
-        0.25f,
-        0.125,
+    0.5f,
+    0.25f,
+    0.125
 };
 const int HEURISTICS = (int) Random;
 
@@ -620,7 +620,7 @@ int main(int argc, char* argv[])
                 split_count = 0;
 
                 time[h][n] = atof(timer.format(boost::timer::default_places, "%w").c_str());
-                cout << hstr[h] << " - iteration: " << n << " time: " << time[h][n] << " timeout: " << timeout << std::endl;
+                //cout << hstr[h] << " - iteration: " << n << " time: " << time[h][n] << " timeout: " << timeout << std::endl;
             }
         }
 
