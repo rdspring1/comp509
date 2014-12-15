@@ -1,38 +1,92 @@
 ./sat 150 0.5 3
 N: 150 L-Probability: 0.5 LN_Ratio: 3
-MyHeuristic Success Rate: 100
-min number of splitting-rule applications: 18
+MyHeuristic Success Rate: 100 Timeouts: 0
+min number of splitting-rule applications: 22
+median number of splitting-rule applications: 35
+max number of splitting-rule applications: 387
+min computation time: 0.012954
+median computation time: 0.017459
+max computation time: 0.512738
+
+TwoClause Success Rate: 100 Timeouts: 0
+min number of splitting-rule applications: 23
+median number of splitting-rule applications: 38
+max number of splitting-rule applications: 1647
+min computation time: 0.015311
+median computation time: 0.02127
+max computation time: 0.514826
+
+./sat 150 0.5 3.2
+N: 150 L-Probability: 0.5 LN_Ratio: 3.2
+MyHeuristic Success Rate: 100 Timeouts: 0
+min number of splitting-rule applications: 20
 median number of splitting-rule applications: 34
-max number of splitting-rule applications: 271
-min computation time: 0.012074
-median computation time: 0.017524
-max computation time: 0.379205
+max number of splitting-rule applications: 575
+min computation time: 0.013401
+median computation time: 0.019892
+max computation time: 1.05706
 
-TwoClause Success Rate: 100
+TwoClause Success Rate: 100 Timeouts: 0
 min number of splitting-rule applications: 15
-median number of splitting-rule applications: 37
-max number of splitting-rule applications: 272
-min computation time: 0.01462
-median computation time: 0.020391
-max computation time: 0.275427
+median number of splitting-rule applications: 40
+max number of splitting-rule applications: 369
+min computation time: 0.015523
+median computation time: 0.032124
+max computation time: 0.757322
 
-./sat 150 0.5 3.5
-N: 150 L-Probability: 0.5 LN_Ratio: 3.5
-MyHeuristic Success Rate: 100
-min number of splitting-rule applications: 17
-median number of splitting-rule applications: 109
-max number of splitting-rule applications: 3487
-min computation time: 0.014997
-median computation time: 0.221169
-max computation time: 11.417
+./sat 150 0.5 3.4
+N: 150 L-Probability: 0.5 LN_Ratio: 3.4
+MyHeuristic Success Rate: 100 Timeouts: 0
+min number of splitting-rule applications: 13
+median number of splitting-rule applications: 68
+max number of splitting-rule applications: 2754
+min computation time: 0.014552
+median computation time: 0.087814
+max computation time: 6.39279
 
-TwoClause Success Rate: 100
+TwoClause Success Rate: 100 Timeouts: 0
+min number of splitting-rule applications: 16
+median number of splitting-rule applications: 50
+max number of splitting-rule applications: 1453
+min computation time: 0.016869
+median computation time: 0.08214
+max computation time: 4.20677
+
+./sat 150 0.5 3.6
+N: 150 L-Probability: 0.5 LN_Ratio: 3.6
+MyHeuristic Success Rate: 100 Timeouts: 0
 min number of splitting-rule applications: 21
-median number of splitting-rule applications: 96
-max number of splitting-rule applications: 4171
-min computation time: 0.018005
-median computation time: 0.26925
-max computation time: 17.2447
+median number of splitting-rule applications: 192
+max number of splitting-rule applications: 7577
+min computation time: 0.015666
+median computation time: 0.459185
+max computation time: 17.486
+
+TwoClause Success Rate: 100 Timeouts: 0
+min number of splitting-rule applications: 17
+median number of splitting-rule applications: 176
+max number of splitting-rule applications: 10638
+min computation time: 0.019924
+median computation time: 0.434601
+max computation time: 38.2589
+
+./sat 150 0.5 3.8
+N: 150 L-Probability: 0.5 LN_Ratio: 3.8
+MyHeuristic Success Rate: 99 Timeouts: 1
+min number of splitting-rule applications: 15
+median number of splitting-rule applications: 589
+max number of splitting-rule applications: 19573
+min computation time: 0.015131
+median computation time: 1.59551
+max computation time: 60.0012
+
+TwoClause Success Rate: 98 Timeouts: 2
+min number of splitting-rule applications: 16
+median number of splitting-rule applications: 383
+max number of splitting-rule applications: 16265
+min computation time: 0.018092
+median computation time: 1.26208
+max computation time: 60.0074
 
 ./sat 150 0.5 4
 N: 150 L-Probability: 0.5 LN_Ratio: 4
