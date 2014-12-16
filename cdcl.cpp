@@ -67,8 +67,7 @@ std::default_random_engine generator( (unsigned int)time(NULL) );
 enum state
 {
     NONE,
-    CONFLICT,
-    SAT
+    CONFLICT
 };
 
 // Implication Graph
@@ -155,13 +154,8 @@ void setup(heuristic h, bool restart = false)
     }
 }
 
-const int p[] = {41, 40, 39, 38, 37, 35, 34, 33, 32, 29, 28, 27, 23, 22, 17, 16, 5, 4, 10, 17, 10, 16, 21, 2, 17, 4, 22, 8, 17, 22, 15, 23, 20, 22, 10, 9, 15, 23, 15, 10, 2, 22, 8, 2, 21, 8, 17, 3, 3, 25, 2, 3, 27, 17, 9, 23, 22, 21, 17, 22, 8, 22, 21, 23, 17, 3, 16, 23, 3, 20, 23, 9, 22, 20, 20, 33, 20, 10, 32, 33, 1, 8, 3, 33, 23, 22, 21, 16, 16, 22, 32, 22, 21, 10, 14, 21, 10, 16, 9, 23, 33, 26, 33, 16, 9, 10, 32, 7, 27, 15, 9, 21, 19, 27, 9, 16, 9, 26, 13, 16, 9, 3, 19, 27, 3, 33, 9, 2, 7, 13, 27, 7, 20, 33, 3, 10, 28, 33, 3, 19, 33, 3, 8, 33, 3, 8, 30, 25, 2, 9, 28, 10, 16, 21, 28, 16, 28, 33, 10, 20, 9, 10, 16, 3, 10, 3, 8, 8, 21, 10, 22, 38, 39, 9, 1, 20, 9, 16, 16, 15, 10, 8, 39, 11, 16, 21, 10, 17, 22, 26, 38, 39, 27, 9, 26, 19, 7, 39, 3, 39, 27, 3, 19, 8, 39, 27, 3, 10, 28, 38, 2, 39, 3, 9, 37, 2, 7, 27, 38, 13, 39, 20, 21, 3, 39, 20, 24, 37, 38, 1, 7, 19, 13, 1, 8, 39, 21, 28, 16, 28, 22, 39, 22, 20, 16, 33, 15, 11, 15, 32, 10, 11, 10, 39, 13, 20, 32, 8, 19, 14, 32, 8, 2, 14, 13, 14, 20, 3, 33, 40, 2, 9, 11, 32, 3, 19, 32, 2, 33, 3, 3, 7, 32, 33, 20, 20, 7, 2, 38, 6, 1, 31, 33, 19, 3, 19, 13, 0, 31, 33, 19, 13, 19, 13, 18, 19, 13, 33, 3, 31, 7, 12, 18, 1, 19, 6, 32, 1, 19, 3, 13, 13, 39, 37, 20, 19, 31, 33, 1, 13, 1, 39, 28, 37, 39, 13, 3, 13, 1, 33, 39, 31, 26, 26, 13, 39, 19, 39, 19, 33, 2, 13, 39, 33, 19, 2, 39, 33, 39, 33, 2, 25, 12, 26, 31, 1, 39, 39, 37, 33, 1, 32, 20, 39, 33, 33, 37, 32, 39, 20, 31, 32, 25, 19, 39, 25, 20, 39, 20, 26, 0, 31, 19, 39, 39, 37, 25, 33, 31, 39, 7, 1, 37, 31, 0, 37, 32, 0, 32, 1, 7, 19, 25, 0, 7, 1, 19, 8, 25, 20, 2, 18, 39};
-const int v[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-int prop = -1;
-
 update myh_heuristic(const vector<int>& t)
 {
-    /*
     vector<int> ties;
     float maxValue = 0;
     for(int i = 0; i < t.size(); ++i)
@@ -183,8 +177,6 @@ update myh_heuristic(const vector<int>& t)
     std::uniform_int_distribution<int> p(0,ties.size()-1);
     std::uniform_int_distribution<int> v(0,1);
     return make_pair(ties[p(generator)], v(generator));
-    */
-    return make_pair(p[++prop], v[prop]);
 }
 
 update random_heuristic(const vector<int>& t)
@@ -270,7 +262,7 @@ void evaluate_cnf()
 
 void update_implication_graph(const int& ap, const int& value, const int& dl, const int& pc)
 {
-    cout << dl << " " << (ap+1) << " " << value << endl;
+    //cout << dl << " " << (ap+1) << " " << value << endl;
     assert(t[ap] == IGNORE);
     updates.push_front(ap+1);
     t[ap] = value;
@@ -293,6 +285,12 @@ state unit_propagation(int& clause_id, int dl)
             int v1 = evaluate_literal(literal1);
             int v2 = evaluate_literal(literal2);
 
+            /*
+            cout << "size: " << iter->second.size() << endl;
+            cout << "wl1: " << wl1[iter->first] << " wl2: " << wl2[iter->first] << endl;
+            cout << "l1: " << literal1 << " l2: " << literal2 << endl;
+            cout << "v1: " << v1 << " v2: " << v2 << endl;
+            */
             if(v1 == 1 || v2 == 1)
             {
                 // Clause is SAT
@@ -300,8 +298,7 @@ state unit_propagation(int& clause_id, int dl)
             }
             else if(v1 == 0 && v2 == 0)
             {
-                //cout << "CONFLICT: " << dl << endl;
-                cout << "clause: " << iter->first << endl;
+                //cout << "CONFLICT: " << iter->first << " " << dl << endl;
                 //cout << "wl1: " << wl1[iter->first] << " wl2: " << wl2[iter->first] << endl;
                 //cout << "l1: " << literal1 << " l2: " << literal2 << endl;
                 //cout << "v1: " << v1 << " v2: " << v2 << endl;
@@ -315,12 +312,7 @@ state unit_propagation(int& clause_id, int dl)
             else // Unit Clause
             {
                 /*
-                cout << "clause: " << iter->first << endl;
-                cout << "size: " << iter->second.size() << endl;
-                cout << "wl1: " << wl1[iter->first] << " wl2: " << wl2[iter->first] << endl;
-                cout << "l1: " << literal1 << " l2: " << literal2 << endl;
-                cout << "v1: " << v1 << " v2: " << v2 << endl;
-
+                cout << "UNIT: " << iter->first << " " << dl << endl;
                 int count = 0;
                 for(int l : iter->second)
                 {
@@ -336,8 +328,9 @@ state unit_propagation(int& clause_id, int dl)
                 int ap = abs(literal)-1;
                 update_implication_graph(ap, value, dl, iter->first);
                 evaluate_cnf();
-                //cout << "update-clause: " << iter->first << " ap: " << (ap+1) << " value: " << value << endl;
                 restart = true;
+                break;
+                //cout << "update-clause: " << iter->first << " ap: " << (ap+1) << " value: " << value << endl;
             }
         }
     } while (restart);
@@ -389,8 +382,8 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
             const vector<int>& clause = cnf[parent[literal-1]];
             for(const int& l : clause)
             {
-                //cout << l << " ";
-                if(abs(l) != literal && conflict_set.find(literal) == conflict_set.end())
+            //    cout << l << " ";
+                if(abs(l) != literal)
                 {
                     assert(evaluate_literal(l) == 0);
                     conflict_set.insert(l);
@@ -403,7 +396,7 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
         //for(int l : conflict_set)
         //{
         //    cout << l << " ";
-        //    assert(evaluate_literal(l) == 0);
+        //   assert(evaluate_literal(l) == 0);
         //}
         //cout << endl;
 
@@ -431,13 +424,6 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change)
             }
         }
     }
-
-        for(int l : conflict_set)
-        {
-            cout << l << " ";
-            assert(evaluate_literal(l) == 0);
-        }
-        cout << endl;
 
     //cout << "dl: " << dl << " max_dl: " << max_dl << " new_dl: " << new_dl << " size: " << conflict_clause.size() << endl;
     if(max_dl <= 0)
@@ -519,11 +505,11 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
                     //cout << "conflict size: " << conflict_clause.size() << " new decision level: " << dl << endl;
 
                     // Update VSIDS Heuristic
-                    update_heuristic(conflict_clause);
                     for(int i = 0; i < myh.size(); ++i)
                     {
                         myh[i] = round(myh[i]/DECAY);
                     }
+                    update_heuristic(conflict_clause);
 
                     // Add Conflict Clause
                     if(change)
