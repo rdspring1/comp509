@@ -178,3 +178,15 @@ Min computation time: 0.109336
 Median computation time: 1.05722
 Max computation time: 60.0017
 
+N: 100 L-Probability: 0.5 LN_Ratio: 6.0
+MyHeuristic Success Rate: 0 Timeout: 16
+Min number of added clauses: 94
+Median number of added clauses: 373
+Max number of added clauses: 1206
+Min number of backtracks: 210
+Median number of backtracks: 1043
+Max number of backtracks: 969262
+Min computation time: 0.145085
+Median computation time: 1.00619
+Max computation time: 60.0023
+
