@@ -63,7 +63,8 @@ enum state
 {
     CONTINUE,
     UNSAT,
-    SAT
+    SAT,
+	TIMEFAIL
 };
 
 // MyHeuristic
@@ -571,6 +572,30 @@ void setup(const vector<list<int>>& cnf, heuristic h)
     }
 }
 
+bool valid(vector<list<int>> f, const vector<int> t)
+{
+	if(t.size() == 0)
+	{
+		return true;
+	}
+
+	for(int ap = 0; ap < t.size(); ++ap)
+	{
+		sub(f, ap+1, t[ap], Basic);
+	}
+    // check if any clauses are empty: Not Satisfiable under current truth assignment
+    // check if all clauses are True: Satisfiable
+    for(const auto& clause : f)
+    {
+        // Clause is False, Clause contains multiple propositions, singleton clause
+        if(clause.size() != 1 || clause.front() != TRUE)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main(int argc, char* argv[])
 {
     // Experiments - N, L-Probability, L/N Ratio
@@ -597,6 +622,7 @@ int main(int argc, char* argv[])
         for(int n = 0; n < ITER; ++n)
         {
             const vector<list<int>> cnf = randomCNF(vars, LProb, LN_Ratio);
+			list<state> status;
             for(int h = 0; h < HEURISTICS; ++h)
             {
                 setup(cnf, (heuristic) h);
@@ -609,12 +635,18 @@ int main(int argc, char* argv[])
                 {
                     timeout = true;
                     ++timeouts[h];
+					status.push_back(TIMEFAIL);
                 }
-
-                if(result.size() > 0)
+				else if(result.size() > 0)
                 {
                     ++success[h];
+					status.push_back(SAT);
                 }
+				else
+				{
+					status.push_back(UNSAT);
+				}
+				assert(valid(cnf, result));
 
                 split[h][n] = split_count;
                 split_count = 0;
@@ -622,6 +654,33 @@ int main(int argc, char* argv[])
                 time[h][n] = atof(timer.format(boost::timer::default_places, "%w").c_str());
                 //cout << hstr[h] << " - iteration: " << n << " time: " << time[h][n] << " timeout: " << timeout << std::endl;
             }
+
+			// Check that each heuristic benchmark has the same result
+			int expected = HEURISTICS;
+			int sat = 0;
+			int unsat = 0;
+			for(state s : status)
+			{
+				switch(s)
+				{
+					case TIMEFAIL:
+						{
+							--expected;
+						}
+						break;
+					case SAT:
+						{
+							++sat;
+						}
+						break;
+					case UNSAT:
+						{
+							++unsat;
+						}
+						break;
+				}
+			}
+			assert(expected == sat || expected == unsat);
         }
 
         for(int h = 0; h < HEURISTICS; ++h)
@@ -666,6 +725,7 @@ int main(int argc, char* argv[])
             timeout = true;
         }
         timer.reset(nullptr);
+		assert(valid(cnf, result));
 
         print(result); 
         cout << "Timeout: " << timeout << endl;
