@@ -48,7 +48,6 @@ int vars = 100;
 int backtrack_count = 0;
 int added_clauses = 0;
 
-const string TRUE = "True";
 const string FALSE = "False";
 const string UNSAT_STR = "UNSAT";
 const string VAR = "VARIABLE";
@@ -60,6 +59,7 @@ const string cnf_format = "cnf";
 const string sat_format = "sat";
 const char NEGATION = '-';
 const int IGNORE = -1;
+const int TRUE = 0;
 const int ITER = 100;
 const boost::timer::nanosecond_type TIMEOUT(60 * 1000000000LL);
 std::default_random_engine generator( (unsigned int)time(NULL) );
@@ -652,6 +652,75 @@ unordered_map<int, vector<int>> randomCNF(const int& N, const double& LProb, con
     return cnf;
 }
 
+void sub(unordered_map<int,vector<int>>& f, const int& ap, const int& value)
+{
+    for(auto& c : f)
+    {
+		auto& clause = c.second;
+		vector<int> new_clause;
+        for(auto& literal : clause)
+        {
+            bool match = false;
+            // evaluate truth value for literal
+            bool truth_value = bool(value);
+
+            if(literal == ap)
+            {
+                match = true;
+            }
+            else if(literal < 0)
+            {
+                if(abs(literal) == ap)
+                {
+                    truth_value = !truth_value;
+                    match = true;
+                }
+            }
+
+            if(match)
+            {
+                if(truth_value)
+                {
+                    new_clause.clear();
+                    new_clause.push_back(TRUE);
+                    break;
+                }
+			}
+			else
+			{
+				new_clause.push_back(literal);	
+			}
+        }
+		clause = move(new_clause);
+    }
+}
+
+bool valid(unordered_map<int, vector<int>> f, const vector<int> t)
+{
+	if(t.size() == 0)
+	{
+		return true;
+	}
+
+	for(int ap = 0; ap < t.size(); ++ap)
+	{
+		sub(f, ap+1, t[ap]);
+	}
+    // check if any clauses are empty: Not Satisfiable under current truth assignment
+    // check if all clauses are True: Satisfiable
+    for(const auto& c : f)
+    {
+		auto& clause = c.second;
+        // Clause is False, Clause contains multiple propositions, singleton clause
+        if(clause.size() != 1 || clause.front() != TRUE)
+        {
+			cout << c.first << endl;
+            return false;
+        }
+    }
+    return true;
+}
+
 int main(int argc, char* argv[])
 {
     // CNF Format File
@@ -670,6 +739,8 @@ int main(int argc, char* argv[])
             timeout = true;
         }
         timer.reset(nullptr);
+
+		assert(valid(cnf, result));
 
         print(result); 
         cout << hstr[h] << " Timeout: " << timeout << endl;
@@ -709,6 +780,7 @@ int main(int argc, char* argv[])
             {
                 ++success;
             }
+			assert(valid(cnf, result));
 
             split[n] = backtrack_count;
             added[n] = added_clauses;

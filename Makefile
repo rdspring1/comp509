@@ -1,4 +1,4 @@
-CXXFLAGS = -O3 -std=c++11
+CXXFLAGS = -g -std=c++11
 CXX=g++
 LD_FLAGS = -lboost_program_options -lboost_system -lboost_timer
 
