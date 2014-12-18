@@ -172,7 +172,6 @@ void setup(heuristic h, bool restart = false)
 		//cout << "Restart" << endl;
 		restart_threshold = round(restart_threshold * RESTART_CONST);
 	}
-
 	assignment_queue.clear();
 	preprocess();
 
@@ -314,8 +313,8 @@ bool update_implication_graph(const int& ap, const int& value, const int& dl, co
 		return false;
 	}
 
-	//cout << dl << " " << (ap+1) << " " << value << endl;
-	updates.push_front(ap+1);
+	//cout << dl << " " << (ap+1) << " " << value << " " << pc << endl;
+	updates.push_front(ap);
 	t[ap] = value;
 	decision_level[ap] = dl;
 	parent[ap] = pc;
@@ -376,21 +375,22 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change, int& UIP)
 	// Collect all literals from parent clauses - Ignore Duplicates and conflicting variables
 	// All literals in unsatisfied clause are false
 	unordered_set<int> conflict_set(cnf[clause_id].begin(), cnf[clause_id].end());
-	do 
+	while(!updates.empty() && !decision_count(conflict_set, dl))
 	{
-		int literal = updates.front();
+		int ap = updates.front();
+		int literal = ap+1;
 		updates.pop_front();
 
 		//implied literals
-		if(decision_level[literal-1] == dl && parent[literal-1] != IGNORE)
+		if(decision_level[ap] == dl && parent[ap] != IGNORE)
 		{
-			//cout << literal << " parent: " << parent[literal-1] << endl;
+			//cout << literal << " parent: " << parent[ap] << endl;
 			// Resolution Implication Rule
 			change = true;
 			conflict_set.erase(literal);
 			conflict_set.erase(-1 * literal);
 
-			const vector<int>& clause = cnf[parent[literal-1]];
+			const vector<int>& clause = cnf[parent[ap]];
 			for(const int& l : clause)
 			{
 				if(abs(l) != literal)
@@ -400,7 +400,7 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change, int& UIP)
 				}
 			}
 		}
-	} while(!updates.empty() && !decision_count(conflict_set, dl));
+	}
 
 	// Create Conflict Clause
 	int max_dl = -1;
@@ -449,7 +449,7 @@ vector<int> analysis(const int& clause_id, int& dl, bool& change, int& UIP)
 // Update Truth Assignment
 void update_truth_assignment(const int& dl)
 {
-	while(!updates.empty() && decision_level[updates.front()-1] > dl)
+	while(!updates.empty() && decision_level[updates.front()] > dl)
 	{
 		updates.pop_front();
 	}
@@ -534,7 +534,14 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
 					{
 						update_truth_assignment(dl);
 						assignment_queue.clear();
-						unit_clause(UIP, cnf.size()-1);				
+						if(change)
+						{
+							unit_clause(UIP, cnf.size()-1);
+						}
+						else
+						{
+							unit_clause(UIP, clause_id);
+						}
 					}
 				}
 				continue;
