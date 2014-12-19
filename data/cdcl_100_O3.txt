@@ -1,192 +1,193 @@
 N: 100 L-Probability: 0.5 LN_Ratio: 3
 MyHeuristic Success Rate: 100 Timeout: 0
 Min number of added clauses: 0
-Median number of added clauses: 3
-Max number of added clauses: 96
-Min number of backtracks: 21
-Median number of backtracks: 47
-Max number of backtracks: 307
-Min computation time: 0.001869
-Median computation time: 0.004771
-Max computation time: 0.083324
+Median number of added clauses: 2
+Max number of added clauses: 20
+Min number of backtracks: 18
+Median number of backtracks: 40
+Max number of backtracks: 102
+Min computation time: 0.001819
+Median computation time: 0.00353
+Max computation time: 0.019676
 
 N: 100 L-Probability: 0.5 LN_Ratio: 3.2
 MyHeuristic Success Rate: 100 Timeout: 0
 Min number of added clauses: 0
-Median number of added clauses: 4
-Max number of added clauses: 101
-Min number of backtracks: 22
-Median number of backtracks: 43
-Max number of backtracks: 326
-Min computation time: 0.002077
-Median computation time: 0.005666
-Max computation time: 0.10527
+Median number of added clauses: 5
+Max number of added clauses: 133
+Min number of backtracks: 20
+Median number of backtracks: 48
+Max number of backtracks: 408
+Min computation time: 0.001903
+Median computation time: 0.005444
+Max computation time: 0.092845
 
 N: 100 L-Probability: 0.5 LN_Ratio: 3.4
 MyHeuristic Success Rate: 100 Timeout: 0
 Min number of added clauses: 0
-Median number of added clauses: 16
-Max number of added clauses: 330
-Min number of backtracks: 22
-Median number of backtracks: 85
-Max number of backtracks: 989
-Min computation time: 0.002031
-Median computation time: 0.01803
-Max computation time: 0.464744
+Median number of added clauses: 8
+Max number of added clauses: 217
+Min number of backtracks: 20
+Median number of backtracks: 54
+Max number of backtracks: 608
+Min computation time: 0.002203
+Median computation time: 0.009086
+Max computation time: 0.165733
 
 N: 100 L-Probability: 0.5 LN_Ratio: 3.6
 MyHeuristic Success Rate: 100 Timeout: 0
 Min number of added clauses: 0
-Median number of added clauses: 51
-Max number of added clauses: 1078
-Min number of backtracks: 21
-Median number of backtracks: 217
-Max number of backtracks: 2752
-Min computation time: 0.00198
-Median computation time: 0.046568
-Max computation time: 2.26583
+Median number of added clauses: 28
+Max number of added clauses: 1606
+Min number of backtracks: 15
+Median number of backtracks: 98
+Max number of backtracks: 4038
+Min computation time: 0.002202
+Median computation time: 0.021557
+Max computation time: 3.15352
 
 N: 100 L-Probability: 0.5 LN_Ratio: 3.8
 MyHeuristic Success Rate: 99 Timeout: 1
 Min number of added clauses: 0
-Median number of added clauses: 150
-Max number of added clauses: 5564
-Min number of backtracks: 17
-Median number of backtracks: 431
-Max number of backtracks: 29239
-Min computation time: 0.002449
-Median computation time: 0.178943
-Max computation time: 60.005
+Median number of added clauses: 132
+Max number of added clauses: 4721
+Min number of backtracks: 16
+Median number of backtracks: 366
+Max number of backtracks: 11385
+Min computation time: 0.001747
+Median computation time: 0.100447
+Max computation time: 20.0107
 
 N: 100 L-Probability: 0.5 LN_Ratio: 4
-MyHeuristic Success Rate: 88 Timeout: 6
-Min number of added clauses: 0
-Median number of added clauses: 393
-Max number of added clauses: 5633
+MyHeuristic Success Rate: 86 Timeout: 3
+Min number of added clauses: 3
+Median number of added clauses: 234
+Max number of added clauses: 4663
 Min number of backtracks: 23
-Median number of backtracks: 1220
-Max number of backtracks: 23704
-Min computation time: 0.002694
-Median computation time: 0.697852
-Max computation time: 60.0242
+Median number of backtracks: 632
+Max number of backtracks: 38405
+Min computation time: 0.003298
+Median computation time: 0.177209
+Max computation time: 20.0004
 
 N: 100 L-Probability: 0.5 LN_Ratio: 4.2
-MyHeuristic Success Rate: 53 Timeout: 19
-Min number of added clauses: 2
-Median number of added clauses: 1916
-Max number of added clauses: 6098
-Min number of backtracks: 18
-Median number of backtracks: 6094
-Max number of backtracks: 164895
-Min computation time: 0.005203
-Median computation time: 8.85502
-Max computation time: 60.0233
+MyHeuristic Success Rate: 54 Timeout: 9
+Min number of added clauses: 3
+Median number of added clauses: 1234
+Max number of added clauses: 4849
+Min number of backtracks: 38
+Median number of backtracks: 3173
+Max number of backtracks: 121941
+Min computation time: 0.004808
+Median computation time: 2.19977
+Max computation time: 20.0128
 
 N: 100 L-Probability: 0.5 LN_Ratio: 4.4
-MyHeuristic Success Rate: 21 Timeout: 24
-Min number of added clauses: 17
-Median number of added clauses: 2431
-Max number of added clauses: 5937
-Min number of backtracks: 47
-Median number of backtracks: 7431
-Max number of backtracks: 186033
-Min computation time: 0.018006
-Median computation time: 15.9126
-Max computation time: 60.022
+MyHeuristic Success Rate: 27 Timeout: 16
+Min number of added clauses: 1
+Median number of added clauses: 1286
+Max number of added clauses: 4668
+Min number of backtracks: 18
+Median number of backtracks: 3603
+Max number of backtracks: 179342
+Min computation time: 0.002735
+Median computation time: 2.58826
+Max computation time: 20.0038
 
 N: 100 L-Probability: 0.5 LN_Ratio: 4.6
-MyHeuristic Success Rate: 9 Timeout: 22
-Min number of added clauses: 83
-Median number of added clauses: 2023
-Max number of added clauses: 5936
-Min number of backtracks: 202
-Median number of backtracks: 6114
-Max number of backtracks: 409750
-Min computation time: 0.09912
-Median computation time: 13.223
-Max computation time: 60.0106
+MyHeuristic Success Rate: 8 Timeout: 15
+Min number of added clauses: 104
+Median number of added clauses: 1256
+Max number of added clauses: 3681
+Min number of backtracks: 307
+Median number of backtracks: 3634
+Max number of backtracks: 204805
+Min computation time: 0.078944
+Median computation time: 2.56943
+Max computation time: 20.0023
 
 N: 100 L-Probability: 0.5 LN_Ratio: 4.8
-MyHeuristic Success Rate: 3 Timeout: 17
-Min number of added clauses: 319
-Median number of added clauses: 1569
-Max number of added clauses: 5393
-Min number of backtracks: 788
-Median number of backtracks: 4717
-Max number of backtracks: 239752
-Min computation time: 0.50011
-Median computation time: 8.23183
-Max computation time: 60.0122
+MyHeuristic Success Rate: 2 Timeout: 14
+Min number of added clauses: 31
+Median number of added clauses: 890
+Max number of added clauses: 2655
+Min number of backtracks: 77
+Median number of backtracks: 2385
+Max number of backtracks: 290628
+Min computation time: 0.024259
+Median computation time: 1.33714
+Max computation time: 20.0018
 
 N: 100 L-Probability: 0.5 LN_Ratio: 5
-MyHeuristic Success Rate: 0 Timeout: 20
-Min number of added clauses: 97
-Median number of added clauses: 1166
-Max number of added clauses: 3593
-Min number of backtracks: 910
-Median number of backtracks: 3713
-Max number of backtracks: 711709
-Min computation time: 0.708051
-Median computation time: 5.7359
-Max computation time: 60.005
+MyHeuristic Success Rate: 0 Timeout: 17
+Min number of added clauses: 230
+Median number of added clauses: 712
+Max number of added clauses: 2109
+Min number of backtracks: 566
+Median number of backtracks: 1940
+Max number of backtracks: 244382
+Min computation time: 0.188974
+Median computation time: 1.01313
+Max computation time: 20.001
 
 N: 100 L-Probability: 0.5 LN_Ratio: 5.2
-MyHeuristic Success Rate: 0 Timeout: 21
-Min number of added clauses: 126
-Median number of added clauses: 950
-Max number of added clauses: 3616
-Min number of backtracks: 666
-Median number of backtracks: 2528
-Max number of backtracks: 655370
-Min computation time: 0.516513
-Median computation time: 3.50962
-Max computation time: 60.0062
+MyHeuristic Success Rate: 0 Timeout: 18
+Min number of added clauses: 34
+Median number of added clauses: 566
+Max number of added clauses: 1587
+Min number of backtracks: 87
+Median number of backtracks: 1548
+Max number of backtracks: 180089
+Min computation time: 0.027667
+Median computation time: 0.729428
+Max computation time: 20.0012
 
 N: 100 L-Probability: 0.5 LN_Ratio: 5.4
 MyHeuristic Success Rate: 0 Timeout: 22
-Min number of added clauses: 172
-Median number of added clauses: 697
-Max number of added clauses: 2150
-Min number of backtracks: 429
-Median number of backtracks: 2014
-Max number of backtracks: 723635
-Min computation time: 0.239955
-Median computation time: 2.08434
-Max computation time: 60.0045
+Min number of added clauses: 68
+Median number of added clauses: 432
+Max number of added clauses: 1195
+Min number of backtracks: 158
+Median number of backtracks: 1218
+Max number of backtracks: 141995
+Min computation time: 0.051264
+Median computation time: 0.535465
+Max computation time: 20.0008
 
 N: 100 L-Probability: 0.5 LN_Ratio: 5.6
-MyHeuristic Success Rate: 0 Timeout: 25
-Min number of added clauses: 89
-Median number of added clauses: 612
-Max number of added clauses: 2163
-Min number of backtracks: 637
-Median number of backtracks: 1921
-Max number of backtracks: 409128
-Min computation time: 0.4372
-Median computation time: 2.00328
-Max computation time: 60.0045
+MyHeuristic Success Rate: 0 Timeout: 11
+Min number of added clauses: 80
+Median number of added clauses: 366
+Max number of added clauses: 1080
+Min number of backtracks: 187
+Median number of backtracks: 956
+Max number of backtracks: 240442
+Min computation time: 0.051284
+Median computation time: 0.377185
+Max computation time: 20.0015
 
 N: 100 L-Probability: 0.5 LN_Ratio: 5.8
-MyHeuristic Success Rate: 0 Timeout: 11
-Min number of added clauses: 72
-Median number of added clauses: 456
-Max number of added clauses: 1137
-Min number of backtracks: 189
-Median number of backtracks: 1197
-Max number of backtracks: 780068
-Min computation time: 0.109336
-Median computation time: 1.05722
-Max computation time: 60.0017
+MyHeuristic Success Rate: 0 Timeout: 14
+Min number of added clauses: 28
+Median number of added clauses: 311
+Max number of added clauses: 683
+Min number of backtracks: 65
+Median number of backtracks: 782
+Max number of backtracks: 312819
+Min computation time: 0.019047
+Median computation time: 0.294474
+Max computation time: 20.0005
 
 N: 100 L-Probability: 0.5 LN_Ratio: 6.0
-MyHeuristic Success Rate: 0 Timeout: 16
-Min number of added clauses: 94
-Median number of added clauses: 373
-Max number of added clauses: 1206
-Min number of backtracks: 210
-Median number of backtracks: 1043
-Max number of backtracks: 969262
-Min computation time: 0.145085
-Median computation time: 1.00619
-Max computation time: 60.0023
+MyHeuristic Success Rate: 0 Timeout: 23
+Min number of added clauses: 33
+Median number of added clauses: 253
+Max number of added clauses: 727
+Min number of backtracks: 80
+Median number of backtracks: 736
+Max number of backtracks: 226288
+Min computation time: 0.02928
+Median computation time: 0.310438
+Max computation time: 20.0014
+
 
