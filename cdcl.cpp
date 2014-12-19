@@ -89,6 +89,7 @@ vector<int> parent;
 vector<int> t;
 list<int> updates;
 list<update> assignment_queue;
+list<int> cnf_id;
 unordered_map<int, vector<int>> cnf;
 int original_size = 0;
 
@@ -156,6 +157,7 @@ void setup(heuristic h, bool restart = false)
 	if(!restart)
 	{
 		conflict_count = 0;
+		cnf_id.clear();
 		wl1.clear();
 		wl2.clear();
 		wl1.reserve(cnf.size());
@@ -164,6 +166,7 @@ void setup(heuristic h, bool restart = false)
 		{
 			wl1[i] = 0;
 			wl2[i] = cnf[i].size()-1;
+			cnf_id.push_back(i);
 		}
 		restart_threshold = RESTART_INIT;
 	}
@@ -281,39 +284,37 @@ state update_watched_literal(bool first, int clause)
 
 	if(status == UNIT)
 	{
+		//cout << "UNIT: " << clause << " " << other_literal << endl;
 		unit_clause(other_literal, clause);
 	}
 	return status;
 }
 
-state evaluate_wlist(const wlist& wl, int& clause_id, bool first)
+state evaluate_wlist(const wlist& wl, int index, int& clause_id, bool first)
 {
 	// Update Watchlist 
-	for(const auto& index : wl)
+	int literal = cnf[index][wl.at(index)];
+	int truth_value = evaluate_literal(literal);
+	if(truth_value == 0)
 	{
-		int literal = cnf[index.first][index.second];
-		int truth_value = evaluate_literal(literal);
-		if(truth_value == 0)
+		state status = update_watched_literal(first, index);
+		if(status == CONFLICT)
 		{
-			state status = update_watched_literal(first, index.first);
-			if(status == CONFLICT)
-			{
-				clause_id = index.first;
-				return CONFLICT;
-			}
+			clause_id = index;
 		}
+		return status;
 	}
 	return NONE;
 }
 
 bool update_implication_graph(const int& ap, const int& value, const int& dl, const int& pc)
 {
-	if(t[ap] != IGNORE)
+	if(t[ap] != IGNORE && cnf[parent[ap]].size() <= cnf[pc].size())
 	{
 		return false;
 	}
 
-	//cout << dl << " " << (ap+1) << " " << value << " " << pc << endl;
+	//cout << dl << " " << (ap+1) << " " << value << endl;
 	updates.push_front(ap);
 	t[ap] = value;
 	decision_level[ap] = dl;
@@ -332,16 +333,20 @@ state unit_propagation(int& clause_id, int dl)
 			continue;
 		}
 
-		state s1 = evaluate_wlist(wl1, clause_id, true);	
-		if(s1 == CONFLICT)
+		// Update Watchlist
+		for(const auto& index : cnf_id)
 		{
-			return CONFLICT;
-		}
+			state s1 = evaluate_wlist(wl1, index, clause_id, true);
+			if(s1 == CONFLICT)
+			{
+				return CONFLICT;
+			}
 
-		state s2 = evaluate_wlist(wl2, clause_id, false);	
-		if(s2 == CONFLICT)
-		{
-			return CONFLICT;
+			state s2 = evaluate_wlist(wl2, index, clause_id, false);
+			if(s2 == CONFLICT)
+			{
+				return CONFLICT;
+			}
 		}
 	}
 	return NONE;
@@ -495,6 +500,7 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
 		{
 			case CONFLICT:
 				{
+					//cout << "Conflict: " << clause_id << endl;
 					++conflict_count;
 					bool change = false;
 					int UIP = 0;
@@ -522,6 +528,7 @@ vector<int> solve(const boost::timer::cpu_timer& timer, heuristic h)
 						wl1[wl1.size()] = 0;
 						wl2[wl2.size()] = conflict_clause.size()-1;
 						cnf[cnf.size()] = move(conflict_clause);
+						cnf_id.push_back(cnf_id.size());
 						++added_clauses;
 					}
 
